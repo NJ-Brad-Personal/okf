@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/okf/okf.csproj" />
+  <Project Path="src/Tests/Tests.csproj" />
+</Solution>
