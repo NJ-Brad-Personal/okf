@@ -405,12 +405,65 @@ public class GraphBuilderTests
         Assert.True(firstNode.TryGetProperty("label", out _));
         Assert.True(firstNode.TryGetProperty("in", out _));
         Assert.True(firstNode.TryGetProperty("out", out _));
+        Assert.True(firstNode.TryGetProperty("weight", out _));
 
         var edge = root.GetProperty("edges")[0];
         Assert.True(edge.TryGetProperty("source", out _));
         Assert.True(edge.TryGetProperty("target", out _));
         Assert.True(edge.TryGetProperty("label", out _));
         Assert.True(edge.TryGetProperty("id", out _));
+    }
+
+    [Fact]
+    public void Build_assigns_page_rank_weight_in_zero_to_one_range()
+    {
+        var graph = GraphBuilder.Build(FixturePath("valid"));
+
+        foreach (var node in graph.Nodes)
+        {
+            Assert.NotNull(node.Weight);
+            Assert.InRange(node.Weight!.Value, 0.0, 1.0);
+        }
+
+        Assert.Equal(1.0, graph.Nodes.Sum(n => n.Weight!.Value), precision: 6);
+
+        var orders = graph.Nodes.First(n => n.Id == "tables/orders");
+        var customers = graph.Nodes.First(n => n.Id == "tables/customers");
+        Assert.True(customers.Weight > orders.Weight);
+    }
+
+    [Fact]
+    public void Build_assigns_equal_weight_when_graph_has_no_edges()
+    {
+        var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(bundlePath);
+
+        try
+        {
+            File.WriteAllText(Path.Combine(bundlePath, "a.md"), """
+                ---
+                type: Reference
+                ---
+                A.
+                """);
+
+            File.WriteAllText(Path.Combine(bundlePath, "b.md"), """
+                ---
+                type: Reference
+                ---
+                B.
+                """);
+
+            var graph = GraphBuilder.Build(bundlePath);
+
+            Assert.Equal(2, graph.Nodes.Count);
+            Assert.Empty(graph.Edges);
+            Assert.All(graph.Nodes, n => Assert.Equal(0.5, n.Weight!.Value, precision: 6));
+        }
+        finally
+        {
+            if (Directory.Exists(bundlePath)) Directory.Delete(bundlePath, recursive: true);
+        }
     }
 
     [Fact]
@@ -427,6 +480,91 @@ public class GraphBuilderTests
             Assert.Equal(2, loaded.Nodes.Count);
             Assert.Equal(1, loaded.Edges.Count);
             Assert.False(string.IsNullOrWhiteSpace(loaded.Edges[0].Id));
+            Assert.All(loaded.Nodes, n => Assert.NotNull(n.Weight));
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Load_assigns_weight_when_node_weight_is_missing()
+    {
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            File.WriteAllText(graphPath, """
+                {
+                  "bundle": {
+                    "name": "test",
+                    "root": "/tmp",
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "concepts": 2
+                  },
+                  "nodes": [
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1, "meta": {} },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                  ],
+                  "edges": [
+                    { "source": "a", "target": "b", "label": "b" }
+                  ]
+                }
+                """);
+
+            var loaded = GraphBuilder.Load(graphPath);
+
+            Assert.All(loaded.Nodes, n =>
+            {
+                Assert.NotNull(n.Weight);
+                Assert.InRange(n.Weight!.Value, 0.0, 1.0);
+            });
+            Assert.Equal(1.0, loaded.Nodes.Sum(n => n.Weight!.Value), precision: 6);
+            Assert.True(loaded.Nodes.First(n => n.Id == "b").Weight > loaded.Nodes.First(n => n.Id == "a").Weight);
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Load_preserves_existing_node_weights_when_some_are_missing()
+    {
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            File.WriteAllText(graphPath, """
+                {
+                  "bundle": {
+                    "name": "test",
+                    "root": "/tmp",
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "concepts": 3
+                  },
+                  "nodes": [
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2, "meta": {}, "weight": 0.9 },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 2, "in": 1, "out": 1, "meta": {} },
+                    { "id": "c", "path": "c.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                  ],
+                  "edges": [
+                    { "source": "a", "target": "b", "label": "b", "id": "custom_ab" },
+                    { "source": "b", "target": "c", "label": "c" }
+                  ]
+                }
+                """);
+
+            var loaded = GraphBuilder.Load(graphPath);
+
+            Assert.Equal(0.9, loaded.Nodes.First(n => n.Id == "a").Weight!.Value, precision: 6);
+            Assert.NotNull(loaded.Nodes.First(n => n.Id == "b").Weight);
+            Assert.NotNull(loaded.Nodes.First(n => n.Id == "c").Weight);
+            Assert.InRange(loaded.Nodes.First(n => n.Id == "b").Weight!.Value, 0.0, 1.0);
+            Assert.InRange(loaded.Nodes.First(n => n.Id == "c").Weight!.Value, 0.0, 1.0);
         }
         finally
         {

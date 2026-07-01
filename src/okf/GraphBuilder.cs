@@ -65,6 +65,10 @@ public static partial class GraphBuilder
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Body { get; init; }
 
+        [JsonPropertyName("weight")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public double? Weight { get; init; }
+
         [JsonExtensionData]
         public Dictionary<string, JsonElement>? ExtensionData { get; init; }
     }
@@ -101,7 +105,7 @@ public static partial class GraphBuilder
         if (graph is null)
             throw new InvalidDataException($"Failed to deserialize graph from {fullPath}");
 
-        return EnsureEdgeIds(graph);
+        return EnsureNodeWeights(EnsureEdgeIds(graph));
     }
 
     static KnowledgeGraph EnsureEdgeIds(KnowledgeGraph graph)
@@ -122,6 +126,19 @@ public static partial class GraphBuilder
             .ToList();
 
         return graph with { Edges = edges };
+    }
+
+    static KnowledgeGraph EnsureNodeWeights(KnowledgeGraph graph)
+    {
+        if (graph.Nodes.All(n => n.Weight.HasValue))
+            return graph;
+
+        var weights = PageRank.Compute(graph.Nodes, graph.Edges);
+        var nodes = graph.Nodes
+            .Select(n => n.Weight.HasValue ? n : n with { Weight = weights[n.Id] })
+            .ToList();
+
+        return graph with { Nodes = nodes };
     }
 
     static string FormatEdgeId(IReadOnlyDictionary<string, string> conceptAbbrs, string source, string target)
@@ -311,6 +328,11 @@ public static partial class GraphBuilder
             var label = n.Label ?? derivedLabels.GetValueOrDefault(n.Id);
             finalNodes.Add(n with { In = ins, Out = outs, Degree = ins + outs, Label = label });
         }
+
+        var weights = PageRank.Compute(finalNodes, edges);
+        finalNodes = finalNodes
+            .Select(n => n with { Weight = weights[n.Id] })
+            .ToList();
 
         var bundle = new Bundle(
             name,
