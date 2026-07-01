@@ -2,15 +2,12 @@ using System.Collections;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using SharpYaml;
-using SharpYaml.Serialization;
 
 namespace okf;
 
 public sealed partial class OKFDocument
 {
     const string FrontmatterDelimiter = "---";
-
-    static readonly Serializer Serializer = new();
 
     public IReadOnlyDictionary<string, object?> Frontmatter { get; }
     public string Body { get; }
@@ -128,7 +125,7 @@ public sealed partial class OKFDocument
 
     static IReadOnlyDictionary<string, object?> ParseYamlMapping(string yaml)
     {
-        var parsed = Serializer.Deserialize(yaml);
+        var parsed = YamlSerializer.Deserialize(yaml, typeof(object));
         if (parsed is null)
         {
             return new Dictionary<string, object?>();
