@@ -6,7 +6,42 @@ public static class PageRank
     const int MaxIterations = 100;
     const double Tolerance = 1e-6;
 
-    public static IReadOnlyDictionary<string, double> Compute(
+    public sealed record Result(
+        IReadOnlyDictionary<string, double> Weights,
+        IReadOnlyDictionary<string, int> Ranks);
+
+    public static Result Compute(
+        IReadOnlyList<GraphBuilder.Node> nodes,
+        IReadOnlyList<GraphBuilder.Edge> edges)
+    {
+        var weights = ComputeWeights(nodes, edges);
+        return new Result(weights, ComputeRanks(weights));
+    }
+
+    public static IReadOnlyDictionary<string, int> ComputeRanks(IReadOnlyDictionary<string, double> weights)
+    {
+        if (weights.Count == 0)
+            return new Dictionary<string, int>(StringComparer.Ordinal);
+
+        var ordered = weights
+            .OrderByDescending(kvp => kvp.Value)
+            .ThenBy(kvp => kvp.Key, StringComparer.Ordinal)
+            .ToList();
+
+        var ranks = new Dictionary<string, int>(StringComparer.Ordinal);
+        var rank = 1;
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            if (i > 0 && ordered[i].Value != ordered[i - 1].Value)
+                rank = i + 1;
+
+            ranks[ordered[i].Key] = rank;
+        }
+
+        return ranks;
+    }
+
+    static IReadOnlyDictionary<string, double> ComputeWeights(
         IReadOnlyList<GraphBuilder.Node> nodes,
         IReadOnlyList<GraphBuilder.Edge> edges)
     {

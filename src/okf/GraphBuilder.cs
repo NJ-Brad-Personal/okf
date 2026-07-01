@@ -66,6 +66,10 @@ public static partial class GraphBuilder
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Weight { get; init; }
 
+        [JsonPropertyName("rank")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? Rank { get; init; }
+
         [JsonExtensionData]
         public Dictionary<string, JsonElement>? ExtensionData { get; init; }
     }
@@ -127,12 +131,30 @@ public static partial class GraphBuilder
 
     static KnowledgeGraph EnsureNodeWeights(KnowledgeGraph graph)
     {
-        if (graph.Nodes.All(n => n.Weight.HasValue))
+        if (graph.Nodes.All(n => n.Weight.HasValue && n.Rank.HasValue))
             return graph;
 
-        var weights = PageRank.Compute(graph.Nodes, graph.Edges);
+        Dictionary<string, double> weights;
+        if (graph.Nodes.All(n => n.Weight.HasValue))
+        {
+            weights = graph.Nodes.ToDictionary(n => n.Id, n => n.Weight!.Value, StringComparer.Ordinal);
+        }
+        else
+        {
+            var computed = PageRank.Compute(graph.Nodes, graph.Edges);
+            weights = graph.Nodes.ToDictionary(
+                n => n.Id,
+                n => n.Weight ?? computed.Weights[n.Id],
+                StringComparer.Ordinal);
+        }
+
+        var ranks = PageRank.ComputeRanks(weights);
         var nodes = graph.Nodes
-            .Select(n => n.Weight.HasValue ? n : n with { Weight = weights[n.Id] })
+            .Select(n => n with
+            {
+                Weight = n.Weight ?? weights[n.Id],
+                Rank = n.Rank ?? ranks[n.Id],
+            })
             .ToList();
 
         return graph with { Nodes = nodes };
@@ -342,9 +364,13 @@ public static partial class GraphBuilder
             finalNodes.Add(n with { In = ins, Out = outs, Degree = ins + outs, Label = label });
         }
 
-        var weights = PageRank.Compute(finalNodes, edges);
+        var pageRank = PageRank.Compute(finalNodes, edges);
         finalNodes = finalNodes
-            .Select(n => n with { Weight = weights[n.Id] })
+            .Select(n => n with
+            {
+                Weight = pageRank.Weights[n.Id],
+                Rank = pageRank.Ranks[n.Id],
+            })
             .ToList();
 
         var bundle = new Bundle(

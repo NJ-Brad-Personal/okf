@@ -416,6 +416,7 @@ public class GraphBuilderTests
         Assert.True(firstNode.TryGetProperty("in", out _));
         Assert.True(firstNode.TryGetProperty("out", out _));
         Assert.True(firstNode.TryGetProperty("weight", out _));
+        Assert.True(firstNode.TryGetProperty("rank", out _));
 
         var edge = root.GetProperty("edges")[0];
         Assert.True(edge.TryGetProperty("source", out _));
@@ -433,6 +434,8 @@ public class GraphBuilderTests
         {
             Assert.NotNull(node.Weight);
             Assert.InRange(node.Weight!.Value, 0.0, 1.0);
+            Assert.NotNull(node.Rank);
+            Assert.True(node.Rank >= 1);
         }
 
         Assert.Equal(1.0, graph.Nodes.Sum(n => n.Weight!.Value), precision: 6);
@@ -440,6 +443,7 @@ public class GraphBuilderTests
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         var customers = graph.Nodes.First(n => n.Id == "tables/customers");
         Assert.True(customers.Weight > orders.Weight);
+        Assert.True(customers.Rank < orders.Rank);
     }
 
     [Fact]
@@ -468,7 +472,11 @@ public class GraphBuilderTests
 
             Assert.Equal(2, graph.Nodes.Count);
             Assert.Empty(graph.Edges);
-            Assert.All(graph.Nodes, n => Assert.Equal(0.5, n.Weight!.Value, precision: 6));
+            Assert.All(graph.Nodes, n =>
+            {
+                Assert.Equal(0.5, n.Weight!.Value, precision: 6);
+                Assert.Equal(1, n.Rank);
+            });
         }
         finally
         {
@@ -490,7 +498,11 @@ public class GraphBuilderTests
             Assert.Equal(2, loaded.Nodes.Count);
             Assert.Equal(1, loaded.Edges.Count);
             Assert.False(string.IsNullOrWhiteSpace(loaded.Edges[0].Id));
-            Assert.All(loaded.Nodes, n => Assert.NotNull(n.Weight));
+            Assert.All(loaded.Nodes, n =>
+            {
+                Assert.NotNull(n.Weight);
+                Assert.NotNull(n.Rank);
+            });
         }
         finally
         {
@@ -530,9 +542,12 @@ public class GraphBuilderTests
             {
                 Assert.NotNull(n.Weight);
                 Assert.InRange(n.Weight!.Value, 0.0, 1.0);
+                Assert.NotNull(n.Rank);
             });
             Assert.Equal(1.0, loaded.Nodes.Sum(n => n.Weight!.Value), precision: 6);
             Assert.True(loaded.Nodes.First(n => n.Id == "b").Weight > loaded.Nodes.First(n => n.Id == "a").Weight);
+            Assert.Equal(1, loaded.Nodes.First(n => n.Id == "b").Rank);
+            Assert.Equal(2, loaded.Nodes.First(n => n.Id == "a").Rank);
         }
         finally
         {
@@ -575,6 +590,9 @@ public class GraphBuilderTests
             Assert.NotNull(loaded.Nodes.First(n => n.Id == "c").Weight);
             Assert.InRange(loaded.Nodes.First(n => n.Id == "b").Weight!.Value, 0.0, 1.0);
             Assert.InRange(loaded.Nodes.First(n => n.Id == "c").Weight!.Value, 0.0, 1.0);
+            Assert.Equal(1, loaded.Nodes.First(n => n.Id == "a").Rank);
+            Assert.NotNull(loaded.Nodes.First(n => n.Id == "b").Rank);
+            Assert.NotNull(loaded.Nodes.First(n => n.Id == "c").Rank);
         }
         finally
         {
