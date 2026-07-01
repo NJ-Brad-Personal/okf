@@ -170,12 +170,52 @@ public class GraphBuilderTests
     }
 
     [Fact]
-    public void Title_is_copied_to_node_label_when_present()
+    public void Label_is_lifted_to_node_level_not_duplicated_in_meta()
+    {
+        var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(bundlePath);
+
+        try
+        {
+            File.WriteAllText(Path.Combine(bundlePath, "labeled.md"), """
+                ---
+                type: Reference
+                label: Display Name
+                ---
+                Content.
+                """);
+
+            File.WriteAllText(Path.Combine(bundlePath, "unlabeled.md"), """
+                ---
+                type: Reference
+                title: Title Only
+                ---
+                Content.
+                """);
+
+            var graph = GraphBuilder.Build(bundlePath);
+
+            var labeled = graph.Nodes.First(n => n.Id == "labeled");
+            Assert.Equal("Display Name", labeled.Label);
+            Assert.DoesNotContain(labeled.Meta, kvp => string.Equals(kvp.Key, "label", StringComparison.Ordinal));
+
+            var unlabeled = graph.Nodes.First(n => n.Id == "unlabeled");
+            Assert.Null(unlabeled.Label);
+            Assert.DoesNotContain(unlabeled.Meta, kvp => string.Equals(kvp.Key, "label", StringComparison.Ordinal));
+        }
+        finally
+        {
+            if (Directory.Exists(bundlePath)) Directory.Delete(bundlePath, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void Title_stays_in_meta_and_is_not_copied_to_node_label()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
 
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
-        Assert.Equal("Orders", orders.Label);
+        Assert.Null(orders.Label);
         Assert.Equal("Orders", orders.Meta["title"]);
 
         var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
@@ -219,7 +259,7 @@ public class GraphBuilderTests
         Assert.True(firstNode.TryGetProperty("id", out _));
         Assert.True(firstNode.TryGetProperty("path", out _));
         Assert.True(firstNode.TryGetProperty("meta", out _));
-        Assert.True(firstNode.TryGetProperty("label", out _));
+        Assert.False(firstNode.TryGetProperty("label", out _));
         Assert.True(firstNode.TryGetProperty("in", out _));
         Assert.True(firstNode.TryGetProperty("out", out _));
 

@@ -113,13 +113,18 @@ public static partial class GraphBuilder
 
             var meta = SanitizeMeta(frontmatter);
 
-            string? label = GetStringValue(frontmatter, "title");
+            var title = GetStringValue(frontmatter, "title");
+            var label = GetStringValue(frontmatter, "label");
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                label = null;
+            }
 
             concepts.Add(new Concept(
                 conceptId,
                 relativePath,
                 type!,
-                label ?? conceptId,
+                title ?? conceptId,
                 label,
                 meta,
                 includeBody ? document.Body : null,
@@ -281,7 +286,8 @@ public static partial class GraphBuilder
         var result = new Dictionary<string, object?>(StringComparer.Ordinal);
         foreach (var kvp in frontmatter)
         {
-            if (string.Equals(kvp.Key, "type", StringComparison.Ordinal))
+            if (string.Equals(kvp.Key, "type", StringComparison.Ordinal) ||
+                string.Equals(kvp.Key, "label", StringComparison.Ordinal))
             {
                 continue;
             }
