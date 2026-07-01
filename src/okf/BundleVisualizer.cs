@@ -57,29 +57,21 @@ public static partial class BundleVisualizer
 
     private static GraphData BuildVizData(GraphBuilder.KnowledgeGraph graph)
     {
-        var abbrs = ShortIds.ComputeConceptAbbreviations(graph.Nodes.Select(n => n.Id));
-
         var vizNodes = graph.Nodes
             .Select(n => new NodeElement { Data = ToVizNodeData(n) })
             .ToList();
 
-        var vizEdges = new List<EdgeElement>();
-        foreach (var e in graph.Edges)
-        {
-            var sAb = abbrs.TryGetValue(e.Source, out var sa) ? sa : AbbrFallback(e.Source);
-            var tAb = abbrs.TryGetValue(e.Target, out var ta) ? ta : AbbrFallback(e.Target);
-            var edgeId = !string.IsNullOrEmpty(e.Id) ? e.Id : $"{sAb}_{tAb}";
-
-            vizEdges.Add(new EdgeElement
+        var vizEdges = graph.Edges
+            .Select(e => new EdgeElement
             {
                 Data = new EdgeData
                 {
-                    Id = edgeId,
+                    Id = e.Id,
                     Source = e.Source,
                     Target = e.Target,
                 },
-            });
-        }
+            })
+            .ToList();
 
         var bodies = graph.Nodes
             .Where(n => !string.IsNullOrEmpty(n.Body))
@@ -99,12 +91,6 @@ public static partial class BundleVisualizer
             Types = types,
             Palette = TypePalette,
         };
-    }
-
-    private static string AbbrFallback(string id)
-    {
-        var parts = id.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        return string.Concat(parts.Select(p => p.Length > 0 ? char.ToLowerInvariant(p[0]) : '_'));
     }
 
     private static NodeData ToVizNodeData(GraphBuilder.Node n)

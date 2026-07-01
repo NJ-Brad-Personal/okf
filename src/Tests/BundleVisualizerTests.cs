@@ -111,6 +111,7 @@ public class BundleVisualizerTests
 
             Assert.Equal("source", edge.GetProperty("source").GetString());
             Assert.Equal("target", edge.GetProperty("target").GetString());
+            Assert.Equal("s_t", edge.GetProperty("id").GetString());
         }
         finally
         {

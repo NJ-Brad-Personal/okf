@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +10,8 @@ public static partial class GraphBuilder
     const string IndexName = "index.md";
     const string LogName = "log.md";
 
+    static readonly TextInfo TitleCasing = CultureInfo.CurrentCulture.TextInfo;
+
     static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = null,
@@ -19,30 +22,64 @@ public static partial class GraphBuilder
     public sealed record KnowledgeGraph(
         [property: JsonPropertyName("bundle")] Bundle Bundle,
         [property: JsonPropertyName("nodes")] List<Node> Nodes,
-        [property: JsonPropertyName("edges")] List<Edge> Edges);
+        [property: JsonPropertyName("edges")] List<Edge> Edges)
+    {
+        [JsonExtensionData]
+        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+    }
 
     public sealed record Bundle(
         [property: JsonPropertyName("name")] string Name,
         [property: JsonPropertyName("root")] string Root,
         [property: JsonPropertyName("timestamp")] DateTimeOffset Timestamp,
-        [property: JsonPropertyName("concepts")] int Concepts);
+        [property: JsonPropertyName("concepts")] int Concepts)
+    {
+        [JsonExtensionData]
+        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+    }
 
     public sealed record Node(
         [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("path")] string Path,
-        [property: JsonPropertyName("type")] string Type,
-        [property: JsonPropertyName("degree")] int Degree,
-        [property: JsonPropertyName("in")] int In,
-        [property: JsonPropertyName("out")] int Out,
-        [property: JsonPropertyName("meta")] Dictionary<string, object?> Meta,
-        [property: JsonPropertyName("label")][property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Label = null,
-        [property: JsonPropertyName("body")][property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Body = null);
+        [property: JsonPropertyName("type")] string Type)
+    {
+        [JsonPropertyName("path")]
+        public required string Path { get; init; }
+
+        [JsonPropertyName("degree")]
+        public required int Degree { get; init; }
+
+        [JsonPropertyName("in")]
+        public required int In { get; init; }
+
+        [JsonPropertyName("out")]
+        public required int Out { get; init; }
+
+        [JsonPropertyName("meta")]
+        public required Dictionary<string, object?> Meta { get; init; }
+
+        [JsonPropertyName("label")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Label { get; init; }
+
+        [JsonPropertyName("body")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Body { get; init; }
+
+        [JsonExtensionData]
+        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+    }
 
     public sealed record Edge(
         [property: JsonPropertyName("source")] string Source,
         [property: JsonPropertyName("target")] string Target,
-        [property: JsonPropertyName("label")] string? Label,
-        [property: JsonPropertyName("id")][property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Id = null);
+        [property: JsonPropertyName("id")] string Id = "")
+    {
+        [JsonPropertyName("label")]
+        public string? Label { get; init; }
+
+        [JsonExtensionData]
+        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+    }
 
     /// <summary>
     /// Loads a previously generated knowledge graph from its JSON file.
@@ -64,8 +101,31 @@ public static partial class GraphBuilder
         if (graph is null)
             throw new InvalidDataException($"Failed to deserialize graph from {fullPath}");
 
-        return graph;
+        return EnsureEdgeIds(graph);
     }
+
+    static KnowledgeGraph EnsureEdgeIds(KnowledgeGraph graph)
+    {
+        if (graph.Edges.All(e => !string.IsNullOrWhiteSpace(e.Id)))
+            return graph;
+
+        var conceptIds = graph.Nodes
+            .Select(n => n.Id)
+            .Concat(graph.Edges.SelectMany(e => new[] { e.Source, e.Target }))
+            .Distinct(StringComparer.Ordinal);
+        var conceptAbbrs = ShortIds.ComputeConceptAbbreviations(conceptIds);
+
+        var edges = graph.Edges
+            .Select(e => string.IsNullOrWhiteSpace(e.Id)
+                ? e with { Id = FormatEdgeId(conceptAbbrs, e.Source, e.Target) }
+                : e)
+            .ToList();
+
+        return graph with { Edges = edges };
+    }
+
+    static string FormatEdgeId(IReadOnlyDictionary<string, string> conceptAbbrs, string source, string target)
+        => $"{conceptAbbrs[source]}_{conceptAbbrs[target]}";
 
     /// <summary>
     /// Builds the knowledge graph for a bundle and returns the serializable structure.
@@ -175,16 +235,16 @@ public static partial class GraphBuilder
 
         foreach (var c in concepts.OrderBy(c => c.Id, StringComparer.Ordinal))
         {
-            var node = new Node(
-                Id: c.Id,
-                Path: c.Path,
-                Type: c.Type,
-                Degree: 0,
-                In: 0,
-                Out: 0,
-                Meta: c.Meta,
-                Label: c.Label,
-                Body: c.Body);
+            var node = new Node(c.Id, c.Type)
+            {
+                Path = c.Path,
+                Degree = 0,
+                In = 0,
+                Out = 0,
+                Meta = c.Meta,
+                Label = c.Label,
+                Body = c.Body,
+            };
 
             nodes.Add(node);
             nodeLookup[c.Id] = node;
@@ -221,10 +281,16 @@ public static partial class GraphBuilder
                     ? linkText
                     : (idToTitle.TryGetValue(targetId, out var t) && !string.IsNullOrEmpty(t) ? t : targetId);
 
-                var shortId = $"{conceptAbbrs[c.Id]}_{conceptAbbrs[targetId]}";
-                edges.Add(new Edge(c.Id, targetId, label, shortId));
+                edges.Add(new Edge(c.Id, targetId, FormatEdgeId(conceptAbbrs, c.Id, targetId))
+                {
+                    Label = label,
+                });
             }
         }
+
+        var indexLabels = LoadIndexLinkLabels(bundleRoot, ids);
+        var incomingLabels = CollectIncomingLinkTexts(concepts, ids, bundleRoot);
+        var derivedLabels = ResolveDerivedLabels(concepts, indexLabels, incomingLabels);
 
         // Compute degrees
         var outDeg = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -236,20 +302,21 @@ public static partial class GraphBuilder
             inDeg[e.Target] = inDeg.GetValueOrDefault(e.Target) + 1;
         }
 
-        // Update nodes with degrees (recreate because records are immutable here)
+        // Update nodes with degrees and derived labels (records are immutable here)
         var finalNodes = new List<Node>(nodes.Count);
         foreach (var n in nodes)
         {
             var ins = inDeg.GetValueOrDefault(n.Id);
             var outs = outDeg.GetValueOrDefault(n.Id);
-            finalNodes.Add(n with { In = ins, Out = outs, Degree = ins + outs });
+            var label = n.Label ?? derivedLabels.GetValueOrDefault(n.Id);
+            finalNodes.Add(n with { In = ins, Out = outs, Degree = ins + outs, Label = label });
         }
 
         var bundle = new Bundle(
-            Name: name,
-            Root: bundleRoot.Replace('\\', '/'),
-            Timestamp: DateTimeOffset.UtcNow,
-            Concepts: finalNodes.Count);
+            name,
+            bundleRoot.Replace('\\', '/'),
+            DateTimeOffset.UtcNow,
+            finalNodes.Count);
 
         return new KnowledgeGraph(bundle, finalNodes, edges);
     }
@@ -271,10 +338,231 @@ public static partial class GraphBuilder
         return id;
     }
 
+    static Dictionary<string, string> LoadIndexLinkLabels(string bundleRoot, HashSet<string> conceptIds)
+    {
+        var labels = new Dictionary<string, string>(StringComparer.Ordinal);
+        var bundleRootFull = Path.GetFullPath(bundleRoot);
+
+        foreach (var absolutePath in Directory.EnumerateFiles(bundleRootFull, IndexName, SearchOption.AllDirectories)
+                     .OrderBy(p => p, StringComparer.OrdinalIgnoreCase))
+        {
+            var relativePath = Path.GetRelativePath(bundleRootFull, absolutePath).Replace('\\', '/');
+            var text = File.ReadAllText(absolutePath);
+            var body = GetIndexBody(relativePath, text);
+
+            foreach (var (linkText, rawTarget, _) in MarkdownLinks.ExtractWithText(body))
+            {
+                if (string.IsNullOrWhiteSpace(linkText) || !MarkdownLinks.IsInternalLink(rawTarget))
+                {
+                    continue;
+                }
+
+                if (!MarkdownLinks.TryResolve(rawTarget, relativePath, bundleRootFull, out var resolved))
+                {
+                    continue;
+                }
+
+                var targetId = NormalizeToConceptId(resolved);
+                if (!conceptIds.Contains(targetId) || labels.ContainsKey(targetId))
+                {
+                    continue;
+                }
+
+                labels[targetId] = linkText;
+            }
+        }
+
+        return labels;
+    }
+
+    static string GetIndexBody(string relativePath, string text)
+    {
+        var isBundleRoot = relativePath.Equals(IndexName, StringComparison.OrdinalIgnoreCase);
+        if (isBundleRoot
+            && OKFDocument.HasFrontmatterBlock(text)
+            && OKFDocument.TryParse(text, out var document, out _))
+        {
+            return document!.Body;
+        }
+
+        return text;
+    }
+
+    static Dictionary<string, string> CollectIncomingLinkTexts(
+        List<Concept> concepts,
+        HashSet<string> conceptIds,
+        string bundleRoot)
+    {
+        var incoming = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+
+        foreach (var concept in concepts)
+        {
+            foreach (var (linkText, rawTarget) in concept.LinksTo)
+            {
+                if (string.IsNullOrWhiteSpace(linkText) || !MarkdownLinks.IsInternalLink(rawTarget))
+                {
+                    continue;
+                }
+
+                if (!MarkdownLinks.TryResolve(rawTarget, concept.Path, bundleRoot, out var resolved))
+                {
+                    continue;
+                }
+
+                var targetId = NormalizeToConceptId(resolved);
+                if (targetId == concept.Id || !conceptIds.Contains(targetId))
+                {
+                    continue;
+                }
+
+                if (!incoming.TryGetValue(targetId, out var texts))
+                {
+                    texts = [];
+                    incoming[targetId] = texts;
+                }
+
+                texts.Add(linkText);
+            }
+        }
+
+        return incoming.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value
+                .OrderBy(t => t.Length)
+                .ThenBy(t => t, StringComparer.Ordinal)
+                .First(),
+            StringComparer.Ordinal);
+    }
+
+    static Dictionary<string, string> ResolveDerivedLabels(
+        List<Concept> concepts,
+        Dictionary<string, string> indexLabels,
+        Dictionary<string, string> incomingLabels)
+    {
+        var needsFallback = concepts
+            .Where(c => string.IsNullOrWhiteSpace(c.Label))
+            .ToList();
+
+        var resolved = new Dictionary<string, string>(StringComparer.Ordinal);
+        var idFallbackIds = new List<string>();
+
+        foreach (var concept in needsFallback)
+        {
+            if (indexLabels.TryGetValue(concept.Id, out var indexLabel))
+            {
+                resolved[concept.Id] = indexLabel;
+                continue;
+            }
+
+            if (incomingLabels.TryGetValue(concept.Id, out var incomingLabel))
+            {
+                resolved[concept.Id] = incomingLabel;
+                continue;
+            }
+
+            idFallbackIds.Add(concept.Id);
+        }
+
+        foreach (var (conceptId, label) in DisambiguateIdFallbackLabels(idFallbackIds))
+        {
+            resolved[conceptId] = label;
+        }
+
+        return resolved;
+    }
+
+    static IEnumerable<(string ConceptId, string Label)> DisambiguateIdFallbackLabels(IReadOnlyList<string> conceptIds)
+    {
+        if (conceptIds.Count == 0)
+        {
+            yield break;
+        }
+
+        var baseLabels = conceptIds.ToDictionary(
+            id => id,
+            id => TitleCaseSegment(GetLastSegment(id)),
+            StringComparer.Ordinal);
+
+        var groups = baseLabels
+            .GroupBy(kvp => kvp.Value, StringComparer.Ordinal)
+            .ToList();
+
+        foreach (var group in groups)
+        {
+            var members = group.Select(kvp => kvp.Key).ToList();
+            if (members.Count == 1)
+            {
+                yield return (members[0], group.Key);
+                continue;
+            }
+
+            var parentSegments = members.ToDictionary(
+                id => id,
+                GetParentSegments,
+                StringComparer.Ordinal);
+
+            var depth = 1;
+            string[]? finalLabels = null;
+
+            while (depth <= members.Max(id => parentSegments[id].Length))
+            {
+                var candidateLabels = members.ToDictionary(
+                    id => id,
+                    id => FormatIdFallbackLabel(group.Key, parentSegments[id], depth),
+                    StringComparer.Ordinal);
+
+                if (candidateLabels.Values.Distinct(StringComparer.Ordinal).Count() == members.Count)
+                {
+                    finalLabels = members.Select(id => candidateLabels[id]).ToArray();
+                    break;
+                }
+
+                depth++;
+            }
+
+            finalLabels ??= members
+                .Select(id => FormatIdFallbackLabel(group.Key, parentSegments[id], parentSegments[id].Length))
+                .ToArray();
+
+            for (var i = 0; i < members.Count; i++)
+            {
+                yield return (members[i], finalLabels[i]);
+            }
+        }
+    }
+
+    static string FormatIdFallbackLabel(string baseLabel, string[] parentSegments, int depth)
+    {
+        if (parentSegments.Length == 0)
+        {
+            return baseLabel;
+        }
+
+        var count = Math.Min(depth, parentSegments.Length);
+        var parents = parentSegments[^count..]
+            .Select(TitleCaseSegment)
+            .ToArray();
+
+        return $"{baseLabel} ({string.Join(", ", parents)})";
+    }
+
+    static string[] GetParentSegments(string conceptId)
+        => conceptId.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)[..^1];
+
+    static string GetLastSegment(string conceptId)
+    {
+        var segments = conceptId.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        return segments.Length > 0 ? segments[^1] : conceptId;
+    }
+
+    static string TitleCaseSegment(string segment)
+        => string.IsNullOrEmpty(segment)
+            ? segment
+            : TitleCasing.ToTitleCase(segment);
+
     static List<(string Text, string Target)> ExtractLinks(string body, string sourceRelativePath, string bundleRoot)
     {
         var links = new List<(string, string)>();
-        var seen = new HashSet<string>(StringComparer.Ordinal);
 
         foreach (var (text, target, _) in MarkdownLinks.ExtractWithText(body))
         {
@@ -283,12 +571,7 @@ public static partial class GraphBuilder
                 continue;
             }
 
-            // Dedup by target for the concept (we don't need per-line here)
-            var key = target;
-            if (seen.Add(key))
-            {
-                links.Add((text, target));
-            }
+            links.Add((text, target));
         }
 
         return links;
