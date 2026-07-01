@@ -95,27 +95,22 @@ public static partial class BundleVisualizer
 
     private static NodeData ToVizNodeData(GraphBuilder.Node n)
     {
-        var meta = n.Meta ?? new Dictionary<string, object?>(StringComparer.Ordinal);
-
-        static string GetMeta(Dictionary<string, object?> m, string key, string def = "")
-        {
-            return m.TryGetValue(key, out var v) && v is not null ? v.ToString() ?? def : def;
-        }
-
         var tags = new List<string>();
-        if (meta.TryGetValue("tags", out var tagVal) && tagVal is not null)
+        if (n.ExtensionData?.TryGetValue("tags", out var tagElement) == true)
         {
-            if (tagVal is string tagStr && !string.IsNullOrWhiteSpace(tagStr))
+            if (tagElement.ValueKind == JsonValueKind.String)
             {
-                tags.Add(tagStr);
+                var tag = tagElement.GetString();
+                if (!string.IsNullOrWhiteSpace(tag))
+                    tags.Add(tag);
             }
-            else if (tagVal is System.Collections.IEnumerable en)
+            else if (tagElement.ValueKind == JsonValueKind.Array)
             {
-                foreach (var item in en)
+                foreach (var item in tagElement.EnumerateArray())
                 {
-                    var s = item?.ToString();
-                    if (!string.IsNullOrWhiteSpace(s))
-                        tags.Add(s!);
+                    var tag = item.ValueKind == JsonValueKind.String ? item.GetString() : item.ToString();
+                    if (!string.IsNullOrWhiteSpace(tag))
+                        tags.Add(tag);
                 }
             }
         }
@@ -129,11 +124,24 @@ public static partial class BundleVisualizer
             Id = n.Id,
             Label = string.IsNullOrEmpty(n.Label) ? n.Id : n.Label,
             Type = n.Type,
-            Description = GetMeta(meta, "description"),
-            Resource = GetMeta(meta, "resource"),
+            Description = GetExtensionString(n.ExtensionData, "description"),
+            Resource = GetExtensionString(n.ExtensionData, "resource"),
             Tags = tags,
             Color = color,
             Size = size,
+        };
+    }
+
+    static string GetExtensionString(Dictionary<string, JsonElement>? extensionData, string key, string def = "")
+    {
+        if (extensionData is null || !extensionData.TryGetValue(key, out var element))
+            return def;
+
+        return element.ValueKind switch
+        {
+            JsonValueKind.String => element.GetString() ?? def,
+            JsonValueKind.Null => def,
+            _ => element.ToString(),
         };
     }
 

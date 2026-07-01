@@ -54,9 +54,6 @@ public static partial class GraphBuilder
         [JsonPropertyName("out")]
         public required int Out { get; init; }
 
-        [JsonPropertyName("meta")]
-        public required Dictionary<string, object?> Meta { get; init; }
-
         [JsonPropertyName("label")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Label { get; init; }
@@ -141,6 +138,24 @@ public static partial class GraphBuilder
         return graph with { Nodes = nodes };
     }
 
+    static Dictionary<string, JsonElement>? ToExtensionData(IReadOnlyDictionary<string, object?> frontmatter)
+    {
+        var extensionData = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
+        foreach (var (key, value) in frontmatter)
+        {
+            if (string.Equals(key, "type", StringComparison.Ordinal) ||
+                string.Equals(key, "label", StringComparison.Ordinal) ||
+                value is null)
+            {
+                continue;
+            }
+
+            extensionData[key] = JsonSerializer.SerializeToElement(value, JsonOptions);
+        }
+
+        return extensionData.Count > 0 ? extensionData : null;
+    }
+
     static string FormatEdgeId(IReadOnlyDictionary<string, string> conceptAbbrs, string source, string target)
         => $"{conceptAbbrs[source]}_{conceptAbbrs[target]}";
 
@@ -212,8 +227,6 @@ public static partial class GraphBuilder
                 continue;
             }
 
-            var meta = SanitizeMeta(frontmatter);
-
             var title = GetStringValue(frontmatter, "title");
             var label = GetStringValue(frontmatter, "label");
             if (string.IsNullOrWhiteSpace(label))
@@ -227,7 +240,7 @@ public static partial class GraphBuilder
                 type!,
                 title ?? conceptId,
                 label,
-                meta,
+                ToExtensionData(frontmatter),
                 includeBody ? document.Body : null,
                 ExtractLinks(document.Body, relativePath, bundleRootFull)));
         }
@@ -258,7 +271,7 @@ public static partial class GraphBuilder
                 Degree = 0,
                 In = 0,
                 Out = 0,
-                Meta = c.Meta,
+                ExtensionData = c.ExtensionData,
                 Label = c.Label,
                 Body = c.Body,
             };
@@ -613,49 +626,6 @@ public static partial class GraphBuilder
         };
     }
 
-    static Dictionary<string, object?> SanitizeMeta(IReadOnlyDictionary<string, object?> frontmatter)
-    {
-        var result = new Dictionary<string, object?>(StringComparer.Ordinal);
-        foreach (var kvp in frontmatter)
-        {
-            if (string.Equals(kvp.Key, "type", StringComparison.Ordinal) ||
-                string.Equals(kvp.Key, "label", StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            result[kvp.Key] = SanitizeValue(kvp.Value);
-        }
-        return result;
-    }
-
-    static object? SanitizeValue(object? value)
-    {
-        if (value is null)
-            return null;
-
-        return value switch
-        {
-            string or int or long or double or float or bool or decimal => value,
-            DateTime dt => dt.ToString("o"),
-            DateTimeOffset dto => dto.ToString("o"),
-            IEnumerable<object?> enumerable => enumerable.Select(SanitizeValue).ToList(),
-            System.Collections.IDictionary dict => SanitizeDictionary(dict),
-            _ => value.ToString()
-        };
-    }
-
-    static Dictionary<string, object?> SanitizeDictionary(System.Collections.IDictionary dict)
-    {
-        var result = new Dictionary<string, object?>(StringComparer.Ordinal);
-        foreach (System.Collections.DictionaryEntry entry in dict)
-        {
-            var key = Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture) ?? "";
-            result[key] = SanitizeValue(entry.Value);
-        }
-        return result;
-    }
-
     // Internal concept representation
     sealed record Concept(
         string Id,
@@ -663,7 +633,7 @@ public static partial class GraphBuilder
         string Type,
         string Title,
         string? Label,
-        Dictionary<string, object?> Meta,
+        Dictionary<string, JsonElement>? ExtensionData,
         string? Body,
         List<(string Text, string Target)> LinksTo);
 }

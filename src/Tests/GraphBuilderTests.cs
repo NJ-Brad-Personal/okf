@@ -9,6 +9,15 @@ public class GraphBuilderTests
     static string FixturePath(string name)
         => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Fixtures", name));
 
+    static string? ExtensionString(GraphBuilder.Node node, string key)
+        => node.ExtensionData?.TryGetValue(key, out var element) == true
+            && element.ValueKind == JsonValueKind.String
+            ? element.GetString()
+            : null;
+
+    static bool HasExtensionKey(GraphBuilder.Node node, string key)
+        => node.ExtensionData?.ContainsKey(key) == true;
+
     [Fact]
     public void Generates_expected_shape_and_counts_for_valid_bundle()
     {
@@ -155,23 +164,23 @@ public class GraphBuilderTests
     }
 
     [Fact]
-    public void Type_is_lifted_to_node_level_not_duplicated_in_meta()
+    public void Type_is_lifted_to_node_level_not_duplicated_in_extension_data()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
 
         foreach (var node in graph.Nodes)
         {
             Assert.False(string.IsNullOrWhiteSpace(node.Type));
-            Assert.DoesNotContain(node.Meta, kvp => string.Equals(kvp.Key, "type", StringComparison.Ordinal));
+            Assert.False(HasExtensionKey(node, "type"));
         }
 
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         Assert.Equal("BigQuery Table", orders.Type);
-        Assert.Equal("Orders", orders.Meta["title"]);
+        Assert.Equal("Orders", ExtensionString(orders, "title"));
     }
 
     [Fact]
-    public void Label_is_lifted_to_node_level_not_duplicated_in_meta()
+    public void Label_is_lifted_to_node_level_not_duplicated_in_extension_data()
     {
         var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
         Directory.CreateDirectory(bundlePath);
@@ -198,11 +207,11 @@ public class GraphBuilderTests
 
             var labeled = graph.Nodes.First(n => n.Id == "labeled");
             Assert.Equal("Display Name", labeled.Label);
-            Assert.DoesNotContain(labeled.Meta, kvp => string.Equals(kvp.Key, "label", StringComparison.Ordinal));
+            Assert.False(HasExtensionKey(labeled, "label"));
 
             var unlabeled = graph.Nodes.First(n => n.Id == "unlabeled");
             Assert.Equal("Unlabeled", unlabeled.Label);
-            Assert.DoesNotContain(unlabeled.Meta, kvp => string.Equals(kvp.Key, "label", StringComparison.Ordinal));
+            Assert.False(HasExtensionKey(unlabeled, "label"));
         }
         finally
         {
@@ -211,13 +220,13 @@ public class GraphBuilderTests
     }
 
     [Fact]
-    public void Title_stays_in_meta_and_is_not_copied_to_node_label()
+    public void Title_stays_in_extension_data_and_is_not_copied_to_node_label()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
 
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         Assert.Equal("Orders", orders.Label);
-        Assert.Equal("Orders", orders.Meta["title"]);
+        Assert.Equal("Orders", ExtensionString(orders, "title"));
 
         var customers = graph.Nodes.First(n => n.Id == "tables/customers");
         Assert.Equal("customers", customers.Label);
@@ -237,7 +246,7 @@ public class GraphBuilderTests
             var untitledGraph = GraphBuilder.Build(bundlePath);
             var untitled = Assert.Single(untitledGraph.Nodes);
             Assert.Equal("Untitled", untitled.Label);
-            Assert.DoesNotContain(untitled.Meta, kvp => string.Equals(kvp.Key, "title", StringComparison.Ordinal));
+            Assert.False(HasExtensionKey(untitled, "title"));
         }
         finally
         {
@@ -272,7 +281,7 @@ public class GraphBuilderTests
             var customers = Assert.Single(graph.Nodes);
 
             Assert.Equal("Customer Records", customers.Label);
-            Assert.Equal("Customers", customers.Meta["title"]);
+            Assert.Equal("Customers", ExtensionString(customers, "title"));
         }
         finally
         {
@@ -401,8 +410,9 @@ public class GraphBuilderTests
         var firstNode = root.GetProperty("nodes")[0];
         Assert.True(firstNode.TryGetProperty("id", out _));
         Assert.True(firstNode.TryGetProperty("path", out _));
-        Assert.True(firstNode.TryGetProperty("meta", out _));
+        Assert.True(firstNode.TryGetProperty("title", out _));
         Assert.True(firstNode.TryGetProperty("label", out _));
+        Assert.False(firstNode.TryGetProperty("meta", out _));
         Assert.True(firstNode.TryGetProperty("in", out _));
         Assert.True(firstNode.TryGetProperty("out", out _));
         Assert.True(firstNode.TryGetProperty("weight", out _));
@@ -505,8 +515,8 @@ public class GraphBuilderTests
                     "concepts": 2
                   },
                   "nodes": [
-                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1, "meta": {} },
-                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1 },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 1, "in": 1, "out": 0 }
                   ],
                   "edges": [
                     { "source": "a", "target": "b", "label": "b" }
@@ -547,9 +557,9 @@ public class GraphBuilderTests
                     "concepts": 3
                   },
                   "nodes": [
-                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2, "meta": {}, "weight": 0.9 },
-                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 2, "in": 1, "out": 1, "meta": {} },
-                    { "id": "c", "path": "c.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2, "weight": 0.9 },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 2, "in": 1, "out": 1 },
+                    { "id": "c", "path": "c.md", "type": "Reference", "degree": 1, "in": 1, "out": 0 }
                   ],
                   "edges": [
                     { "source": "a", "target": "b", "label": "b", "id": "custom_ab" },
@@ -589,8 +599,8 @@ public class GraphBuilderTests
                     "concepts": 2
                   },
                   "nodes": [
-                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1, "meta": {} },
-                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1 },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 1, "in": 1, "out": 0 }
                   ],
                   "edges": [
                     { "source": "a", "target": "b", "label": "b" }
@@ -625,9 +635,9 @@ public class GraphBuilderTests
                     "concepts": 3
                   },
                   "nodes": [
-                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2, "meta": {} },
-                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 2, "in": 1, "out": 1, "meta": {} },
-                    { "id": "c", "path": "c.md", "type": "Reference", "degree": 1, "in": 1, "out": 0, "meta": {} }
+                    { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2 },
+                    { "id": "b", "path": "b.md", "type": "Reference", "degree": 2, "in": 1, "out": 1 },
+                    { "id": "c", "path": "c.md", "type": "Reference", "degree": 1, "in": 1, "out": 0 }
                   ],
                   "edges": [
                     { "source": "a", "target": "b", "label": "b", "id": "custom_ab" },
@@ -641,6 +651,52 @@ public class GraphBuilderTests
             Assert.Equal(2, loaded.Edges.Count);
             Assert.Equal("custom_ab", loaded.Edges[0].Id);
             Assert.Equal("b_c", loaded.Edges[1].Id);
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Load_preserves_unknown_node_properties_in_extension_data()
+    {
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            File.WriteAllText(graphPath, """
+                {
+                  "bundle": {
+                    "name": "test",
+                    "root": "/tmp",
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "concepts": 1
+                  },
+                  "nodes": [
+                    {
+                      "id": "a",
+                      "path": "a.md",
+                      "type": "Reference",
+                      "degree": 0,
+                      "in": 0,
+                      "out": 0,
+                      "meta": { "title": "Legacy Title", "resource": "bq://proj.ds.tbl" },
+                      "highlight": true
+                    }
+                  ],
+                  "edges": []
+                }
+                """);
+
+            var loaded = GraphBuilder.Load(graphPath);
+            var node = Assert.Single(loaded.Nodes);
+
+            Assert.True(HasExtensionKey(node, "meta"));
+            Assert.Equal("Legacy Title", node.ExtensionData!["meta"].GetProperty("title").GetString());
+            Assert.Equal("bq://proj.ds.tbl", node.ExtensionData!["meta"].GetProperty("resource").GetString());
+            Assert.True(node.ExtensionData!["highlight"].GetBoolean());
         }
         finally
         {
@@ -674,7 +730,6 @@ public class GraphBuilderTests
                       "degree": 0,
                       "in": 0,
                       "out": 0,
-                      "meta": {},
                       "highlight": true
                     }
                   ],

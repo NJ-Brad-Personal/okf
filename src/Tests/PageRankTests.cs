@@ -12,7 +12,6 @@ public class PageRankTests
             Degree = 0,
             In = 0,
             Out = 0,
-            Meta = [],
         };
 
     [Fact]
