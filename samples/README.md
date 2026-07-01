@@ -12,7 +12,14 @@ This bundle is **intentionally invalid**. Each file triggers a specific diagnost
 |------|----------------|
 | `concepts/missing-frontmatter.md` | Missing YAML frontmatter block |
 | `concepts/unterminated-frontmatter.md` | Unterminated YAML frontmatter block |
-| `concepts/invalid-yaml.md` | Invalid YAML in frontmatter |
+| `concepts/invalid-yaml.md` | Unclosed flow sequence in frontmatter |
+| `concepts/flow-mapping-unclosed.md` | Unclosed flow mapping (`{ …`) in frontmatter |
+| `concepts/unclosed-quote.md` | Unclosed double-quoted scalar |
+| `concepts/unclosed-single-quote.md` | Unclosed single-quoted scalar |
+| `concepts/bad-indent.md` | Mis-indented mapping key |
+| `concepts/block-scalar-indent.md` | Under-indented literal block scalar line |
+| `concepts/sequence-root.md` | Sequence entry mixed into a mapping |
+| `concepts/undefined-anchor.md` | Reference to an undefined YAML alias |
 | `concepts/missing-type.md` | Missing non-empty `type` field |
 | `concepts/empty-type.md` | Missing non-empty `type` field |
 | `concepts/broken-relative-link.md` | Broken relative link |

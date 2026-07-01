@@ -11,14 +11,10 @@ static int Check([Argument] string path = ".")
     var checker = new BundleChecker(path);
     var issues = checker.Check();
 
-    foreach (var issue in issues)
-    {
-        Console.WriteLine(issue);
-    }
+    CheckRenderer.Render(issues, path);
 
     if (issues.Count == 0)
     {
-        Console.WriteLine($"OK: {Path.GetFullPath(path)}");
         return 0;
     }
 

@@ -7,13 +7,15 @@ public enum IssueSeverity
 }
 
 public sealed record ValidationIssue(
+    CheckRule Rule,
     IssueSeverity Severity,
     string File,
     string Message,
-    int? Line = null)
+    IssueLocation? Location = null,
+    SourceSnippet? Snippet = null)
 {
     public override string ToString()
-        => Line is int line
-            ? $"{Severity.ToString().ToLowerInvariant()}: {File}:{line}: {Message}"
-            : $"{Severity.ToString().ToLowerInvariant()}: {File}: {Message}";
+        => Location is null
+            ? $"{Severity.ToString().ToLowerInvariant()}: {File}: {Message}"
+            : $"{Severity.ToString().ToLowerInvariant()}: {File}{Location.FormatSuffix()}: {Message}";
 }

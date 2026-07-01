@@ -30,7 +30,7 @@ public sealed partial class BundleChecker
 
         if (!Directory.Exists(bundleRoot))
         {
-            issues.Add(new ValidationIssue(IssueSeverity.Error, bundleRoot, "Bundle directory not found."));
+            issues.Add(new ValidationIssue(CheckRule.BundleExists, IssueSeverity.Error, bundleRoot, "Bundle directory not found."));
             return issues;
         }
 
@@ -64,16 +64,21 @@ public sealed partial class BundleChecker
 
     void ValidateConcept(string relativePath, string text, bool validateLinks, HashSet<string> markdownFiles)
     {
-        if (!OKFDocument.TryParse(text, out var document, out var error))
+        if (!OKFDocument.TryParse(text, out var document, out var error, out var snippet))
         {
-            AddError(relativePath, error!);
+            AddError(
+                CheckRule.ConceptFrontmatter,
+                relativePath,
+                error!,
+                IssueLocation.FromYamlSnippet(text, snippet),
+                snippet);
             return;
         }
 
         var type = OKFDocument.GetTypeValue(document!.Frontmatter);
         if (string.IsNullOrWhiteSpace(type))
         {
-            AddError(relativePath, "Frontmatter must contain a non-empty 'type' field.");
+            AddError(CheckRule.ConceptType, relativePath, "Frontmatter must contain a non-empty 'type' field.");
         }
 
         if (validateLinks)
@@ -91,12 +96,17 @@ public sealed partial class BundleChecker
         {
             if (!isBundleRoot)
             {
-                AddError(relativePath, "index.md must not contain frontmatter.");
+                AddError(CheckRule.IndexFrontmatter, relativePath, "index.md must not contain frontmatter.");
                 body = text;
             }
-            else if (!OKFDocument.TryParse(text, out var document, out var error))
+            else if (!OKFDocument.TryParse(text, out var document, out var error, out var snippet))
             {
-                AddError(relativePath, error!);
+                AddError(
+                    CheckRule.IndexFrontmatter,
+                    relativePath,
+                    error!,
+                    IssueLocation.FromYamlSnippet(text, snippet),
+                    snippet);
                 body = text;
             }
             else
@@ -107,6 +117,7 @@ public sealed partial class BundleChecker
                 if (unexpectedKeys.Length > 0)
                 {
                     AddError(
+                        CheckRule.IndexFrontmatter,
                         relativePath,
                         $"Bundle-root index.md frontmatter may only contain 'okf_version'; unexpected keys: {string.Join(", ", unexpectedKeys)}.");
                 }
@@ -147,7 +158,7 @@ public sealed partial class BundleChecker
             }
             else if (line.StartsWith("* ", StringComparison.Ordinal) && line.Contains("]("))
             {
-                AddError(relativePath, "Index entry must use the form '* [Title](url) - description'.", lineNumber);
+                AddError(CheckRule.IndexStructure, relativePath, "Index entry must use the form '* [Title](url) - description'.", new IssueLocation(lineNumber));
             }
 
             lineNumber++;
@@ -155,12 +166,12 @@ public sealed partial class BundleChecker
 
         if (!hasSection)
         {
-            AddError(relativePath, "index.md must contain at least one section heading ('# …').");
+            AddError(CheckRule.IndexStructure, relativePath, "index.md must contain at least one section heading ('# …').");
         }
 
         if (!hasEntry)
         {
-            AddError(relativePath, "index.md must contain at least one list entry linking to a concept or subdirectory.");
+            AddError(CheckRule.IndexStructure, relativePath, "index.md must contain at least one list entry linking to a concept or subdirectory.");
         }
     }
 
@@ -168,7 +179,7 @@ public sealed partial class BundleChecker
     {
         if (OKFDocument.HasFrontmatterBlock(text))
         {
-            AddError(relativePath, "log.md must not contain frontmatter.");
+            AddError(CheckRule.LogFormat, relativePath, "log.md must not contain frontmatter.");
         }
 
         ValidateLogBody(relativePath, text);
@@ -201,7 +212,7 @@ public sealed partial class BundleChecker
                         DateTimeStyles.None,
                         out _))
                 {
-                    AddError(relativePath, "Log date heading must use ISO 8601 YYYY-MM-DD form.", lineNumber);
+                    AddError(CheckRule.LogFormat, relativePath, "Log date heading must use ISO 8601 YYYY-MM-DD form.", new IssueLocation(lineNumber));
                 }
             }
             else if (inDateSection && line.StartsWith("* ", StringComparison.Ordinal))
@@ -210,11 +221,11 @@ public sealed partial class BundleChecker
             }
             else if (inDateSection && line.Length > 0 && !line.StartsWith('#'))
             {
-                AddError(relativePath, "Log entries must be list items under a date heading.", lineNumber);
+                AddError(CheckRule.LogFormat, relativePath, "Log entries must be list items under a date heading.", new IssueLocation(lineNumber));
             }
             else if (line.StartsWith("## ", StringComparison.Ordinal) && !dateMatch.Success)
             {
-                AddError(relativePath, "Log section headings must use ISO 8601 YYYY-MM-DD form.", lineNumber);
+                AddError(CheckRule.LogFormat, relativePath, "Log section headings must use ISO 8601 YYYY-MM-DD form.", new IssueLocation(lineNumber));
             }
 
             lineNumber++;
@@ -222,7 +233,7 @@ public sealed partial class BundleChecker
 
         if (!hasDateSection)
         {
-            AddError(relativePath, "log.md must contain at least one date heading ('## YYYY-MM-DD').");
+            AddError(CheckRule.LogFormat, relativePath, "log.md must contain at least one date heading ('## YYYY-MM-DD').");
         }
     }
 
@@ -243,15 +254,16 @@ public sealed partial class BundleChecker
             if (!MarkdownLinks.TargetExists(resolved, bundleRoot, markdownFiles))
             {
                 AddError(
+                    CheckRule.InternalLinks,
                     sourceRelativePath,
                     $"Broken link to '{target}' (resolved to '{resolved}').",
-                    line);
+                    new IssueLocation(line));
             }
         }
     }
 
-    void AddError(string file, string message, int? line = null)
-        => issues.Add(new ValidationIssue(IssueSeverity.Error, file, message, line));
+    void AddError(CheckRule rule, string file, string message, IssueLocation? location = null, SourceSnippet? snippet = null)
+        => issues.Add(new ValidationIssue(rule, IssueSeverity.Error, file, message, location, snippet));
 
     [GeneratedRegex(@"^# .+", RegexOptions.Compiled)]
     private static partial Regex SectionHeadingRegex();

@@ -69,4 +69,32 @@ public class OKFDocumentTests
         Assert.Equal("BigQuery Table", OKFDocument.GetTypeValue(document!.Frontmatter));
         Assert.StartsWith("# Body", document.Body);
     }
+
+    [Fact]
+    public void TryParse_includes_yaml_snippet_for_invalid_frontmatter()
+    {
+        const string text = """
+            ---
+            type: Metric
+            tags: [unclosed list
+            ---
+            
+            Body
+            """;
+
+        Assert.False(OKFDocument.TryParse(text, out _, out var error, out var snippet));
+        Assert.Equal("While parsing a flow sequence, did not find expected ',' or ']'.", error);
+        Assert.NotNull(snippet);
+        Assert.Single(snippet!.Lines);
+        Assert.Equal(2, snippet.Lines[0].LineNumber);
+        Assert.Equal("tags: [unclosed list", snippet.Lines[0].Text);
+        Assert.Equal(7, snippet.Lines[0].StartColumn);
+        Assert.Equal(20, snippet.Lines[0].EndColumn);
+
+        var location = IssueLocation.FromYamlSnippet(text, snippet);
+        Assert.NotNull(location);
+        Assert.Equal("(3:7-3:20)", location!.FormatSuffix());
+        Assert.Equal("(5:9)", new IssueLocation(5, 9).FormatSuffix());
+        Assert.Equal("(14)", new IssueLocation(14).FormatSuffix());
+    }
 }
