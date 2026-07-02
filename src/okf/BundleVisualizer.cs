@@ -26,9 +26,8 @@ public static partial class BundleVisualizer
     public static VisualizationStats Generate(string bundleRoot, string outPath, string? bundleName = null)
     {
         // Delegate to the common in-memory graph model (same as `graph` command)
-        var graph = GraphBuilder.Build(bundleRoot, bundleName, includeBody: true);
-        var name = bundleName ?? graph.Bundle.Name;
-        return Generate(graph, outPath, name);
+        var graph = GraphBuilder.Build(bundleRoot, includeBody: true);
+        return Generate(graph, outPath, bundleName);
     }
 
     /// <summary>
@@ -39,7 +38,7 @@ public static partial class BundleVisualizer
     {
         outPath = Path.GetFullPath(outPath);
 
-        var name = displayName ?? graph.Bundle.Name;
+        var name = displayName ?? "";
 
         var vizData = BuildVizData(graph);
 
@@ -55,7 +54,7 @@ public static partial class BundleVisualizer
         return new VisualizationStats(graph.Nodes.Count, graph.Edges.Count, Encoding.UTF8.GetByteCount(html));
     }
 
-    private static GraphData BuildVizData(GraphBuilder.KnowledgeGraph graph)
+    static GraphData BuildVizData(GraphBuilder.KnowledgeGraph graph)
     {
         var vizNodes = graph.Nodes
             .Select(n => new NodeElement { Data = ToVizNodeData(n) })
@@ -93,7 +92,7 @@ public static partial class BundleVisualizer
         };
     }
 
-    private static NodeData ToVizNodeData(GraphBuilder.Node n)
+    static NodeData ToVizNodeData(GraphBuilder.Node n)
     {
         var color = TypePalette.GetValueOrDefault(n.Type, DefaultNodeColor);
         int bodyLen = n.Body?.Length ?? 0;

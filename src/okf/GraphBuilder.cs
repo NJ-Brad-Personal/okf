@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -29,10 +28,7 @@ public static partial class GraphBuilder
         public Dictionary<string, JsonElement>? ExtensionData { get; init; }
     }
 
-    public sealed record Bundle(
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("root")] string Root,
-        [property: JsonPropertyName("concepts")] int Concepts)
+    public sealed record Bundle
     {
         [JsonPropertyName("timestamp")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -46,17 +42,9 @@ public static partial class GraphBuilder
         [property: JsonPropertyName("id")] string Id,
         [property: JsonPropertyName("type")] string Type)
     {
-        [JsonPropertyName("path")]
-        public required string Path { get; init; }
-
-        [JsonPropertyName("degree")]
-        public required int Degree { get; init; }
-
-        [JsonPropertyName("in")]
-        public required int In { get; init; }
-
-        [JsonPropertyName("out")]
-        public required int Out { get; init; }
+        [JsonPropertyName("title")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Title { get; init; }
 
         [JsonPropertyName("label")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -81,6 +69,18 @@ public static partial class GraphBuilder
         [JsonPropertyName("body")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Body { get; init; }
+
+        [JsonPropertyName("path")]
+        public required string Path { get; init; }
+
+        [JsonPropertyName("degree")]
+        public required int Degree { get; init; }
+
+        [JsonPropertyName("in")]
+        public required int In { get; init; }
+
+        [JsonPropertyName("out")]
+        public required int Out { get; init; }
 
         [JsonPropertyName("weight")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -180,35 +180,16 @@ public static partial class GraphBuilder
         return graph with { Nodes = nodes };
     }
 
-    static Dictionary<string, JsonElement>? ToExtensionData(IReadOnlyDictionary<string, object?> frontmatter)
-    {
-        var extensionData = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
-        foreach (var (key, value) in frontmatter)
-        {
-            if (string.Equals(key, "type", StringComparison.Ordinal) ||
-                string.Equals(key, "label", StringComparison.Ordinal) ||
-                string.Equals(key, "description", StringComparison.Ordinal) ||
-                string.Equals(key, "resource", StringComparison.Ordinal) ||
-                string.Equals(key, "tags", StringComparison.Ordinal) ||
-                string.Equals(key, "timestamp", StringComparison.Ordinal) ||
-                value is null)
-            {
-                continue;
-            }
-
-            extensionData[key] = JsonSerializer.SerializeToElement(value, JsonOptions);
-        }
-
-        return extensionData.Count > 0 ? extensionData : null;
-    }
-
     static string FormatEdgeId(IReadOnlyDictionary<string, string> conceptAbbrs, string source, string target)
         => $"{conceptAbbrs[source]}_{conceptAbbrs[target]}";
 
     /// <summary>
     /// Builds the knowledge graph for a bundle and returns the serializable structure.
     /// </summary>
-    public static KnowledgeGraph Build(string bundleRoot, string? bundleName = null, bool includeBody = false)
+    public static KnowledgeGraph Build(
+        string bundleRoot,
+        bool includeBody = false,
+        IReadOnlyDictionary<string, string>? bundleProperties = null)
     {
         bundleRoot = Path.GetFullPath(bundleRoot);
 
@@ -218,16 +199,20 @@ public static partial class GraphBuilder
         }
 
         var concepts = WalkConcepts(bundleRoot, includeBody);
-        var graph = BuildGraph(concepts, bundleRoot, bundleName);
+        var graph = BuildGraph(concepts, bundleRoot, bundleProperties);
         return graph;
     }
 
     /// <summary>
     /// Builds the graph and writes it as pretty JSON to the given path. Returns basic stats.
     /// </summary>
-    public static (int Concepts, int Edges) Generate(string bundleRoot, string outPath, string? bundleName = null, bool includeBody = false)
+    public static (int Nodes, int Edges) Generate(
+        string bundleRoot,
+        string outPath,
+        bool includeBody = false,
+        IReadOnlyDictionary<string, string>? bundleProperties = null)
     {
-        var graph = Build(bundleRoot, bundleName, includeBody);
+        var graph = Build(bundleRoot, includeBody, bundleProperties);
 
         var outDir = Path.GetDirectoryName(outPath);
         if (!string.IsNullOrEmpty(outDir))
@@ -265,37 +250,16 @@ public static partial class GraphBuilder
                 continue;
             }
 
-            var frontmatter = document!.Frontmatter;
-            var type = OKFDocument.GetTypeValue(frontmatter);
-            if (string.IsNullOrWhiteSpace(type))
+            if (!ConceptDocument.TryDeserialize(document!.FrontmatterYaml, out var conceptDoc))
             {
                 // Invalid OKF document per spec - skip
                 continue;
             }
 
-            var title = GetStringValue(frontmatter, "title");
-            var label = GetStringValue(frontmatter, "label");
-            if (string.IsNullOrWhiteSpace(label))
-            {
-                label = null;
-            }
-
-            var description = GetStringValue(frontmatter, "description");
-            var resource = GetStringValue(frontmatter, "resource");
-            var tags = GetTagsValue(frontmatter);
-            var timestamp = GetTimestampValue(frontmatter);
-
             concepts.Add(new Concept(
                 conceptId,
                 relativePath,
-                type!,
-                title ?? conceptId,
-                label,
-                description,
-                resource,
-                tags,
-                timestamp,
-                ToExtensionData(frontmatter),
+                conceptDoc!,
                 includeBody ? document.Body : null,
                 ExtractLinks(document.Body, relativePath, bundleRootFull)));
         }
@@ -303,11 +267,30 @@ public static partial class GraphBuilder
         return concepts;
     }
 
-    static KnowledgeGraph BuildGraph(List<Concept> concepts, string bundleRoot, string? bundleName)
+    static Dictionary<string, JsonElement>? CreateBundleExtensionData(
+        IReadOnlyDictionary<string, string>? properties)
     {
-        var name = bundleName ?? new DirectoryInfo(bundleRoot).Name;
+        if (properties is null || properties.Count == 0)
+        {
+            return null;
+        }
+
+        var extensionData = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
+        foreach (var (key, value) in properties)
+        {
+            extensionData[key] = Converters.ToJsonElement(value);
+        }
+
+        return extensionData;
+    }
+
+    static KnowledgeGraph BuildGraph(
+        List<Concept> concepts,
+        string bundleRoot,
+        IReadOnlyDictionary<string, string>? bundleProperties = null)
+    {
         var ids = concepts.Select(c => c.Id).ToHashSet(StringComparer.Ordinal);
-        var idToTitle = concepts.ToDictionary(c => c.Id, c => c.Title, StringComparer.Ordinal);
+        var idToTitle = concepts.ToDictionary(c => c.Id, c => c.Document.Title ?? c.Id, StringComparer.Ordinal);
 
         var conceptAbbrs = ShortIds.ComputeConceptAbbreviations(concepts.Select(c => c.Id));
 
@@ -320,18 +303,19 @@ public static partial class GraphBuilder
 
         foreach (var c in concepts.OrderBy(c => c.Id, StringComparer.Ordinal))
         {
-            var node = new Node(c.Id, c.Type)
+            var node = new Node(c.Id, c.Document.Type!)
             {
                 Path = c.Path,
                 Degree = 0,
                 In = 0,
                 Out = 0,
-                ExtensionData = c.ExtensionData,
-                Label = c.Label,
-                Description = c.Description,
-                Resource = c.Resource,
-                Tags = c.Tags,
-                Timestamp = c.Timestamp,
+                Title = c.Document.Title,
+                Label = GetFrontmatterLabel(c.Document.ExtensionData),
+                Description = c.Document.Description,
+                Resource = c.Document.Resource,
+                Tags = c.Document.Tags,
+                Timestamp = c.Document.Timestamp,
+                ExtensionData = CopyExtensionDataExcluding(c.Document.ExtensionData, "label"),
                 Body = c.Body,
             };
 
@@ -402,17 +386,17 @@ public static partial class GraphBuilder
         }
 
         var pageRank = PageRank.Compute(finalNodes, edges);
-        finalNodes = finalNodes
+        finalNodes = [.. finalNodes
             .Select(n => n with
             {
                 Weight = pageRank.Weights[n.Id],
                 Rank = pageRank.Ranks[n.Id],
-            })
-            .ToList();
+            })];
 
-        var bundle = new Bundle(name, bundleRoot.Replace('\\', '/'), finalNodes.Count)
+        var bundle = new Bundle
         {
             Timestamp = DateTimeOffset.UtcNow,
+            ExtensionData = CreateBundleExtensionData(bundleProperties),
         };
 
         return new KnowledgeGraph(bundle, finalNodes, edges);
@@ -537,7 +521,7 @@ public static partial class GraphBuilder
         Dictionary<string, string> incomingLabels)
     {
         var needsFallback = concepts
-            .Where(c => string.IsNullOrWhiteSpace(c.Label))
+            .Where(c => string.IsNullOrWhiteSpace(GetFrontmatterLabel(c.Document.ExtensionData)))
             .ToList();
 
         var resolved = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -610,16 +594,14 @@ public static partial class GraphBuilder
 
                 if (candidateLabels.Values.Distinct(StringComparer.Ordinal).Count() == members.Count)
                 {
-                    finalLabels = members.Select(id => candidateLabels[id]).ToArray();
+                    finalLabels = [.. members.Select(id => candidateLabels[id])];
                     break;
                 }
 
                 depth++;
             }
 
-            finalLabels ??= members
-                .Select(id => FormatIdFallbackLabel(group.Key, parentSegments[id], parentSegments[id].Length))
-                .ToArray();
+            finalLabels ??= [.. members.Select(id => FormatIdFallbackLabel(group.Key, parentSegments[id], parentSegments[id].Length))];
 
             for (var i = 0; i < members.Count; i++)
             {
@@ -657,6 +639,41 @@ public static partial class GraphBuilder
             ? segment
             : TitleCasing.ToTitleCase(segment);
 
+    static string? GetFrontmatterLabel(Dictionary<string, JsonElement>? extensionData)
+    {
+        if (extensionData?.TryGetValue("label", out var element) != true
+            || element.ValueKind != JsonValueKind.String)
+        {
+            return null;
+        }
+
+        var label = element.GetString();
+        return string.IsNullOrWhiteSpace(label) ? null : label;
+    }
+
+    static Dictionary<string, JsonElement>? CopyExtensionDataExcluding(
+        Dictionary<string, JsonElement>? extensionData,
+        params string[] excludeKeys)
+    {
+        if (extensionData is null || extensionData.Count == 0)
+        {
+            return null;
+        }
+
+        var excluded = new HashSet<string>(excludeKeys, StringComparer.Ordinal);
+        var result = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
+
+        foreach (var (key, value) in extensionData)
+        {
+            if (!excluded.Contains(key))
+            {
+                result[key] = value;
+            }
+        }
+
+        return result.Count > 0 ? result : null;
+    }
+
     static List<(string Text, string Target)> ExtractLinks(string body, string sourceRelativePath, string bundleRoot)
     {
         var links = new List<(string, string)>();
@@ -674,106 +691,11 @@ public static partial class GraphBuilder
         return links;
     }
 
-    static string? GetStringValue(IReadOnlyDictionary<string, object?> frontmatter, string key)
-    {
-        if (!frontmatter.TryGetValue(key, out var value) || value is null)
-        {
-            return null;
-        }
-
-        return value switch
-        {
-            string s => s,
-            _ => value.ToString(),
-        };
-    }
-
-    static DateTimeOffset? GetTimestampValue(IReadOnlyDictionary<string, object?> frontmatter, string key = "timestamp")
-    {
-        if (!frontmatter.TryGetValue(key, out var value) || value is null)
-        {
-            return null;
-        }
-
-        return value switch
-        {
-            DateTimeOffset dto => dto.ToUniversalTime(),
-            DateTime dt => new DateTimeOffset(
-                DateTime.SpecifyKind(dt, dt.Kind == DateTimeKind.Unspecified ? DateTimeKind.Utc : dt.Kind))
-                .ToUniversalTime(),
-            string s when DateTimeOffset.TryParse(
-                s,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
-                out var parsed) => parsed,
-            _ when DateTimeOffset.TryParse(
-                value.ToString(),
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
-                out var parsed) => parsed,
-            _ => null,
-        };
-    }
-
-    static List<string>? GetTagsValue(IReadOnlyDictionary<string, object?> frontmatter, string key = "tags")
-    {
-        if (!frontmatter.TryGetValue(key, out var value) || value is null)
-        {
-            return null;
-        }
-
-        var tags = new List<string>();
-        switch (value)
-        {
-            case string s when !string.IsNullOrWhiteSpace(s):
-                tags.Add(s);
-                break;
-            case IEnumerable enumerable:
-                foreach (var item in enumerable)
-                {
-                    if (item is null)
-                    {
-                        continue;
-                    }
-
-                    var tag = item switch
-                    {
-                        string t when !string.IsNullOrWhiteSpace(t) => t,
-                        _ => item.ToString(),
-                    };
-
-                    if (!string.IsNullOrWhiteSpace(tag))
-                    {
-                        tags.Add(tag);
-                    }
-                }
-
-                break;
-            default:
-                var single = value.ToString();
-                if (!string.IsNullOrWhiteSpace(single))
-                {
-                    tags.Add(single);
-                }
-
-                break;
-        }
-
-        return tags.Count > 0 ? tags : null;
-    }
-
     // Internal concept representation
     sealed record Concept(
         string Id,
         string Path,
-        string Type,
-        string Title,
-        string? Label,
-        string? Description,
-        string? Resource,
-        List<string>? Tags,
-        DateTimeOffset? Timestamp,
-        Dictionary<string, JsonElement>? ExtensionData,
+        ConceptDocument Document,
         string? Body,
         List<(string Text, string Target)> LinksTo);
 }

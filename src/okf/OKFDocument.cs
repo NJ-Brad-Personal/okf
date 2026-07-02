@@ -10,11 +10,13 @@ public sealed partial class OKFDocument
     const string FrontmatterDelimiter = "---";
 
     public IReadOnlyDictionary<string, object?> Frontmatter { get; }
+    public string FrontmatterYaml { get; }
     public string Body { get; }
 
-    OKFDocument(IReadOnlyDictionary<string, object?> frontmatter, string body)
+    OKFDocument(IReadOnlyDictionary<string, object?> frontmatter, string frontmatterYaml, string body)
     {
         Frontmatter = frontmatter;
+        FrontmatterYaml = frontmatterYaml;
         Body = body;
     }
 
@@ -85,7 +87,7 @@ public sealed partial class OKFDocument
             body = body[1..];
         }
 
-        document = new OKFDocument(frontmatter, body);
+        document = new OKFDocument(frontmatter, frontmatterText, body);
         return true;
     }
 

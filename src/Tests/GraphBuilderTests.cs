@@ -18,6 +18,12 @@ public class GraphBuilderTests
     static bool HasExtensionKey(GraphBuilder.Node node, string key)
         => node.ExtensionData?.ContainsKey(key) == true;
 
+    static string? BundleExtensionString(GraphBuilder.Bundle bundle, string key)
+        => bundle.ExtensionData?.TryGetValue(key, out var element) == true
+            && element.ValueKind == JsonValueKind.String
+            ? element.GetString()
+            : null;
+
     [Fact]
     public void Generates_expected_shape_and_counts_for_valid_bundle()
     {
@@ -25,11 +31,8 @@ public class GraphBuilderTests
 
         Assert.Equal(2, graph.Nodes.Count);
         Assert.Equal(1, graph.Edges.Count); // absolute /tables/customers link from orders
-        Assert.Equal("valid", graph.Bundle.Name); // dir name of fixture (lowercase)
-        Assert.Equal(2, graph.Bundle.Concepts);
         Assert.NotNull(graph.Bundle.Timestamp);
-        Assert.NotNull(graph.Bundle.Root);
-        Assert.Contains("valid", graph.Bundle.Root.Replace('\\', '/'));
+        Assert.Null(graph.Bundle.ExtensionData);
     }
 
     [Fact]
@@ -177,7 +180,8 @@ public class GraphBuilderTests
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         Assert.Equal("BigQuery Table", orders.Type);
         Assert.Equal("One row per order.", orders.Description);
-        Assert.Equal("Orders", ExtensionString(orders, "title"));
+        Assert.Equal("Orders", orders.Title);
+        Assert.False(HasExtensionKey(orders, "title"));
         Assert.False(HasExtensionKey(orders, "description"));
     }
 
@@ -311,16 +315,19 @@ public class GraphBuilderTests
     }
 
     [Fact]
-    public void Title_stays_in_extension_data_and_is_not_copied_to_node_label()
+    public void Title_is_lifted_to_node_level_not_duplicated_in_extension_data()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
 
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         Assert.Equal("Orders", orders.Label);
-        Assert.Equal("Orders", ExtensionString(orders, "title"));
+        Assert.Equal("Orders", orders.Title);
+        Assert.False(HasExtensionKey(orders, "title"));
 
         var customers = graph.Nodes.First(n => n.Id == "tables/customers");
         Assert.Equal("customers", customers.Label);
+        Assert.Equal("Customers", customers.Title);
+        Assert.False(HasExtensionKey(customers, "title"));
 
         var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
         Directory.CreateDirectory(bundlePath);
@@ -337,6 +344,7 @@ public class GraphBuilderTests
             var untitledGraph = GraphBuilder.Build(bundlePath);
             var untitled = Assert.Single(untitledGraph.Nodes);
             Assert.Equal("Untitled", untitled.Label);
+            Assert.Null(untitled.Title);
             Assert.False(HasExtensionKey(untitled, "title"));
         }
         finally
@@ -372,7 +380,8 @@ public class GraphBuilderTests
             var customers = Assert.Single(graph.Nodes);
 
             Assert.Equal("Customer Records", customers.Label);
-            Assert.Equal("Customers", ExtensionString(customers, "title"));
+            Assert.Equal("Customers", customers.Title);
+            Assert.False(HasExtensionKey(customers, "title"));
         }
         finally
         {
@@ -485,6 +494,21 @@ public class GraphBuilderTests
     }
 
     [Fact]
+    public void Build_appends_bundle_properties_as_extension_data_strings()
+    {
+        var graph = GraphBuilder.Build(
+            FixturePath("valid"),
+            bundleProperties: new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["producer"] = "acme-agent",
+                ["build"] = "42",
+            });
+
+        Assert.Equal("acme-agent", BundleExtensionString(graph.Bundle, "producer"));
+        Assert.Equal("42", BundleExtensionString(graph.Bundle, "build"));
+    }
+
+    [Fact]
     public void Produces_valid_json_with_lowercase_keys()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
@@ -494,9 +518,10 @@ public class GraphBuilderTests
         var root = doc.RootElement;
 
         Assert.True(root.TryGetProperty("bundle", out var b));
-        Assert.True(b.TryGetProperty("root", out _));
         Assert.True(b.TryGetProperty("timestamp", out _));
-        Assert.True(b.TryGetProperty("concepts", out _));
+        Assert.False(b.TryGetProperty("name", out _));
+        Assert.False(b.TryGetProperty("root", out _));
+        Assert.False(b.TryGetProperty("concepts", out _));
 
         var firstNode = root.GetProperty("nodes")[0];
         Assert.True(firstNode.TryGetProperty("id", out _));

@@ -85,7 +85,7 @@ public static class ShortIds
         return result;
     }
 
-    private static string GetSegmentAbbr(string segment, int depth)
+    static string GetSegmentAbbr(string segment, int depth)
     {
         var words = SplitWords(segment);
         bool treatAsMulti = words.Count > 1 || segment.Contains('_', StringComparison.Ordinal);
@@ -93,9 +93,7 @@ public static class ShortIds
         if (treatAsMulti)
         {
             // Take first letter of the first N words
-            return new string(words.Take(depth)
-                .Select(w => w.Length > 0 ? char.ToLowerInvariant(w[0]) : '_')
-                .ToArray());
+            return new string([.. words.Take(depth).Select(w => w.Length > 0 ? char.ToLowerInvariant(w[0]) : '_')]);
         }
 
         var clean = segment.Trim('_');
@@ -104,7 +102,7 @@ public static class ShortIds
         return clean[..len].ToLowerInvariant();
     }
 
-    private static List<string> SplitWords(string segment)
+    static List<string> SplitWords(string segment)
     {
         // Split on underscores first
         var parts = segment.Split('_', StringSplitOptions.RemoveEmptyEntries);
