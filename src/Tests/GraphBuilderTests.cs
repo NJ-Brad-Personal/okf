@@ -27,7 +27,7 @@ public class GraphBuilderTests
         Assert.Equal(1, graph.Edges.Count); // absolute /tables/customers link from orders
         Assert.Equal("valid", graph.Bundle.Name); // dir name of fixture (lowercase)
         Assert.Equal(2, graph.Bundle.Concepts);
-        Assert.True(graph.Bundle.Timestamp != default);
+        Assert.NotNull(graph.Bundle.Timestamp);
         Assert.NotNull(graph.Bundle.Root);
         Assert.Contains("valid", graph.Bundle.Root.Replace('\\', '/'));
     }
@@ -176,7 +176,9 @@ public class GraphBuilderTests
 
         var orders = graph.Nodes.First(n => n.Id == "tables/orders");
         Assert.Equal("BigQuery Table", orders.Type);
+        Assert.Equal("One row per order.", orders.Description);
         Assert.Equal("Orders", ExtensionString(orders, "title"));
+        Assert.False(HasExtensionKey(orders, "description"));
     }
 
     [Fact]
@@ -212,6 +214,95 @@ public class GraphBuilderTests
             var unlabeled = graph.Nodes.First(n => n.Id == "unlabeled");
             Assert.Equal("Unlabeled", unlabeled.Label);
             Assert.False(HasExtensionKey(unlabeled, "label"));
+        }
+        finally
+        {
+            if (Directory.Exists(bundlePath)) Directory.Delete(bundlePath, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void Frontmatter_fields_are_lifted_to_node_level_not_duplicated_in_extension_data()
+    {
+        var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(bundlePath);
+
+        try
+        {
+            File.WriteAllText(Path.Combine(bundlePath, "full.md"), """
+                ---
+                type: BigQuery Table
+                description: One row per order.
+                resource: https://example.com/orders
+                tags: [sales, orders]
+                timestamp: 2026-05-28T14:30:00Z
+                ---
+                Content.
+                """);
+
+            File.WriteAllText(Path.Combine(bundlePath, "sparse.md"), """
+                ---
+                type: Reference
+                ---
+                Content.
+                """);
+
+            var graph = GraphBuilder.Build(bundlePath);
+
+            var full = graph.Nodes.First(n => n.Id == "full");
+            Assert.Equal("One row per order.", full.Description);
+            Assert.Equal("https://example.com/orders", full.Resource);
+            Assert.Equal(["sales", "orders"], full.Tags);
+            Assert.Equal(DateTimeOffset.Parse("2026-05-28T14:30:00+00:00"), full.Timestamp);
+            Assert.False(HasExtensionKey(full, "description"));
+            Assert.False(HasExtensionKey(full, "resource"));
+            Assert.False(HasExtensionKey(full, "tags"));
+            Assert.False(HasExtensionKey(full, "timestamp"));
+
+            var sparse = graph.Nodes.First(n => n.Id == "sparse");
+            Assert.Null(sparse.Description);
+            Assert.Null(sparse.Resource);
+            Assert.Null(sparse.Tags);
+            Assert.Null(sparse.Timestamp);
+        }
+        finally
+        {
+            if (Directory.Exists(bundlePath)) Directory.Delete(bundlePath, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void Timestamp_is_lifted_to_node_level_not_duplicated_in_extension_data()
+    {
+        var bundlePath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(bundlePath);
+
+        try
+        {
+            File.WriteAllText(Path.Combine(bundlePath, "stamped.md"), """
+                ---
+                type: Reference
+                timestamp: 2026-05-28T14:30:00Z
+                ---
+                Content.
+                """);
+
+            File.WriteAllText(Path.Combine(bundlePath, "unstamped.md"), """
+                ---
+                type: Reference
+                ---
+                Content.
+                """);
+
+            var graph = GraphBuilder.Build(bundlePath);
+
+            var stamped = graph.Nodes.First(n => n.Id == "stamped");
+            Assert.Equal(DateTimeOffset.Parse("2026-05-28T14:30:00+00:00"), stamped.Timestamp);
+            Assert.False(HasExtensionKey(stamped, "timestamp"));
+
+            var unstamped = graph.Nodes.First(n => n.Id == "unstamped");
+            Assert.Null(unstamped.Timestamp);
+            Assert.False(HasExtensionKey(unstamped, "timestamp"));
         }
         finally
         {
@@ -411,6 +502,7 @@ public class GraphBuilderTests
         Assert.True(firstNode.TryGetProperty("id", out _));
         Assert.True(firstNode.TryGetProperty("path", out _));
         Assert.True(firstNode.TryGetProperty("title", out _));
+        Assert.True(firstNode.TryGetProperty("description", out _));
         Assert.True(firstNode.TryGetProperty("label", out _));
         Assert.False(firstNode.TryGetProperty("meta", out _));
         Assert.True(firstNode.TryGetProperty("in", out _));
@@ -503,6 +595,7 @@ public class GraphBuilderTests
                 Assert.NotNull(n.Weight);
                 Assert.NotNull(n.Rank);
             });
+            Assert.NotNull(loaded.Bundle.Timestamp);
         }
         finally
         {

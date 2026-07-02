@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -31,9 +32,12 @@ public static partial class GraphBuilder
     public sealed record Bundle(
         [property: JsonPropertyName("name")] string Name,
         [property: JsonPropertyName("root")] string Root,
-        [property: JsonPropertyName("timestamp")] DateTimeOffset Timestamp,
         [property: JsonPropertyName("concepts")] int Concepts)
     {
+        [JsonPropertyName("timestamp")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public DateTimeOffset? Timestamp { get; init; }
+
         [JsonExtensionData]
         public Dictionary<string, JsonElement>? ExtensionData { get; init; }
     }
@@ -57,6 +61,22 @@ public static partial class GraphBuilder
         [JsonPropertyName("label")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Label { get; init; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Description { get; init; }
+
+        [JsonPropertyName("resource")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Resource { get; init; }
+
+        [JsonPropertyName("tags")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IReadOnlyList<string>? Tags { get; init; }
+
+        [JsonPropertyName("timestamp")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public DateTimeOffset? Timestamp { get; init; }
 
         [JsonPropertyName("body")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -167,6 +187,10 @@ public static partial class GraphBuilder
         {
             if (string.Equals(key, "type", StringComparison.Ordinal) ||
                 string.Equals(key, "label", StringComparison.Ordinal) ||
+                string.Equals(key, "description", StringComparison.Ordinal) ||
+                string.Equals(key, "resource", StringComparison.Ordinal) ||
+                string.Equals(key, "tags", StringComparison.Ordinal) ||
+                string.Equals(key, "timestamp", StringComparison.Ordinal) ||
                 value is null)
             {
                 continue;
@@ -256,12 +280,21 @@ public static partial class GraphBuilder
                 label = null;
             }
 
+            var description = GetStringValue(frontmatter, "description");
+            var resource = GetStringValue(frontmatter, "resource");
+            var tags = GetTagsValue(frontmatter);
+            var timestamp = GetTimestampValue(frontmatter);
+
             concepts.Add(new Concept(
                 conceptId,
                 relativePath,
                 type!,
                 title ?? conceptId,
                 label,
+                description,
+                resource,
+                tags,
+                timestamp,
                 ToExtensionData(frontmatter),
                 includeBody ? document.Body : null,
                 ExtractLinks(document.Body, relativePath, bundleRootFull)));
@@ -295,6 +328,10 @@ public static partial class GraphBuilder
                 Out = 0,
                 ExtensionData = c.ExtensionData,
                 Label = c.Label,
+                Description = c.Description,
+                Resource = c.Resource,
+                Tags = c.Tags,
+                Timestamp = c.Timestamp,
                 Body = c.Body,
             };
 
@@ -373,11 +410,10 @@ public static partial class GraphBuilder
             })
             .ToList();
 
-        var bundle = new Bundle(
-            name,
-            bundleRoot.Replace('\\', '/'),
-            DateTimeOffset.UtcNow,
-            finalNodes.Count);
+        var bundle = new Bundle(name, bundleRoot.Replace('\\', '/'), finalNodes.Count)
+        {
+            Timestamp = DateTimeOffset.UtcNow,
+        };
 
         return new KnowledgeGraph(bundle, finalNodes, edges);
     }
@@ -652,6 +688,80 @@ public static partial class GraphBuilder
         };
     }
 
+    static DateTimeOffset? GetTimestampValue(IReadOnlyDictionary<string, object?> frontmatter, string key = "timestamp")
+    {
+        if (!frontmatter.TryGetValue(key, out var value) || value is null)
+        {
+            return null;
+        }
+
+        return value switch
+        {
+            DateTimeOffset dto => dto.ToUniversalTime(),
+            DateTime dt => new DateTimeOffset(
+                DateTime.SpecifyKind(dt, dt.Kind == DateTimeKind.Unspecified ? DateTimeKind.Utc : dt.Kind))
+                .ToUniversalTime(),
+            string s when DateTimeOffset.TryParse(
+                s,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                out var parsed) => parsed,
+            _ when DateTimeOffset.TryParse(
+                value.ToString(),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                out var parsed) => parsed,
+            _ => null,
+        };
+    }
+
+    static List<string>? GetTagsValue(IReadOnlyDictionary<string, object?> frontmatter, string key = "tags")
+    {
+        if (!frontmatter.TryGetValue(key, out var value) || value is null)
+        {
+            return null;
+        }
+
+        var tags = new List<string>();
+        switch (value)
+        {
+            case string s when !string.IsNullOrWhiteSpace(s):
+                tags.Add(s);
+                break;
+            case IEnumerable enumerable:
+                foreach (var item in enumerable)
+                {
+                    if (item is null)
+                    {
+                        continue;
+                    }
+
+                    var tag = item switch
+                    {
+                        string t when !string.IsNullOrWhiteSpace(t) => t,
+                        _ => item.ToString(),
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(tag))
+                    {
+                        tags.Add(tag);
+                    }
+                }
+
+                break;
+            default:
+                var single = value.ToString();
+                if (!string.IsNullOrWhiteSpace(single))
+                {
+                    tags.Add(single);
+                }
+
+                break;
+        }
+
+        return tags.Count > 0 ? tags : null;
+    }
+
     // Internal concept representation
     sealed record Concept(
         string Id,
@@ -659,6 +769,10 @@ public static partial class GraphBuilder
         string Type,
         string Title,
         string? Label,
+        string? Description,
+        string? Resource,
+        List<string>? Tags,
+        DateTimeOffset? Timestamp,
         Dictionary<string, JsonElement>? ExtensionData,
         string? Body,
         List<(string Text, string Target)> LinksTo);

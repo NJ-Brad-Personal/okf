@@ -95,26 +95,6 @@ public static partial class BundleVisualizer
 
     private static NodeData ToVizNodeData(GraphBuilder.Node n)
     {
-        var tags = new List<string>();
-        if (n.ExtensionData?.TryGetValue("tags", out var tagElement) == true)
-        {
-            if (tagElement.ValueKind == JsonValueKind.String)
-            {
-                var tag = tagElement.GetString();
-                if (!string.IsNullOrWhiteSpace(tag))
-                    tags.Add(tag);
-            }
-            else if (tagElement.ValueKind == JsonValueKind.Array)
-            {
-                foreach (var item in tagElement.EnumerateArray())
-                {
-                    var tag = item.ValueKind == JsonValueKind.String ? item.GetString() : item.ToString();
-                    if (!string.IsNullOrWhiteSpace(tag))
-                        tags.Add(tag);
-                }
-            }
-        }
-
         var color = TypePalette.GetValueOrDefault(n.Type, DefaultNodeColor);
         int bodyLen = n.Body?.Length ?? 0;
         int size = 30 + Math.Min(60, bodyLen / 200);
@@ -124,24 +104,11 @@ public static partial class BundleVisualizer
             Id = n.Id,
             Label = string.IsNullOrEmpty(n.Label) ? n.Id : n.Label,
             Type = n.Type,
-            Description = GetExtensionString(n.ExtensionData, "description"),
-            Resource = GetExtensionString(n.ExtensionData, "resource"),
-            Tags = tags,
+            Description = n.Description ?? "",
+            Resource = n.Resource ?? "",
+            Tags = n.Tags?.ToList() ?? [],
             Color = color,
             Size = size,
-        };
-    }
-
-    static string GetExtensionString(Dictionary<string, JsonElement>? extensionData, string key, string def = "")
-    {
-        if (extensionData is null || !extensionData.TryGetValue(key, out var element))
-            return def;
-
-        return element.ValueKind switch
-        {
-            JsonValueKind.String => element.GetString() ?? def,
-            JsonValueKind.Null => def,
-            _ => element.ToString(),
         };
     }
 
