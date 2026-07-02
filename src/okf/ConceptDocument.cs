@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SharpYaml;
+using SharpYaml.Serialization;
 
 namespace okf;
 
@@ -28,13 +29,14 @@ public class ConceptDocument
     [JsonPropertyName("timestamp")]
     public DateTimeOffset? Timestamp { get; init; }
 
+    [YamlIgnore]
     public Dictionary<string, JsonElement>? ExtensionData { get; init; }
 
     public static bool TryDeserialize(string frontmatterYaml, out ConceptDocument? document)
     {
         try
         {
-            var yaml = YamlSerializer.Deserialize<ConceptDocumentYaml>(frontmatterYaml);
+            var yaml = YamlSerializer.Deserialize(frontmatterYaml, OkfYamlContext.Default.ConceptDocumentYaml);
             if (yaml is null || string.IsNullOrWhiteSpace(yaml.Type))
             {
                 document = null;
@@ -59,12 +61,5 @@ public class ConceptDocument
         }
 
         return true;
-    }
-
-    // SharpYaml extension data only supports Dictionary<string, object?> values.
-    sealed class ConceptDocumentYaml : ConceptDocument
-    {
-        [JsonExtensionData]
-        public Dictionary<string, object?>? ExtensionDataYaml { get; set; }
     }
 }

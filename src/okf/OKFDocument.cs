@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using SharpYaml;
@@ -127,24 +126,13 @@ public sealed partial class OKFDocument
 
     static IReadOnlyDictionary<string, object?> ParseYamlMapping(string yaml)
     {
-        var parsed = YamlSerializer.Deserialize(yaml, typeof(object));
+        var parsed = YamlSerializer.Deserialize(yaml, OkfYamlContext.Default.DictionaryStringObject);
         if (parsed is null)
         {
-            return new Dictionary<string, object?>();
+            return new Dictionary<string, object?>(StringComparer.Ordinal);
         }
 
-        if (parsed is not IDictionary dictionary)
-        {
-            throw new InvalidOperationException("Frontmatter must be a YAML mapping.");
-        }
-
-        var result = new Dictionary<string, object?>(StringComparer.Ordinal);
-        foreach (DictionaryEntry entry in dictionary)
-        {
-            result[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)!] = entry.Value;
-        }
-
-        return result;
+        return parsed.ToDictionary(static kv => kv.Key, static kv => (object?)kv.Value, StringComparer.Ordinal);
     }
 
     static string GetYamlErrorMessage(YamlException ex)
