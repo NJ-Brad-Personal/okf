@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,98 +13,65 @@ public static partial class GraphBuilder
 
     static readonly TextInfo TitleCasing = CultureInfo.CurrentCulture.TextInfo;
 
-    static readonly JsonSerializerOptions JsonOptions = new()
+    public static JsonSerializerOptions JsonOptions { get; } = new(GraphJsonContext.Default.Options)
     {
-        PropertyNamingPolicy = null,
-        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 
-    public sealed record KnowledgeGraph(
-        [property: JsonPropertyName("bundle")] Bundle Bundle,
-        [property: JsonPropertyName("nodes")] List<Node> Nodes,
-        [property: JsonPropertyName("edges")] List<Edge> Edges)
+    public sealed record KnowledgeGraph
     {
+        public List<Node> Nodes { get; init; } = [];
+        public List<Edge> Edges { get; init; } = [];
+
+        [JsonPropertyOrder(-10)]
+        public string Version { get; init; } = "0.1";
+
+        [JsonPropertyOrder(-9)]
+        public DateTimeOffset? Timestamp { get; init; }
+
+        public Bundle? Bundle { get; init; }
+
         [JsonExtensionData]
-        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+        public Dictionary<string, JsonElement>? ExtensionData { get; set; }
     }
 
     public sealed record Bundle
     {
-        [JsonPropertyName("timestamp")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public DateTimeOffset? Timestamp { get; init; }
-
         [JsonExtensionData]
-        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+        public Dictionary<string, JsonElement>? ExtensionData { get; set; }
     }
 
-    public sealed record Node(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("type")] string Type)
+    public sealed record Node
     {
-        [JsonPropertyName("title")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public required string Id { get; init; }
+        public required string Type { get; init; }
         public string? Title { get; init; }
-
-        [JsonPropertyName("label")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Label { get; init; }
-
-        [JsonPropertyName("description")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Description { get; init; }
-
-        [JsonPropertyName("resource")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Resource { get; init; }
-
-        [JsonPropertyName("tags")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IReadOnlyList<string>? Tags { get; init; }
-
-        [JsonPropertyName("timestamp")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DateTimeOffset? Timestamp { get; init; }
-
-        [JsonPropertyName("body")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Body { get; init; }
-
-        [JsonPropertyName("path")]
-        public required string Path { get; init; }
-
-        [JsonPropertyName("degree")]
-        public required int Degree { get; init; }
-
-        [JsonPropertyName("in")]
-        public required int In { get; init; }
-
-        [JsonPropertyName("out")]
-        public required int Out { get; init; }
-
-        [JsonPropertyName("weight")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Path { get; init; }
+        public int? Degree { get; init; }
+        public int? In { get; init; }
+        public int? Out { get; init; }
         public double? Weight { get; init; }
-
-        [JsonPropertyName("rank")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Rank { get; init; }
 
         [JsonExtensionData]
-        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+        public Dictionary<string, JsonElement>? ExtensionData { get; set; }
     }
 
-    public sealed record Edge(
-        [property: JsonPropertyName("source")] string Source,
-        [property: JsonPropertyName("target")] string Target,
-        [property: JsonPropertyName("id")] string Id = "")
+    public sealed record Edge
     {
-        [JsonPropertyName("label")]
+        public required string Source { get; init; }
+        public required string Target { get; init; }
+        public string Id { get; init; } = "";
         public string? Label { get; init; }
 
         [JsonExtensionData]
-        public Dictionary<string, JsonElement>? ExtensionData { get; init; }
+        public Dictionary<string, JsonElement>? ExtensionData { get; set; }
     }
 
     /// <summary>
@@ -303,8 +271,10 @@ public static partial class GraphBuilder
 
         foreach (var c in concepts.OrderBy(c => c.Id, StringComparer.Ordinal))
         {
-            var node = new Node(c.Id, c.Document.Type!)
+            var node = new Node
             {
+                Id = c.Id,
+                Type = c.Document.Type!,
                 Path = c.Path,
                 Degree = 0,
                 In = 0,
@@ -354,8 +324,11 @@ public static partial class GraphBuilder
                     ? linkText
                     : (idToTitle.TryGetValue(targetId, out var t) && !string.IsNullOrEmpty(t) ? t : targetId);
 
-                edges.Add(new Edge(c.Id, targetId, FormatEdgeId(conceptAbbrs, c.Id, targetId))
+                edges.Add(new Edge
                 {
+                    Source = c.Id,
+                    Target = targetId,
+                    Id = FormatEdgeId(conceptAbbrs, c.Id, targetId),
                     Label = label,
                 });
             }
@@ -393,13 +366,18 @@ public static partial class GraphBuilder
                 Rank = pageRank.Ranks[n.Id],
             })];
 
-        var bundle = new Bundle
-        {
-            Timestamp = DateTimeOffset.UtcNow,
-            ExtensionData = CreateBundleExtensionData(bundleProperties),
-        };
+        var bundleExt = CreateBundleExtensionData(bundleProperties);
+        var bundle = bundleExt is not null
+            ? new Bundle { ExtensionData = bundleExt }
+            : null;
 
-        return new KnowledgeGraph(bundle, finalNodes, edges);
+        return new KnowledgeGraph
+        {
+            Nodes = finalNodes,
+            Edges = edges,
+            Timestamp = DateTimeOffset.UtcNow,
+            Bundle = bundle,
+        };
     }
 
     static string NormalizeToConceptId(string resolvedRelative)

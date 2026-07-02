@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.schemastore.org/okf-0.1.json",
+  "title": "OKF Knowledge Graph",
+  "description": "JSON graph representation of an Open Knowledge Format (OKF) bundle. Produced by the `okf graph` command.",
+  "type": "object",
+  "required": ["version", "nodes", "edges"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Schema version of this OKF graph format."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the graph was generated."
+    },
+    "bundle": {
+      "type": "object",
+      "description": "Optional object containing custom properties passed via -p when generating the graph. Only present when such properties were provided.",
+      "additionalProperties": true
+    },
+    "nodes": {
+      "type": "array",
+      "description": "List of concept nodes in the knowledge graph.",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Directed edges representing links between concepts.",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "node": {
+      "type": "object",
+      "description": "A knowledge concept node.",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the concept (path without .md extension)."
+        },
+        "type": {
+          "type": "string",
+          "description": "The concept type from frontmatter (e.g. 'BigQuery Table', 'Reference')."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title from frontmatter."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional display label (falls back to derived values)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description from frontmatter."
+        },
+        "resource": {
+          "type": "string",
+          "description": "Canonical URI for the underlying resource, if any."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags from frontmatter."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp from frontmatter."
+        },
+        "body": {
+          "type": "string",
+          "description": "Full markdown body (only present when --body / includeBody was used)."
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path to the source .md file within the bundle."
+        },
+        "degree": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of connected edges (in + out)."
+        },
+        "in": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of incoming edges."
+        },
+        "out": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of outgoing edges."
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "PageRank weight (0-1)."
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Rank order by weight."
+        }
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "description": "A directed link from one concept to another.",
+      "required": ["source", "target", "id"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Source node id."
+        },
+        "target": {
+          "type": "string",
+          "description": "Target node id."
+        },
+        "id": {
+          "type": "string",
+          "description": "Short stable identifier for the edge."
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable label for the edge (often link text or target title)."
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

@@ -6,8 +6,10 @@ namespace Tests;
 public class PageRankTests
 {
     static GraphBuilder.Node Node(string id)
-        => new(id, "Reference")
+        => new()
         {
+            Id = id,
+            Type = "Reference",
             Path = $"{id}.md",
             Degree = 0,
             In = 0,
@@ -29,8 +31,8 @@ public class PageRankTests
         var nodes = new[] { Node("a"), Node("b"), Node("c") };
         var edges = new[]
         {
-            new GraphBuilder.Edge("a", "b", "a_b"),
-            new GraphBuilder.Edge("b", "c", "b_c"),
+            new GraphBuilder.Edge { Source = "a", Target = "b", Id = "a_b" },
+            new GraphBuilder.Edge { Source = "b", Target = "c", Id = "b_c" },
         };
 
         var result = PageRank.Compute(nodes, edges);

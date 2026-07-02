@@ -31,8 +31,8 @@ public class GraphBuilderTests
 
         Assert.Equal(2, graph.Nodes.Count);
         Assert.Equal(1, graph.Edges.Count); // absolute /tables/customers link from orders
-        Assert.NotNull(graph.Bundle.Timestamp);
-        Assert.Null(graph.Bundle.ExtensionData);
+        Assert.NotNull(graph.Timestamp);
+        Assert.Null(graph.Bundle);
     }
 
     [Fact]
@@ -504,24 +504,24 @@ public class GraphBuilderTests
                 ["build"] = "42",
             });
 
-        Assert.Equal("acme-agent", BundleExtensionString(graph.Bundle, "producer"));
-        Assert.Equal("42", BundleExtensionString(graph.Bundle, "build"));
+        Assert.Equal("acme-agent", BundleExtensionString(graph.Bundle!, "producer"));
+        Assert.Equal("42", BundleExtensionString(graph.Bundle!, "build"));
     }
 
     [Fact]
     public void Produces_valid_json_with_lowercase_keys()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"));
-        var json = System.Text.Json.JsonSerializer.Serialize(graph, new JsonSerializerOptions { WriteIndented = true });
+        var json = System.Text.Json.JsonSerializer.Serialize(graph, GraphBuilder.JsonOptions);
 
         using var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
-        Assert.True(root.TryGetProperty("bundle", out var b));
-        Assert.True(b.TryGetProperty("timestamp", out _));
-        Assert.False(b.TryGetProperty("name", out _));
-        Assert.False(b.TryGetProperty("root", out _));
-        Assert.False(b.TryGetProperty("concepts", out _));
+        Assert.True(root.TryGetProperty("version", out var v));
+        Assert.Equal("0.1", v.GetString());
+
+        Assert.True(root.TryGetProperty("timestamp", out _));
+        Assert.False(root.TryGetProperty("bundle", out _));  // no -p properties provided, so bundle is omitted
 
         var firstNode = root.GetProperty("nodes")[0];
         Assert.True(firstNode.TryGetProperty("id", out _));
@@ -620,7 +620,7 @@ public class GraphBuilderTests
                 Assert.NotNull(n.Weight);
                 Assert.NotNull(n.Rank);
             });
-            Assert.NotNull(loaded.Bundle.Timestamp);
+            Assert.NotNull(loaded.Timestamp);
         }
         finally
         {
@@ -638,11 +638,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
-                    "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 2
+                    "root": "/tmp"
                   },
                   "nodes": [
                     { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1 },
@@ -683,11 +683,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
-                    "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 3
+                    "root": "/tmp"
                   },
                   "nodes": [
                     { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2, "weight": 0.9 },
@@ -728,11 +728,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
-                    "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 2
+                    "root": "/tmp"
                   },
                   "nodes": [
                     { "id": "a", "path": "a.md", "type": "Reference", "degree": 1, "in": 0, "out": 1 },
@@ -764,11 +764,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
-                    "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 3
+                    "root": "/tmp"
                   },
                   "nodes": [
                     { "id": "a", "path": "a.md", "type": "Reference", "degree": 2, "in": 0, "out": 2 },
@@ -804,11 +804,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
-                    "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 1
+                    "root": "/tmp"
                   },
                   "nodes": [
                     {
@@ -851,11 +851,11 @@ public class GraphBuilderTests
         {
             File.WriteAllText(graphPath, """
                 {
+                  "version": "0.1",
+                  "timestamp": "2026-01-01T00:00:00Z",
                   "bundle": {
                     "name": "test",
                     "root": "/tmp",
-                    "timestamp": "2026-01-01T00:00:00Z",
-                    "concepts": 1,
                     "producer": "acme-agent"
                   },
                   "nodes": [
@@ -875,15 +875,15 @@ public class GraphBuilderTests
                 """);
 
             var loaded = GraphBuilder.Load(graphPath);
-            Assert.Equal("acme-agent", loaded.Bundle.ExtensionData!["producer"].GetString());
+            Assert.Equal("acme-agent", loaded.Bundle!.ExtensionData!["producer"].GetString());
             Assert.Equal(2, loaded.ExtensionData!["schema_version"].GetInt32());
             Assert.True(loaded.Nodes[0].ExtensionData!["highlight"].GetBoolean());
 
-            var json = JsonSerializer.Serialize(loaded, new JsonSerializerOptions { WriteIndented = true });
+            var json = JsonSerializer.Serialize(loaded, GraphBuilder.JsonOptions);
             File.WriteAllText(roundTripPath, json);
             var reloaded = GraphBuilder.Load(roundTripPath);
 
-            Assert.Equal("acme-agent", reloaded.Bundle.ExtensionData!["producer"].GetString());
+            Assert.Equal("acme-agent", reloaded.Bundle!.ExtensionData!["producer"].GetString());
             Assert.Equal(2, reloaded.ExtensionData!["schema_version"].GetInt32());
             Assert.True(reloaded.Nodes[0].ExtensionData!["highlight"].GetBoolean());
 
