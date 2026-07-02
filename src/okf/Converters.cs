@@ -1,7 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
-namespace okf;
+namespace Devlooped;
 
 static class Converters
 {

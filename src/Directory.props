@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <RootNamespace>Devlooped</RootNamespace>
     <Product>okf</Product>
     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>

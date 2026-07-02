@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using SharpYaml;
 
-namespace okf;
+namespace Devlooped;
 
 public sealed partial class OKFDocument
 {

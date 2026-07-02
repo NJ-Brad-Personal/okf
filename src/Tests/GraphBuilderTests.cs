@@ -1,5 +1,5 @@
 using System.Text.Json;
-using okf;
+using Devlooped;
 using Xunit;
 
 namespace Tests;
@@ -30,7 +30,7 @@ public class GraphBuilderTests
         var graph = GraphBuilder.Build(FixturePath("valid"));
 
         Assert.Equal(2, graph.Nodes.Count);
-        Assert.Equal(1, graph.Edges.Count); // absolute /tables/customers link from orders
+        Assert.Single(graph.Edges); // absolute /tables/customers link from orders
         Assert.NotNull(graph.Timestamp);
         Assert.Null(graph.Bundle);
     }
@@ -115,7 +115,7 @@ public class GraphBuilderTests
             File.WriteAllText(dbg, "NODES:" + string.Join(",", graph.Nodes.Select(n => n.Id + "(" + n.Type + ")")) + "\nFILES:" + string.Join(",", Directory.GetFiles(bundlePath, "*.md").Select(Path.GetFileName)));
 
             Assert.Equal(2, graph.Nodes.Count);
-            Assert.Equal(1, graph.Edges.Count);
+            Assert.Single(graph.Edges);
             Assert.Contains(graph.Nodes, n => n.Id == "good");
             Assert.Contains(graph.Nodes, n => n.Id == "other");
             Assert.DoesNotContain(graph.Nodes, n => n.Id == "bad");
@@ -153,7 +153,7 @@ public class GraphBuilderTests
 
             var graph = GraphBuilder.Build(bundlePath);
 
-            Assert.Equal(1, graph.Edges.Count);
+            Assert.Single(graph.Edges);
             var edge = graph.Edges[0];
             // text was empty -> fallback to title
             Assert.Equal("The Real Target Title", edge.Label);
@@ -613,7 +613,7 @@ public class GraphBuilderTests
             var loaded = GraphBuilder.Load(graphPath);
 
             Assert.Equal(2, loaded.Nodes.Count);
-            Assert.Equal(1, loaded.Edges.Count);
+            Assert.Single(loaded.Edges);
             Assert.False(string.IsNullOrWhiteSpace(loaded.Edges[0].Id));
             Assert.All(loaded.Nodes, n =>
             {

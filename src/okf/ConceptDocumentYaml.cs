@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using SharpYaml.Serialization;
 
-namespace okf;
+namespace Devlooped;
 
 // SharpYaml extension data only supports Dictionary<string, object> values.
 sealed class ConceptDocumentYaml

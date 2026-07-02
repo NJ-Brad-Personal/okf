@@ -1,4 +1,4 @@
-namespace okf;
+namespace Devlooped;
 
 public sealed record HighlightedSourceLine(
     int LineNumber,

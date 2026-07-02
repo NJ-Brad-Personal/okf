@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using SharpYaml;
 using SharpYaml.Serialization;
 
-namespace okf;
+namespace Devlooped;
 
 /// <summary>
 /// OKF concept frontmatter per spec §4.1: required and recommended fields,

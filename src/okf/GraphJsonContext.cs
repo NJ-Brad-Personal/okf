@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace okf;
+namespace Devlooped;
 
 [JsonSourceGenerationOptions(
     WriteIndented = true,

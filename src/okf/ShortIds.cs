@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace okf;
+namespace Devlooped;
 
 /// <summary>
 /// Computes short, OKF-aware abbreviations for concept IDs (and thus for edges)

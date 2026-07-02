@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace okf;
+namespace Devlooped;
 
 public static partial class MarkdownLinks
 {

@@ -1,4 +1,4 @@
-namespace okf;
+namespace Devlooped;
 
 public enum CheckRule
 {
