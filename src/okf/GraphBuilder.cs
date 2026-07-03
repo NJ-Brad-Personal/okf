@@ -44,6 +44,8 @@ public static partial class GraphBuilder
     public sealed record Node
     {
         public required string Id { get; init; }
+        /// <summary>Short unique slug for the node (computed via first letters + disambiguation). Nice for URLs / #fragments.</summary>
+        public string? Slug { get; init; }
         public required string Type { get; init; }
         public string? Title { get; init; }
         public string? Label { get; init; }
@@ -99,7 +101,10 @@ public static partial class GraphBuilder
 
     static KnowledgeGraph EnsureEdgeIds(KnowledgeGraph graph)
     {
-        if (graph.Edges.All(e => !string.IsNullOrWhiteSpace(e.Id)))
+        var needEdgeIds = graph.Edges.Any(e => string.IsNullOrWhiteSpace(e.Id));
+        var needSlugs = graph.Nodes.Any(n => string.IsNullOrWhiteSpace(n.Slug));
+
+        if (!needEdgeIds && !needSlugs)
             return graph;
 
         var conceptIds = graph.Nodes
@@ -108,13 +113,23 @@ public static partial class GraphBuilder
             .Distinct(StringComparer.Ordinal);
         var conceptAbbrs = ShortIds.ComputeConceptAbbreviations(conceptIds);
 
-        var edges = graph.Edges
-            .Select(e => string.IsNullOrWhiteSpace(e.Id)
-                ? e with { Id = FormatEdgeId(conceptAbbrs, e.Source, e.Target) }
-                : e)
-            .ToList();
+        var edges = needEdgeIds
+            ? graph.Edges
+                .Select(e => string.IsNullOrWhiteSpace(e.Id)
+                    ? e with { Id = FormatEdgeId(conceptAbbrs, e.Source, e.Target) }
+                    : e)
+                .ToList()
+            : graph.Edges;
 
-        return graph with { Edges = edges };
+        var nodes = needSlugs
+            ? graph.Nodes
+                .Select(n => string.IsNullOrWhiteSpace(n.Slug) && conceptAbbrs.TryGetValue(n.Id, out var s)
+                    ? n with { Slug = s }
+                    : n)
+                .ToList()
+            : graph.Nodes;
+
+        return graph with { Nodes = nodes, Edges = edges };
     }
 
     static KnowledgeGraph EnsureNodeWeights(KnowledgeGraph graph)
@@ -295,6 +310,7 @@ public static partial class GraphBuilder
             var node = new Node
             {
                 Id = c.Id,
+                Slug = conceptAbbrs.TryGetValue(c.Id, out var slug) ? slug : null,
                 Type = c.Document.Type!,
                 Path = c.Path,
                 Degree = 0,

@@ -22,7 +22,12 @@
 
   // Look up node label/type by id
   const nodeIndex = {};
-  for (const n of bundle.nodes) nodeIndex[n.data.id] = n.data;
+  const slugToId = {};
+  for (const n of bundle.nodes) {
+    const d = n.data;
+    nodeIndex[d.id] = d;
+    if (d.slug) slugToId[d.slug] = d.id;
+  }
 
   // Create Cytoscape instance WITHOUT an initial layout so we can
   // pre-position high-weight nodes near the center.
@@ -200,13 +205,44 @@
 
   function clearSelection() {
     cy.elements().unselect();
+    // Clear hash for clean state (replace to avoid history spam)
+    if (location.hash) {
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (_) {}
+    }
     document.getElementById("detail-empty").hidden = false;
     document.getElementById("detail-content").hidden = true;
+  }
+
+  function getIdFromHash() {
+    const h = location.hash;
+    if (!h || h === "#") return null;
+    let candidate;
+    try {
+      candidate = decodeURIComponent(h.slice(1));
+    } catch (_) {
+      candidate = h.slice(1);
+    }
+    if (nodeIndex[candidate]) return candidate;
+    if (slugToId[candidate]) return slugToId[candidate];
+    return null;
   }
 
   function showDetail(conceptId) {
     const data = nodeIndex[conceptId];
     if (!data) return;
+
+    // Update URL hash using the slug (nice + short) when available; falls back to full id.
+    // This gives pretty shareable links like #fl instead of #fundamental-principles/...
+    const hashId = data.slug || conceptId;
+
+    try {
+      // encode but keep slashes pretty for readability
+      const newHash = "#" + encodeURIComponent(hashId).replace(/%2F/gi, "/");
+      if (location.hash !== newHash) {
+        history.replaceState(null, "", newHash);
+      }
+    } catch (_) {}
+
     cy.elements().unselect();
     const node = cy.getElementById(conceptId);
     if (node) node.select();
@@ -382,9 +418,29 @@
     });
   }
 
-  // Auto-show the first node (a dataset if available, else first concept)
-  const initial =
-    bundle.nodes.find((n) => n.data.type === "BigQuery Dataset") ||
-    bundle.nodes[0];
-  if (initial) showDetail(initial.data.id);
+  // Initial selection: prefer a valid hash fragment (#node-id), else default to a dataset or first node.
+  // Hash support enables shareable links that open with a specific node pre-selected.
+  const hashId = getIdFromHash();
+  if (hashId && nodeIndex[hashId]) {
+    showDetail(hashId);
+  } else {
+    // Clean up any invalid/empty hash on load
+    if (location.hash) {
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (_) {}
+    }
+    const initial =
+      bundle.nodes.find((n) => n.data.type === "BigQuery Dataset") ||
+      bundle.nodes[0];
+    if (initial) showDetail(initial.data.id);
+  }
+
+  // Support browser back/forward and direct hash edits
+  window.addEventListener("hashchange", () => {
+    const id = getIdFromHash();
+    if (id && nodeIndex[id]) {
+      showDetail(id);
+    } else {
+      clearSelection();
+    }
+  });
 })();

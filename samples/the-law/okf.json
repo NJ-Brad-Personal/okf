@@ -1,9 +1,10 @@
 ﻿{
   "version": "0.1",
-  "timestamp": "2026-07-03T00:04:19.5462401+00:00",
+  "timestamp": "2026-07-03T02:14:15.7885232+00:00",
   "nodes": [
     {
       "id": "foreword",
+      "slug": "f",
       "type": "Foreword",
       "title": "Foreword by Thomas J. DiLorenzo",
       "label": "Foreword",
@@ -24,6 +25,7 @@
     },
     {
       "id": "fundamental-principles/collective-force",
+      "slug": "fc",
       "type": "Core Principle",
       "title": "Collective Force",
       "label": "Collective Force",
@@ -44,6 +46,7 @@
     },
     {
       "id": "fundamental-principles/justice",
+      "slug": "fj",
       "type": "Core Principle",
       "title": "Justice",
       "label": "Justice",
@@ -64,6 +67,7 @@
     },
     {
       "id": "fundamental-principles/law-as-organization-of-defense",
+      "slug": "flaw-",
       "type": "Definition",
       "title": "Law as the Organization of Defense",
       "label": "Law Defined as Organized Defense",
@@ -85,6 +89,7 @@
     },
     {
       "id": "fundamental-principles/lawful-defense",
+      "slug": "flawf",
       "type": "Core Principle",
       "title": "Lawful Defense",
       "label": "Lawful Defense",
@@ -105,6 +110,7 @@
     },
     {
       "id": "fundamental-principles/natural-rights",
+      "slug": "fna",
       "type": "Core Principle",
       "title": "Natural Rights",
       "label": "Natural Rights",
@@ -125,6 +131,7 @@
     },
     {
       "id": "fundamental-principles/non-aggression-principle",
+      "slug": "fno",
       "type": "Core Principle",
       "title": "Non-Aggression",
       "label": "Non-Aggression",
@@ -145,6 +152,7 @@
     },
     {
       "id": "fundamental-principles/order-and-stability",
+      "slug": "fo",
       "type": "Core Principle",
       "title": "Order and Stability",
       "label": "Order and Stability",
@@ -165,6 +173,7 @@
     },
     {
       "id": "fundamental-principles/personality-liberty-property",
+      "slug": "fp",
       "type": "Core Principle",
       "title": "Personality, Liberty, and Property",
       "label": "Personality, Liberty, Property",
@@ -185,6 +194,7 @@
     },
     {
       "id": "historical-context/1850-france",
+      "slug": "h1",
       "type": "Historical Context",
       "title": "France in 1850",
       "label": "France 1850",
@@ -205,6 +215,7 @@
     },
     {
       "id": "historical-context/american-ideal",
+      "slug": "ha",
       "type": "Historical Context",
       "title": "The American Ideal",
       "label": "The American Ideal",
@@ -225,6 +236,7 @@
     },
     {
       "id": "historical-context/slavery-and-tariffs-exception",
+      "slug": "hs",
       "type": "Historical Context",
       "title": "Slavery and Tariffs",
       "label": "Exceptions in America",
@@ -245,6 +257,7 @@
     },
     {
       "id": "key-extracts/extract-conclusion",
+      "slug": "kextract-conc",
       "type": "Quotation",
       "title": "Conclusion",
       "label": "Conclusion",
@@ -266,6 +279,7 @@
     },
     {
       "id": "key-extracts/extract-consequences1",
+      "slug": "kextract-consequences1",
       "type": "Quotation",
       "title": "Justice vs Law",
       "label": "Justice vs Law",
@@ -287,6 +301,7 @@
     },
     {
       "id": "key-extracts/extract-consequences2",
+      "slug": "kextract-consequences2",
       "type": "Quotation",
       "title": "Politics",
       "label": "Politics",
@@ -308,6 +323,7 @@
     },
     {
       "id": "key-extracts/extract-government-role",
+      "slug": "kextract-g",
       "type": "Quotation",
       "title": "Government Role",
       "label": "Government Role",
@@ -329,6 +345,7 @@
     },
     {
       "id": "key-extracts/extract-law-definition",
+      "slug": "kextract-l",
       "type": "Quotation",
       "title": "Law Definition",
       "label": "Law Definition",
@@ -350,6 +367,7 @@
     },
     {
       "id": "key-extracts/extract-perversion-causes",
+      "slug": "kextract-pe",
       "type": "Quotation",
       "title": "Causes",
       "label": "Causes",
@@ -371,6 +389,7 @@
     },
     {
       "id": "key-extracts/extract-plunder-origin",
+      "slug": "kextract-pl",
       "type": "Quotation",
       "title": "Origin of Plunder",
       "label": "Origin of Plunder",
@@ -392,6 +411,7 @@
     },
     {
       "id": "key-extracts/extract-socialists",
+      "slug": "kextract-so",
       "type": "Quotation",
       "title": "Socialists",
       "label": "Socialists",
@@ -413,6 +433,7 @@
     },
     {
       "id": "key-extracts/extract-suffrage",
+      "slug": "kextract-su",
       "type": "Quotation",
       "title": "Suffrage",
       "label": "Suffrage",
@@ -434,6 +455,7 @@
     },
     {
       "id": "key-extracts/extract-three-gifts",
+      "slug": "kextract-t",
       "type": "Quotation",
       "title": "Three Gifts",
       "label": "Three Gifts",
@@ -455,6 +477,7 @@
     },
     {
       "id": "key-figures/frederic-bastiat",
+      "slug": "kf",
       "type": "Biography",
       "title": "Frédéric Bastiat",
       "label": "Frédéric Bastiat",
@@ -475,6 +498,7 @@
     },
     {
       "id": "key-figures/thomas-dilorenzo",
+      "slug": "kt",
       "type": "Biography",
       "title": "Thomas J. DiLorenzo",
       "label": "Thomas J. DiLorenzo",
@@ -495,6 +519,7 @@
     },
     {
       "id": "legal-plunder/consequences/class-conflict",
+      "slug": "lccl",
       "type": "Consequence",
       "title": "Class Conflict",
       "label": "Class Conflict",
@@ -515,6 +540,7 @@
     },
     {
       "id": "legal-plunder/consequences/corruption-of-education",
+      "slug": "lcco",
       "type": "Consequence",
       "title": "Corruption of Education",
       "label": "Corruption of Education",
@@ -535,6 +561,7 @@
     },
     {
       "id": "legal-plunder/consequences/demoralization-of-citizens",
+      "slug": "lcd",
       "type": "Consequence",
       "title": "Demoralization of Citizens",
       "label": "Demoralization",
@@ -555,6 +582,7 @@
     },
     {
       "id": "legal-plunder/consequences/economic-impoverishment",
+      "slug": "lcec",
       "type": "Consequence",
       "title": "Economic Impoverishment",
       "label": "Economic Impoverishment",
@@ -575,6 +603,7 @@
     },
     {
       "id": "legal-plunder/consequences/effacing-justice",
+      "slug": "lcef",
       "type": "Consequence",
       "title": "Effacing Justice",
       "label": "Effacing Justice",
@@ -595,6 +624,7 @@
     },
     {
       "id": "legal-plunder/consequences/instability-and-revolution",
+      "slug": "lci",
       "type": "Consequence",
       "title": "Instability and Revolution",
       "label": "Instability",
@@ -615,6 +645,7 @@
     },
     {
       "id": "legal-plunder/consequences/loss-of-moral-sense",
+      "slug": "lcl",
       "type": "Consequence",
       "title": "Loss of Moral Sense",
       "label": "Loss of Moral Sense",
@@ -635,6 +666,7 @@
     },
     {
       "id": "legal-plunder/consequences/politicization-of-society",
+      "slug": "lcp",
       "type": "Consequence",
       "title": "Politicization of Society",
       "label": "Politicization",
@@ -655,6 +687,7 @@
     },
     {
       "id": "legal-plunder/consequences/rent-seeking",
+      "slug": "lcr",
       "type": "Consequence",
       "title": "Rent Seeking",
       "label": "Rent Seeking",
@@ -675,6 +708,7 @@
     },
     {
       "id": "legal-plunder/definition",
+      "slug": "ld",
       "type": "Definition",
       "title": "Legal Plunder",
       "label": "legal plunder",
@@ -695,6 +729,7 @@
     },
     {
       "id": "legal-plunder/manifestations/deeper/political-economy-of-tariffs",
+      "slug": "lmdp",
       "type": "Manifestation",
       "title": "Political Economy of Tariffs",
       "label": "Political Economy",
@@ -715,6 +750,7 @@
     },
     {
       "id": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "slug": "lmdt",
       "type": "Manifestation",
       "title": "Tariff Effects on Consumers",
       "label": "Effects on Consumers",
@@ -735,6 +771,7 @@
     },
     {
       "id": "legal-plunder/manifestations/forced-labor",
+      "slug": "lmf",
       "type": "Manifestation",
       "title": "Forced Labor",
       "label": "Forced Labor",
@@ -755,6 +792,7 @@
     },
     {
       "id": "legal-plunder/manifestations/government-jobs-programs",
+      "slug": "lmg",
       "type": "Manifestation",
       "title": "Government Jobs Programs",
       "label": "Government Jobs Programs",
@@ -775,6 +813,7 @@
     },
     {
       "id": "legal-plunder/manifestations/minimum-wage-laws",
+      "slug": "lmmi",
       "type": "Manifestation",
       "title": "Minimum Wage Laws",
       "label": "Minimum Wage Laws",
@@ -795,6 +834,7 @@
     },
     {
       "id": "legal-plunder/manifestations/monopolies",
+      "slug": "lmmo",
       "type": "Manifestation",
       "title": "Monopolies",
       "label": "Monopolies",
@@ -815,6 +855,7 @@
     },
     {
       "id": "legal-plunder/manifestations/progressive-taxation",
+      "slug": "lmprog",
       "type": "Manifestation",
       "title": "Progressive Taxation",
       "label": "Progressive Taxation",
@@ -835,6 +876,7 @@
     },
     {
       "id": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "slug": "lmprot",
       "type": "Manifestation",
       "title": "Protectionism & Tariffs",
       "label": "Protectionism & Tariffs",
@@ -855,6 +897,7 @@
     },
     {
       "id": "legal-plunder/manifestations/public-schools",
+      "slug": "lmpu",
       "type": "Manifestation",
       "title": "Public Schools",
       "label": "Public Schools",
@@ -875,6 +918,7 @@
     },
     {
       "id": "legal-plunder/manifestations/subsidies",
+      "slug": "lms",
       "type": "Manifestation",
       "title": "Subsidies",
       "label": "Subsidies",
@@ -895,6 +939,7 @@
     },
     {
       "id": "legal-plunder/manifestations/usury-laws",
+      "slug": "lmu",
       "type": "Manifestation",
       "title": "Usury Laws",
       "label": "Usury Laws",
@@ -915,6 +960,7 @@
     },
     {
       "id": "legal-plunder/manifestations/welfare",
+      "slug": "lmw",
       "type": "Manifestation",
       "title": "Welfare",
       "label": "Welfare",
@@ -935,6 +981,7 @@
     },
     {
       "id": "legal-plunder/universal-plunder",
+      "slug": "lu",
       "type": "Concept",
       "title": "Universal Plunder",
       "label": "Universal Plunder",
@@ -955,6 +1002,7 @@
     },
     {
       "id": "modern-relevance/contemporary-plunder",
+      "slug": "mc",
       "type": "Application",
       "title": "Contemporary Legal Plunder",
       "label": "Contemporary Legal Plunder",
@@ -977,6 +1025,7 @@
     },
     {
       "id": "modern-relevance/influence-on-austrian-economics",
+      "slug": "minfluence-on-a",
       "type": "Application",
       "title": "Influence on Austrian Economics",
       "label": "Influence on Austrian Economics",
@@ -997,6 +1046,7 @@
     },
     {
       "id": "modern-relevance/influence-on-libertarianism",
+      "slug": "minfluence-on-l",
       "type": "Application",
       "title": "Influence on Libertarianism",
       "label": "Influence on Libertarianism",
@@ -1017,6 +1067,7 @@
     },
     {
       "id": "modern-relevance/lessons-for-today",
+      "slug": "ml",
       "type": "Application",
       "title": "Lessons for Today",
       "label": "Lessons for Today",
@@ -1037,6 +1088,7 @@
     },
     {
       "id": "modern-relevance/rent-seeking-today",
+      "slug": "mr",
       "type": "Application",
       "title": "Rent Seeking Today",
       "label": "Rent Seeking Today",
@@ -1057,6 +1109,7 @@
     },
     {
       "id": "perversion-of-law/causes-of-perversion",
+      "slug": "pec",
       "type": "Concept",
       "title": "Causes of Perversion",
       "label": "Causes",
@@ -1077,6 +1130,7 @@
     },
     {
       "id": "perversion-of-law/false-philanthropy",
+      "slug": "pef",
       "type": "Concept",
       "title": "False Philanthropy",
       "label": "False Philanthropy",
@@ -1097,6 +1151,7 @@
     },
     {
       "id": "perversion-of-law/greed",
+      "slug": "peg",
       "type": "Concept",
       "title": "Greed",
       "label": "Greed",
@@ -1117,6 +1172,7 @@
     },
     {
       "id": "perversion-of-law/introduction-to-perversion",
+      "slug": "pei",
       "type": "Concept",
       "title": "The Law Perverted",
       "label": "The Law Perverted",
@@ -1137,6 +1193,7 @@
     },
     {
       "id": "perversion-of-law/law-as-instrument-of-plunder",
+      "slug": "pel",
       "type": "Concept",
       "title": "Law as Plunder Instrument",
       "label": "Law as Instrument of Plunder",
@@ -1157,6 +1214,7 @@
     },
     {
       "id": "political-mechanisms/law-manufacturing",
+      "slug": "pol",
       "type": "Concept",
       "title": "Law Manufacturing",
       "label": "Law Manufacturing",
@@ -1177,6 +1235,7 @@
     },
     {
       "id": "political-mechanisms/political-struggle",
+      "slug": "pop",
       "type": "Concept",
       "title": "Political Struggle",
       "label": "Political Struggle",
@@ -1197,6 +1256,7 @@
     },
     {
       "id": "political-mechanisms/universal-suffrage",
+      "slug": "pou",
       "type": "Concept",
       "title": "Universal Suffrage",
       "label": "Universal Suffrage",
@@ -1217,6 +1277,7 @@
     },
     {
       "id": "related-concepts/free-trade",
+      "slug": "rf",
       "type": "Related Idea",
       "title": "Free Trade",
       "label": "Free Trade",
@@ -1237,6 +1298,7 @@
     },
     {
       "id": "related-concepts/individual-rights",
+      "slug": "ri",
       "type": "Related Idea",
       "title": "Individual Rights",
       "label": "Individual Rights",
@@ -1257,6 +1319,7 @@
     },
     {
       "id": "related-concepts/limited-vs-activist-state",
+      "slug": "rl",
       "type": "Related Idea",
       "title": "Limited vs Activist State",
       "label": "Limited vs Activist State",
@@ -1277,6 +1340,7 @@
     },
     {
       "id": "related-concepts/natural-law",
+      "slug": "rn",
       "type": "Related Idea",
       "title": "Natural Law",
       "label": "Natural Law",
@@ -1297,6 +1361,7 @@
     },
     {
       "id": "related-concepts/philanthropy-vs-coercion",
+      "slug": "rph",
       "type": "Related Idea",
       "title": "Voluntary vs Coerced",
       "label": "Voluntary Philanthropy",
@@ -1317,6 +1382,7 @@
     },
     {
       "id": "related-concepts/property-rights",
+      "slug": "rpr",
       "type": "Related Idea",
       "title": "Property Rights",
       "label": "Property Rights",
@@ -1337,6 +1403,7 @@
     },
     {
       "id": "related-concepts/rule-of-law",
+      "slug": "rr",
       "type": "Related Idea",
       "title": "Rule of Law",
       "label": "Rule of Law",
@@ -1357,6 +1424,7 @@
     },
     {
       "id": "related-concepts/spontaneous-order",
+      "slug": "rs",
       "type": "Related Idea",
       "title": "Spontaneous Order",
       "label": "Spontaneous Order",
@@ -1377,6 +1445,7 @@
     },
     {
       "id": "socialism/critique-of-charity",
+      "slug": "sc",
       "type": "Critique",
       "title": "Critique of Coercive Charity",
       "label": "Critique of Coercive Charity",
@@ -1397,6 +1466,7 @@
     },
     {
       "id": "socialism/education-as-indoctrination",
+      "slug": "se",
       "type": "Critique",
       "title": "Education as Indoctrination",
       "label": "Education as Indoctrination",
@@ -1417,6 +1487,7 @@
     },
     {
       "id": "socialism/forced-conformity",
+      "slug": "sf",
       "type": "Critique",
       "title": "Forced Conformity",
       "label": "Forced Conformity",
@@ -1437,6 +1508,7 @@
     },
     {
       "id": "socialism/playing-god",
+      "slug": "sp",
       "type": "Critique",
       "title": "Playing God",
       "label": "Playing God",
@@ -1457,6 +1529,7 @@
     },
     {
       "id": "socialism/socialist-doctrine",
+      "slug": "ss",
       "type": "Critique",
       "title": "Socialist Doctrine",
       "label": "Socialist Doctrine",
@@ -1477,6 +1550,7 @@
     },
     {
       "id": "the-law",
+      "slug": "t",
       "type": "Essay",
       "title": "The Law",
       "label": "The Law",
@@ -1497,6 +1571,7 @@
     },
     {
       "id": "true-law/limited-government",
+      "slug": "tl",
       "type": "Core Principle",
       "title": "Limited Government",
       "label": "Limited Government",
@@ -1517,6 +1592,7 @@
     },
     {
       "id": "true-law/negative-role",
+      "slug": "tne",
       "type": "Core Principle",
       "title": "Negative Role of Law",
       "label": "Negative Role",
@@ -1537,6 +1613,7 @@
     },
     {
       "id": "true-law/non-intervention",
+      "slug": "tno",
       "type": "Core Principle",
       "title": "Non-Intervention",
       "label": "Non-Intervention",
@@ -1557,6 +1634,7 @@
     },
     {
       "id": "true-law/proper-sphere",
+      "slug": "tprop",
       "type": "Core Principle",
       "title": "Proper Sphere of Law",
       "label": "Proper Sphere",
@@ -1577,6 +1655,7 @@
     },
     {
       "id": "true-law/protection-of-rights",
+      "slug": "tprot",
       "type": "Core Principle",
       "title": "Protection of Rights",
       "label": "Protection of Rights",

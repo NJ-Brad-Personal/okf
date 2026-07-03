@@ -133,6 +133,7 @@ public static partial class BundleVisualizer
         return new NodeData
         {
             Id = n.Id,
+            Slug = n.Slug,
             Label = string.IsNullOrEmpty(n.Label) ? n.Id : n.Label,
             Type = n.Type,
             Description = n.Description ?? "",
@@ -179,6 +180,9 @@ public static partial class BundleVisualizer
     {
         [JsonPropertyName("id")]
         public string Id { get; init; } = "";
+
+        [JsonPropertyName("slug")]
+        public string? Slug { get; init; }
 
         [JsonPropertyName("label")]
         public string Label { get; init; } = "";

@@ -47,6 +47,10 @@
           "type": "string",
           "description": "Unique identifier for the concept (path without .md extension)."
         },
+        "slug": {
+          "type": "string",
+          "description": "Short unique slug for the node (e.g. 'f', 'fc', 'fl'). Computed for compact/URL-friendly references (e.g. #fragments). Stable for a given set of concepts."
+        },
         "type": {
           "type": "string",
           "description": "The concept type from frontmatter (e.g. 'BigQuery Table', 'Reference')."
