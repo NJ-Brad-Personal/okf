@@ -24,6 +24,8 @@
   const nodeIndex = {};
   for (const n of bundle.nodes) nodeIndex[n.data.id] = n.data;
 
+  // Create Cytoscape instance WITHOUT an initial layout so we can
+  // pre-position high-weight nodes near the center.
   const cy = cytoscape({
     container: document.getElementById("graph"),
     elements: [...bundle.nodes, ...bundle.edges],
@@ -34,15 +36,24 @@
           "background-color": "data(color)",
           "label": "data(label)",
           "color": "#0f172a",
-          "font-size": 11,
+          "font-size": "data(fontSize)",
+          "font-weight": 500,
           "text-valign": "bottom",
-          "text-margin-y": 4,
+          "text-halign": "center",
+          "text-margin-y": 6,
           "text-wrap": "wrap",
-          "text-max-width": 120,
+          "text-max-width": 140,
+          // Label readability: white rounded background so text doesn't disappear
+          // on top of edges or other nodes
+          "text-background-color": "#ffffff",
+          "text-background-opacity": 0.88,
+          "text-background-shape": "roundrectangle",
+          "text-background-padding": 3,
           "width": "data(size)",
           "height": "data(size)",
           "border-width": 1,
           "border-color": "#0f172a",
+          "z-index": 10,
         },
       },
       {
@@ -76,9 +87,57 @@
         style: { "opacity": 0.15 },
       },
     ],
-    layout: { name: "cose", animate: false, padding: 30 },
     wheelSensitivity: 0.2,
   });
+
+  // Pre-position the highest-weight nodes near the center.
+  // This strongly encourages the force layout to keep important hubs central
+  // and produces much nicer results for bundles that have a few dominant concepts.
+  try {
+    const withWeight = bundle.nodes
+      .map((n) => ({ id: n.data.id, w: n.data.weight || 0 }))
+      .sort((a, b) => b.w - a.w);
+    const top = withWeight.slice(0, 7);
+    const cx = 0;
+    const cyC = 0;
+    top.forEach((item, i) => {
+      const el = cy.getElementById(item.id);
+      if (el && el.length > 0) {
+        const angle = (2 * Math.PI * i) / Math.max(1, top.length);
+        const radius = 55 + (i % 3) * 22;
+        el.position({
+          x: cx + Math.cos(angle) * radius,
+          y: cyC + Math.sin(angle) * radius,
+        });
+      }
+    });
+  } catch (e) {
+    // non-fatal
+  }
+
+  // Improved COSE defaults: more spread, respect labels for positioning,
+  // stronger central gravity (helps high-weight nodes stay central),
+  // and nodeDimensionsIncludeLabels so the layout accounts for text size.
+  const runCose = () => {
+    cy.layout({
+      name: "cose",
+      animate: false,
+      padding: 55,
+      nodeRepulsion: 7200,
+      idealEdgeLength: 52,
+      edgeElasticity: 95,
+      nestingFactor: 1.25,
+      gravity: 1.9, // stronger pull toward center benefits high-weight hubs
+      numIter: 1400,
+      initialTemp: 180,
+      coolingFactor: 0.955,
+      minTemp: 0.9,
+      nodeDimensionsIncludeLabels: true,
+    }).run();
+  };
+
+  // Run improved cose on init
+  runCose();
 
   cy.on("tap", "node", (evt) => showDetail(evt.target.id()));
   cy.on("tap", (evt) => {
@@ -86,7 +145,17 @@
   });
 
   document.getElementById("layout").addEventListener("change", (e) => {
-    cy.layout({ name: e.target.value, animate: false, padding: 30 }).run();
+    const name = e.target.value;
+    if (name === "cose") {
+      runCose();
+    } else {
+      // Reasonable settings for other built-in layouts
+      const opts = { name, animate: false, padding: 50 };
+      if (name === "concentric" || name === "circle") {
+        opts.nodeDimensionsIncludeLabels = true;
+      }
+      cy.layout(opts).run();
+    }
   });
 
   document.getElementById("reset").addEventListener("click", () => {
@@ -232,6 +301,84 @@
       a.className = "external";
       a.setAttribute("target", "_blank");
       a.setAttribute("rel", "noopener");
+    });
+  }
+
+  // === Resizable sidebar ===
+  const resizerEl = document.getElementById('resizer');
+  const graphEl = document.getElementById('graph');
+  const detailEl = document.getElementById('detail');
+
+  if (resizerEl && graphEl && detailEl) {
+    let isDragging = false;
+
+    const STORAGE_KEY = 'viz-sidebar-width';
+
+    function applyWidth(pxWidth) {
+      const min = 220;
+      const max = Math.max(min, window.innerWidth * 0.65);
+      const w = Math.max(min, Math.min(max, pxWidth));
+      detailEl.style.width = `${w}px`;
+      graphEl.style.flex = '1 1 0';
+    }
+
+    function saveWidth() {
+      try { localStorage.setItem(STORAGE_KEY, detailEl.style.width); } catch (_) {}
+    }
+
+    function loadWidth() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          applyWidth(parseFloat(saved));
+        } else {
+          // default from CSS (40%)
+          // ensure graph takes the rest
+          graphEl.style.flex = '1 1 0';
+        }
+      } catch (_) {
+        graphEl.style.flex = '1 1 0';
+      }
+    }
+
+    // Initialize
+    loadWidth();
+
+    resizerEl.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const container = detailEl.parentElement.getBoundingClientRect();
+      const newDetailWidth = container.right - e.clientX;
+      applyWidth(newDetailWidth);
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        saveWidth();
+      }
+    });
+
+    // Double-click resizer to reset
+    resizerEl.addEventListener('dblclick', () => {
+      detailEl.style.width = '40%';
+      graphEl.style.flex = '1 1 0';
+      try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    });
+
+    // Keep proportions reasonable on window resize
+    window.addEventListener('resize', () => {
+      if (detailEl.style.width && detailEl.style.width.endsWith('px')) {
+        applyWidth(parseFloat(detailEl.style.width));
+      }
     });
   }
 

@@ -21,6 +21,10 @@ public static class CheckRules
         (CheckRule.IndexFrontmatter, "index.md frontmatter is valid"),
         (CheckRule.IndexStructure, "index.md structure and entries are valid"),
         (CheckRule.LogFormat, "log.md format is valid"),
-        (CheckRule.InternalLinks, "Internal links resolve"),
+    ];
+
+    public static readonly IReadOnlyList<(CheckRule Rule, string Description)> Warnings =
+    [
+        (CheckRule.InternalLinks, "Unresolved internal links"),
     ];
 }

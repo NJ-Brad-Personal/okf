@@ -34,4 +34,37 @@ static class Converters
 
         return result.Count > 0 ? result : null;
     }
+
+    public static Dictionary<string, string>? ParseKeyValue(string[]? args)
+    {
+        Dictionary<string, string>? result = null;
+
+        if (args is { Length: > 0 })
+        {
+            var map = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var entry in args)
+            {
+                var equalsIndex = entry.IndexOf('=');
+                if (equalsIndex <= 0)
+                {
+                    continue;
+                }
+
+                var name = entry[..equalsIndex];
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                map[name] = entry[(equalsIndex + 1)..];
+            }
+
+            if (map.Count > 0)
+            {
+                result = map;
+            }
+        }
+
+        return result;
+    }
 }

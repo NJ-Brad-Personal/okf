@@ -401,7 +401,7 @@ public class GraphBuilderTests
                 ---
                 type: Reference
                 ---
-                See [the target concept](target.md) and [target](target.md).
+                See [the target concept](target.md) and [real target](target.md).
                 """);
 
             File.WriteAllText(Path.Combine(bundlePath, "target.md"), """
@@ -415,7 +415,9 @@ public class GraphBuilderTests
             var graph = GraphBuilder.Build(bundlePath);
             var target = graph.Nodes.First(n => n.Id == "target");
 
-            Assert.Equal("target", target.Label);
+            // "real target" and "the target concept" are both collected; shortest is "real target"
+            // Echo-style link texts like [target](target.md) are no longer considered label candidates.
+            Assert.Equal("real target", target.Label);
         }
         finally
         {
@@ -598,6 +600,131 @@ public class GraphBuilderTests
         finally
         {
             if (Directory.Exists(bundlePath)) Directory.Delete(bundlePath, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void Generate_writes_javascript_module_when_requested()
+    {
+        var bundlePath = FixturePath("valid");
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.js");
+
+        try
+        {
+            GraphBuilder.Generate(bundlePath, graphPath, asModule: true);
+            var content = File.ReadAllText(graphPath);
+
+            Assert.StartsWith("/*", content);
+            Assert.Contains("<script type=\"module\">", content);
+            Assert.Contains("import data from './" + Path.GetFileName(graphPath) + "';", content);
+            Assert.Contains("console.log(data);", content);
+            Assert.Contains("export default {", content);
+            var normalized = content.Replace("\r\n", "\n").Replace("\r", "\n");
+            Assert.EndsWith("};\n", normalized);
+
+            var jsonStart = content.IndexOf("export default ", StringComparison.Ordinal) + "export default ".Length;
+            var json = content[jsonStart..].TrimEnd();
+            Assert.EndsWith(";", json);
+            json = json[..^1];
+
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            Assert.Equal("0.1", root.GetProperty("version").GetString());
+            Assert.Equal(2, root.GetProperty("nodes").GetArrayLength());
+            Assert.Equal(1, root.GetProperty("edges").GetArrayLength());
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Graph_command_skips_output_when_bundle_has_errors()
+    {
+        var bundlePath = FixturePath("missing-type");
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var checkResult = new BundleChecker(bundlePath).Check();
+            Assert.NotEmpty(checkResult.Errors);
+
+            if (checkResult.Errors.Count == 0)
+            {
+                GraphBuilder.Generate(bundlePath, graphPath);
+            }
+
+            Assert.False(File.Exists(graphPath));
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Graph_command_json_output_matches_check_for_broken_link()
+    {
+        var fixturePath = FixturePath("broken-link");
+        var checkResult = new BundleChecker(fixturePath).Check();
+        var checkJson = CheckRenderer.BuildJsonResult(checkResult, fixturePath);
+
+        Assert.True(checkJson.Success);
+        Assert.Equal(1, checkJson.Warnings);
+        Assert.Contains(checkJson.WarningIssues, issue => issue.Message.Contains("Unresolved link"));
+    }
+
+    [Fact]
+    public void Graph_command_json_skips_output_when_bundle_has_errors()
+    {
+        var bundlePath = FixturePath("missing-type");
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var checkResult = new BundleChecker(bundlePath).Check();
+            Assert.NotEmpty(checkResult.Errors);
+
+            if (checkResult.Errors.Count == 0)
+            {
+                GraphBuilder.Generate(bundlePath, graphPath);
+            }
+
+            Assert.False(File.Exists(graphPath));
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
+        }
+    }
+
+    [Fact]
+    public void Graph_command_generates_output_when_bundle_has_only_warnings()
+    {
+        var bundlePath = FixturePath("broken-link");
+        var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var checkResult = new BundleChecker(bundlePath).Check();
+            Assert.Empty(checkResult.Errors);
+            Assert.NotEmpty(checkResult.Warnings);
+
+            if (checkResult.Errors.Count == 0)
+            {
+                GraphBuilder.Generate(bundlePath, graphPath);
+            }
+
+            Assert.True(File.Exists(graphPath));
+        }
+        finally
+        {
+            if (File.Exists(graphPath))
+                File.Delete(graphPath);
         }
     }
 

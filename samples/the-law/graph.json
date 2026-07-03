@@ -1,0 +1,3647 @@
+﻿{
+  "version": "0.1",
+  "timestamp": "2026-07-02T23:37:47.8797331+00:00",
+  "nodes": [
+    {
+      "id": "foreword",
+      "type": "Foreword",
+      "title": "Foreword by Thomas J. DiLorenzo",
+      "label": "Foreword",
+      "description": "Places the essay in the tradition of the Declaration of Independence and warns against modern forms of legal plunder.",
+      "tags": [
+        "bastiat",
+        "foreword",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "foreword.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/collective-force",
+      "type": "Core Principle",
+      "title": "Collective Force",
+      "label": "Collective Force",
+      "description": "Individuals may combine their right of defense into a regular common force.",
+      "tags": [
+        "bastiat",
+        "government",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/collective-force.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/justice",
+      "type": "Core Principle",
+      "title": "Justice",
+      "label": "Justice",
+      "description": "Law's mission is to cause justice to reign by protecting rights equally.",
+      "tags": [
+        "bastiat",
+        "justice",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/justice.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/law-as-organization-of-defense",
+      "type": "Definition",
+      "title": "Law as the Organization of Defense",
+      "label": "Law Defined as Organized Defense",
+      "description": "Law is the substitution of collective force for individual force for the sole purpose of protecting persons, liberties and property.",
+      "tags": [
+        "bastiat",
+        "definition",
+        "law",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/law-as-organization-of-defense.md",
+      "degree": 58,
+      "in": 53,
+      "out": 5,
+      "weight": 0.12077159452115767,
+      "rank": 4
+    },
+    {
+      "id": "fundamental-principles/lawful-defense",
+      "type": "Core Principle",
+      "title": "Lawful Defense",
+      "label": "Lawful Defense",
+      "description": "Every person has a natural right to defend life, liberty and property.",
+      "tags": [
+        "bastiat",
+        "defense",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/lawful-defense.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/natural-rights",
+      "type": "Core Principle",
+      "title": "Natural Rights",
+      "label": "Natural Rights",
+      "description": "Life, liberty and property are God-given and exist prior to any legislation.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "natural-rights",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/natural-rights.md",
+      "degree": 70,
+      "in": 62,
+      "out": 8,
+      "weight": 0.11198154345997116,
+      "rank": 5
+    },
+    {
+      "id": "fundamental-principles/non-aggression-principle",
+      "type": "Core Principle",
+      "title": "Non-Aggression",
+      "label": "Non-Aggression",
+      "description": "Force has not been given us to annihilate the equal rights of others.",
+      "tags": [
+        "bastiat",
+        "ethics",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/non-aggression-principle.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/order-and-stability",
+      "type": "Core Principle",
+      "title": "Order and Stability",
+      "label": "Order and Stability",
+      "description": "A government that only protects produces the most stable and natural social order.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "order",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/order-and-stability.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "fundamental-principles/personality-liberty-property",
+      "type": "Core Principle",
+      "title": "Personality, Liberty, and Property",
+      "label": "Personality, Liberty, Property",
+      "description": "The three constitutive elements of man.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "natural-rights",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "fundamental-principles/personality-liberty-property.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "historical-context/1850-france",
+      "type": "Historical Context",
+      "title": "France in 1850",
+      "label": "France 1850",
+      "description": "Revolution, national workshops, socialist agitation in the legislature.",
+      "tags": [
+        "bastiat",
+        "history",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "historical-context/1850-france.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "historical-context/american-ideal",
+      "type": "Historical Context",
+      "title": "The American Ideal",
+      "label": "The American Ideal",
+      "description": "Bastiat saw the early United States as the closest real-world approximation of proper law.",
+      "tags": [
+        "bastiat",
+        "history",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "historical-context/american-ideal.md",
+      "degree": 6,
+      "in": 0,
+      "out": 6,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "historical-context/slavery-and-tariffs-exception",
+      "type": "Historical Context",
+      "title": "Slavery and Tariffs",
+      "label": "Exceptions in America",
+      "description": "Bastiat explicitly excepted these two evils from his praise of America.",
+      "tags": [
+        "bastiat",
+        "history",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "historical-context/slavery-and-tariffs-exception.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-conclusion",
+      "type": "Quotation",
+      "title": "Conclusion",
+      "label": "Conclusion",
+      "description": "Direct quotation: Conclusion.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-conclusion.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-consequences1",
+      "type": "Quotation",
+      "title": "Justice vs Law",
+      "label": "Justice vs Law",
+      "description": "Direct quotation: Justice vs Law.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-consequences1.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-consequences2",
+      "type": "Quotation",
+      "title": "Politics",
+      "label": "Politics",
+      "description": "Direct quotation: Politics.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-consequences2.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-government-role",
+      "type": "Quotation",
+      "title": "Government Role",
+      "label": "Government Role",
+      "description": "Direct quotation: Government Role.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-government-role.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-law-definition",
+      "type": "Quotation",
+      "title": "Law Definition",
+      "label": "Law Definition",
+      "description": "Direct quotation: Law Definition.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-law-definition.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-perversion-causes",
+      "type": "Quotation",
+      "title": "Causes",
+      "label": "Causes",
+      "description": "Direct quotation: Causes.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-perversion-causes.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-plunder-origin",
+      "type": "Quotation",
+      "title": "Origin of Plunder",
+      "label": "Origin of Plunder",
+      "description": "Direct quotation: Origin of Plunder.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-plunder-origin.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-socialists",
+      "type": "Quotation",
+      "title": "Socialists",
+      "label": "Socialists",
+      "description": "Direct quotation: Socialists.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-socialists.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-suffrage",
+      "type": "Quotation",
+      "title": "Suffrage",
+      "label": "Suffrage",
+      "description": "Direct quotation: Suffrage.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-suffrage.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-extracts/extract-three-gifts",
+      "type": "Quotation",
+      "title": "Three Gifts",
+      "label": "Three Gifts",
+      "description": "Direct quotation: Three Gifts.",
+      "tags": [
+        "bastiat",
+        "extract",
+        "legal-philosophy",
+        "quote",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-extracts/extract-three-gifts.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-figures/frederic-bastiat",
+      "type": "Biography",
+      "title": "Frédéric Bastiat",
+      "label": "Frédéric Bastiat",
+      "description": "1801-1850. French economist, free-trader, and author of The Law and Economic Harmonies.",
+      "tags": [
+        "bastiat",
+        "biography",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-figures/frederic-bastiat.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "key-figures/thomas-dilorenzo",
+      "type": "Biography",
+      "title": "Thomas J. DiLorenzo",
+      "label": "Thomas J. DiLorenzo",
+      "description": "Economist, author of the foreword in the Mises Institute edition.",
+      "tags": [
+        "bastiat",
+        "biography",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "key-figures/thomas-dilorenzo.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/class-conflict",
+      "type": "Consequence",
+      "title": "Class Conflict",
+      "label": "Class Conflict",
+      "description": "Every group organizes to plunder or to defend against plunder.",
+      "tags": [
+        "bastiat",
+        "conflict",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/class-conflict.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/corruption-of-education",
+      "type": "Consequence",
+      "title": "Corruption of Education",
+      "label": "Corruption of Education",
+      "description": "State-paid teachers will not criticize the laws that pay them.",
+      "tags": [
+        "bastiat",
+        "education",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/corruption-of-education.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/demoralization-of-citizens",
+      "type": "Consequence",
+      "title": "Demoralization of Citizens",
+      "label": "Demoralization",
+      "description": "When law commands injustice citizens become cynics or accomplices.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "morality",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/demoralization-of-citizens.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/economic-impoverishment",
+      "type": "Consequence",
+      "title": "Economic Impoverishment",
+      "label": "Economic Impoverishment",
+      "description": "Legal plunder reduces total wealth even for many of its beneficiaries.",
+      "tags": [
+        "bastiat",
+        "economics",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/economic-impoverishment.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/effacing-justice",
+      "type": "Consequence",
+      "title": "Effacing Justice",
+      "label": "Effacing Justice",
+      "description": "Law that sanctions plunder destroys the distinction between justice and injustice.",
+      "tags": [
+        "bastiat",
+        "justice",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/effacing-justice.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/instability-and-revolution",
+      "type": "Consequence",
+      "title": "Instability and Revolution",
+      "label": "Instability",
+      "description": "Generalized plunder produces constant pressure for upheaval.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "revolution",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/instability-and-revolution.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/loss-of-moral-sense",
+      "type": "Consequence",
+      "title": "Loss of Moral Sense",
+      "label": "Loss of Moral Sense",
+      "description": "Citizens must choose between conscience and respect for law.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "morality",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/loss-of-moral-sense.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/politicization-of-society",
+      "type": "Consequence",
+      "title": "Politicization of Society",
+      "label": "Politicization",
+      "description": "When law = plunder, politics becomes the main arena of life.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "politics",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/politicization-of-society.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/consequences/rent-seeking",
+      "type": "Consequence",
+      "title": "Rent Seeking",
+      "label": "Rent Seeking",
+      "description": "Resources spent obtaining political transfers rather than producing value.",
+      "tags": [
+        "bastiat",
+        "economics",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/consequences/rent-seeking.md",
+      "degree": 9,
+      "in": 4,
+      "out": 5,
+      "weight": 0.060263784384105304,
+      "rank": 6
+    },
+    {
+      "id": "legal-plunder/definition",
+      "type": "Definition",
+      "title": "Legal Plunder",
+      "label": "/legal-plunder/definition.md",
+      "description": "Law used to take the property of some and give it to others without consent.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "plunder",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/definition.md",
+      "degree": 86,
+      "in": 78,
+      "out": 8,
+      "weight": 0.14001051529322125,
+      "rank": 1
+    },
+    {
+      "id": "legal-plunder/manifestations/deeper/political-economy-of-tariffs",
+      "type": "Manifestation",
+      "title": "Political Economy of Tariffs",
+      "label": "Political Economy",
+      "description": "Concentrated interests lobby; consumers stay ignorant.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "public-choice",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/deeper/political-economy-of-tariffs.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "type": "Manifestation",
+      "title": "Tariff Effects on Consumers",
+      "label": "Effects on Consumers",
+      "description": "Consumers pay the hidden tax of protection.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "the-law",
+        "trade"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/forced-labor",
+      "type": "Manifestation",
+      "title": "Forced Labor",
+      "label": "Forced Labor",
+      "description": "Compulsory service extracted by the state.",
+      "tags": [
+        "bastiat",
+        "conscription",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/forced-labor.md",
+      "degree": 2,
+      "in": 0,
+      "out": 2,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/government-jobs-programs",
+      "type": "Manifestation",
+      "title": "Government Jobs Programs",
+      "label": "Government Jobs Programs",
+      "description": "Make-work at taxpayer expense.",
+      "tags": [
+        "bastiat",
+        "jobs",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/government-jobs-programs.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/minimum-wage-laws",
+      "type": "Manifestation",
+      "title": "Minimum Wage Laws",
+      "label": "Minimum Wage Laws",
+      "description": "Price floor on labor that creates unemployment.",
+      "tags": [
+        "bastiat",
+        "labor",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/minimum-wage-laws.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/monopolies",
+      "type": "Manifestation",
+      "title": "Monopolies",
+      "label": "Monopolies",
+      "description": "State-granted exclusive privileges.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "monopoly",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/monopolies.md",
+      "degree": 2,
+      "in": 0,
+      "out": 2,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/progressive-taxation",
+      "type": "Manifestation",
+      "title": "Progressive Taxation",
+      "label": "Progressive Taxation",
+      "description": "Using the tax code to redistribute.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "tax",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/progressive-taxation.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "type": "Manifestation",
+      "title": "Protectionism & Tariffs",
+      "label": "Protectionism & Tariffs",
+      "description": "Tariffs force consumers to subsidize producers.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "the-law",
+        "trade"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/protectionism-and-tariffs.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/public-schools",
+      "type": "Manifestation",
+      "title": "Public Schools",
+      "label": "Public Schools",
+      "description": "Tax funded schooling used for indoctrination.",
+      "tags": [
+        "bastiat",
+        "education",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/public-schools.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/subsidies",
+      "type": "Manifestation",
+      "title": "Subsidies",
+      "label": "Subsidies",
+      "description": "Tax money given to favored groups.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "subsidies",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/subsidies.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/usury-laws",
+      "type": "Manifestation",
+      "title": "Usury Laws",
+      "label": "Usury Laws",
+      "description": "Interest caps that reduce credit for the poor.",
+      "tags": [
+        "bastiat",
+        "finance",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/usury-laws.md",
+      "degree": 2,
+      "in": 0,
+      "out": 2,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/manifestations/welfare",
+      "type": "Manifestation",
+      "title": "Welfare",
+      "label": "Welfare",
+      "description": "Organized transfer presented as the poor's right to plunder.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "the-law",
+        "welfare"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/manifestations/welfare.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "legal-plunder/universal-plunder",
+      "type": "Concept",
+      "title": "Universal Plunder",
+      "label": "Universal Plunder",
+      "description": "When the principle is accepted, plunder becomes the equilibrium state of politics.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "plunder",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "legal-plunder/universal-plunder.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "modern-relevance/contemporary-plunder",
+      "type": "Application",
+      "title": "Contemporary Legal Plunder",
+      "label": "Contemporary Legal Plunder",
+      "description": "Tariffs, subsidies, entitlements, regulatory capture, occupational licensing all fit the pattern.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "modern",
+        "the-law",
+        "trade",
+        "welfare"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "modern-relevance/contemporary-plunder.md",
+      "degree": 9,
+      "in": 4,
+      "out": 5,
+      "weight": 0.060263784384105304,
+      "rank": 6
+    },
+    {
+      "id": "modern-relevance/influence-on-austrian-economics",
+      "type": "Application",
+      "title": "Influence on Austrian Economics",
+      "label": "Influence on Austrian Economics",
+      "description": "Precursor emphasis on spontaneous order and critique of intervention.",
+      "tags": [
+        "austrian",
+        "bastiat",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "modern-relevance/influence-on-austrian-economics.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "modern-relevance/influence-on-libertarianism",
+      "type": "Application",
+      "title": "Influence on Libertarianism",
+      "label": "Influence on Libertarianism",
+      "description": "Foundational text for natural-rights and limited-government thought.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "libertarianism",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "modern-relevance/influence-on-libertarianism.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "modern-relevance/lessons-for-today",
+      "type": "Application",
+      "title": "Lessons for Today",
+      "label": "Lessons for Today",
+      "description": "Confine law to defense. Reject the fatal principle that law may take from one to give to another.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "modern",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "modern-relevance/lessons-for-today.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "modern-relevance/rent-seeking-today",
+      "type": "Application",
+      "title": "Rent Seeking Today",
+      "label": "Rent Seeking Today",
+      "description": "Industries and interest groups compete for favors instead of serving customers.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "public-choice",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "modern-relevance/rent-seeking-today.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "perversion-of-law/causes-of-perversion",
+      "type": "Concept",
+      "title": "Causes of Perversion",
+      "label": "Causes",
+      "description": "Naked greed and misconceived philanthropy.",
+      "tags": [
+        "bastiat",
+        "causes",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "perversion-of-law/causes-of-perversion.md",
+      "degree": 20,
+      "in": 16,
+      "out": 4,
+      "weight": 0.053373374683772554,
+      "rank": 9
+    },
+    {
+      "id": "perversion-of-law/false-philanthropy",
+      "type": "Concept",
+      "title": "False Philanthropy",
+      "label": "False Philanthropy",
+      "description": "The desire to do good to some by robbing others via law.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "philanthropy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "perversion-of-law/false-philanthropy.md",
+      "degree": 8,
+      "in": 4,
+      "out": 4,
+      "weight": 0.060263784384105304,
+      "rank": 6
+    },
+    {
+      "id": "perversion-of-law/greed",
+      "type": "Concept",
+      "title": "Greed",
+      "label": "Greed",
+      "description": "Legislators using power to live at others' expense.",
+      "tags": [
+        "bastiat",
+        "greed",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "perversion-of-law/greed.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "perversion-of-law/introduction-to-perversion",
+      "type": "Concept",
+      "title": "The Law Perverted",
+      "label": "The Law Perverted",
+      "description": "Law diverted from protection to predation.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "perversion",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "perversion-of-law/introduction-to-perversion.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "perversion-of-law/law-as-instrument-of-plunder",
+      "type": "Concept",
+      "title": "Law as Plunder Instrument",
+      "label": "Law as Instrument of Plunder",
+      "description": "Law protects plunderers instead of the plundered.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "plunder",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "perversion-of-law/law-as-instrument-of-plunder.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "political-mechanisms/law-manufacturing",
+      "type": "Concept",
+      "title": "Law Manufacturing",
+      "label": "Law Manufacturing",
+      "description": "Plundered classes try to enter the business of making law.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "legislation",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "political-mechanisms/law-manufacturing.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "political-mechanisms/political-struggle",
+      "type": "Concept",
+      "title": "Political Struggle",
+      "label": "Political Struggle",
+      "description": "Politics receives exaggerated importance precisely because it controls plunder.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "politics",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "political-mechanisms/political-struggle.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "political-mechanisms/universal-suffrage",
+      "type": "Concept",
+      "title": "Universal Suffrage",
+      "label": "Universal Suffrage",
+      "description": "When law can plunder, the fight over who may vote becomes ferocious.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "suffrage",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "political-mechanisms/universal-suffrage.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/free-trade",
+      "type": "Related Idea",
+      "title": "Free Trade",
+      "label": "Free Trade",
+      "description": "Exchange is production. Barriers are plunder.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "the-law",
+        "trade"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/free-trade.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/individual-rights",
+      "type": "Related Idea",
+      "title": "Individual Rights",
+      "label": "Individual Rights",
+      "description": "The moral unit is the individual; collective force exists only to protect individuals.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "rights",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/individual-rights.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/limited-vs-activist-state",
+      "type": "Related Idea",
+      "title": "Limited vs Activist State",
+      "label": "Limited vs Activist State",
+      "description": "The activist state that tries to organize everything becomes the central plunderer.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "state",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/limited-vs-activist-state.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/natural-law",
+      "type": "Related Idea",
+      "title": "Natural Law",
+      "label": "Natural Law",
+      "description": "Rights inhere in human nature; positive law is valid only insofar as it recognizes them.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/natural-law.md",
+      "degree": 4,
+      "in": 0,
+      "out": 4,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/philanthropy-vs-coercion",
+      "type": "Related Idea",
+      "title": "Voluntary vs Coerced",
+      "label": "Voluntary Philanthropy",
+      "description": "True giving requires a willing giver. Coercion destroys the moral act.",
+      "tags": [
+        "bastiat",
+        "charity",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/philanthropy-vs-coercion.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/property-rights",
+      "type": "Related Idea",
+      "title": "Property Rights",
+      "label": "Property Rights",
+      "description": "Property is the extension of faculties. Attacks on property are attacks on liberty and personality.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "property",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/property-rights.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/rule-of-law",
+      "type": "Related Idea",
+      "title": "Rule of Law",
+      "label": "Rule of Law",
+      "description": "Law must be general and equal. Targeting specific groups for plunder violates the rule of law.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "rule-of-law",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/rule-of-law.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "related-concepts/spontaneous-order",
+      "type": "Related Idea",
+      "title": "Spontaneous Order",
+      "label": "Spontaneous Order",
+      "description": "When law stays within its sphere, order emerges naturally.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "order",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "related-concepts/spontaneous-order.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "socialism/critique-of-charity",
+      "type": "Critique",
+      "title": "Critique of Coercive Charity",
+      "label": "Critique of Coercive Charity",
+      "description": "Taking by taxation is not charity.",
+      "tags": [
+        "bastiat",
+        "charity",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "socialism/critique-of-charity.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "socialism/education-as-indoctrination",
+      "type": "Critique",
+      "title": "Education as Indoctrination",
+      "label": "Education as Indoctrination",
+      "description": "State schools serve the state that funds them.",
+      "tags": [
+        "bastiat",
+        "education",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "socialism/education-as-indoctrination.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "socialism/forced-conformity",
+      "type": "Critique",
+      "title": "Forced Conformity",
+      "label": "Forced Conformity",
+      "description": "Regulation and regimentation imposed on the whole population.",
+      "tags": [
+        "bastiat",
+        "conformity",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "socialism/forced-conformity.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "socialism/playing-god",
+      "type": "Critique",
+      "title": "Playing God",
+      "label": "Playing God",
+      "description": "Socialists want to remake man and society according to their plan.",
+      "tags": [
+        "bastiat",
+        "hubris",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "socialism/playing-god.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "socialism/socialist-doctrine",
+      "type": "Critique",
+      "title": "Socialist Doctrine",
+      "label": "Socialist Doctrine",
+      "description": "The program of systematized legal plunder under philanthropic slogans.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "socialism",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "socialism/socialist-doctrine.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "the-law",
+      "type": "Essay",
+      "title": "The Law",
+      "label": "/the-law.md",
+      "description": "Bastiat's treatise: law exists to protect natural rights; when turned into plunder it destroys justice and liberty.",
+      "tags": [
+        "bastiat",
+        "essay",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "the-law.md",
+      "degree": 85,
+      "in": 78,
+      "out": 7,
+      "weight": 0.1381154675919391,
+      "rank": 2
+    },
+    {
+      "id": "true-law/limited-government",
+      "type": "Core Principle",
+      "title": "Limited Government",
+      "label": "Limited Government",
+      "description": "The most restrained government is the most just and stable.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "limited-government",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "true-law/limited-government.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "true-law/negative-role",
+      "type": "Core Principle",
+      "title": "Negative Role of Law",
+      "label": "Negative Role",
+      "description": "Law represses injustice; it does not positively organize society.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "negative",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "true-law/negative-role.md",
+      "degree": 5,
+      "in": 0,
+      "out": 5,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "true-law/non-intervention",
+      "type": "Core Principle",
+      "title": "Non-Intervention",
+      "label": "Non-Intervention",
+      "description": "Wants and satisfactions develop in their natural order.",
+      "tags": [
+        "bastiat",
+        "laissez-faire",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "true-law/non-intervention.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    },
+    {
+      "id": "true-law/proper-sphere",
+      "type": "Core Principle",
+      "title": "Proper Sphere of Law",
+      "label": "Proper Sphere",
+      "description": "Law confined to protecting persons, liberties and properties.",
+      "tags": [
+        "bastiat",
+        "law",
+        "legal-philosophy",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "true-law/proper-sphere.md",
+      "degree": 49,
+      "in": 42,
+      "out": 7,
+      "weight": 0.12204475889256071,
+      "rank": 3
+    },
+    {
+      "id": "true-law/protection-of-rights",
+      "type": "Core Principle",
+      "title": "Protection of Rights",
+      "label": "Protection of Rights",
+      "description": "The only legitimate end of collective force.",
+      "tags": [
+        "bastiat",
+        "legal-philosophy",
+        "rights",
+        "the-law"
+      ],
+      "timestamp": "2026-07-02T12:00:00+00:00",
+      "path": "true-law/protection-of-rights.md",
+      "degree": 3,
+      "in": 0,
+      "out": 3,
+      "weight": 0.0018987341772151902,
+      "rank": 10
+    }
+  ],
+  "edges": [
+    {
+      "source": "foreword",
+      "target": "the-law",
+      "id": "f_t",
+      "label": "The Law"
+    },
+    {
+      "source": "foreword",
+      "target": "fundamental-principles/natural-rights",
+      "id": "f_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "foreword",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "f_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "foreword",
+      "target": "true-law/proper-sphere",
+      "id": "f_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "foreword",
+      "target": "legal-plunder/definition",
+      "id": "f_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "the-law",
+      "id": "fc_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "fundamental-principles/natural-rights",
+      "id": "fc_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fc_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "true-law/proper-sphere",
+      "id": "fc_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fc_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/collective-force",
+      "target": "legal-plunder/definition",
+      "id": "fc_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "the-law",
+      "id": "fj_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "fundamental-principles/natural-rights",
+      "id": "fj_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fj_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "true-law/proper-sphere",
+      "id": "fj_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fj_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/justice",
+      "target": "legal-plunder/definition",
+      "id": "fj_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/law-as-organization-of-defense",
+      "target": "the-law",
+      "id": "flaw-_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/law-as-organization-of-defense",
+      "target": "fundamental-principles/natural-rights",
+      "id": "flaw-_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/law-as-organization-of-defense",
+      "target": "true-law/proper-sphere",
+      "id": "flaw-_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/law-as-organization-of-defense",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "flaw-_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/law-as-organization-of-defense",
+      "target": "legal-plunder/definition",
+      "id": "flaw-_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "the-law",
+      "id": "flawf_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "fundamental-principles/natural-rights",
+      "id": "flawf_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "flawf_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "true-law/proper-sphere",
+      "id": "flawf_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "flawf_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/lawful-defense",
+      "target": "legal-plunder/definition",
+      "id": "flawf_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "the-law",
+      "id": "fna_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fna_flaw-",
+      "label": "definition of law"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "true-law/proper-sphere",
+      "id": "fna_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fna_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "legal-plunder/definition",
+      "id": "fna_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "legal-plunder/consequences/rent-seeking",
+      "id": "fna_lcr",
+      "label": "rent-seeking behavior"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "modern-relevance/contemporary-plunder",
+      "id": "fna_mc",
+      "label": "modern examples"
+    },
+    {
+      "source": "fundamental-principles/natural-rights",
+      "target": "perversion-of-law/false-philanthropy",
+      "id": "fna_pef",
+      "label": "false philanthropy"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "the-law",
+      "id": "fno_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "fundamental-principles/natural-rights",
+      "id": "fno_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fno_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "true-law/proper-sphere",
+      "id": "fno_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fno_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/non-aggression-principle",
+      "target": "legal-plunder/definition",
+      "id": "fno_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "the-law",
+      "id": "fo_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "fundamental-principles/natural-rights",
+      "id": "fo_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fo_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "true-law/proper-sphere",
+      "id": "fo_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fo_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/order-and-stability",
+      "target": "legal-plunder/definition",
+      "id": "fo_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "the-law",
+      "id": "fp_t",
+      "label": "The Law"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "fundamental-principles/natural-rights",
+      "id": "fp_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "fp_flaw-",
+      "label": "central definition"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "true-law/proper-sphere",
+      "id": "fp_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "fp_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "fundamental-principles/personality-liberty-property",
+      "target": "legal-plunder/definition",
+      "id": "fp_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "the-law",
+      "id": "h1_t",
+      "label": "The Law"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "fundamental-principles/natural-rights",
+      "id": "h1_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "h1_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "true-law/proper-sphere",
+      "id": "h1_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "legal-plunder/definition",
+      "id": "h1_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "historical-context/1850-france",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "h1_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "the-law",
+      "id": "ha_t",
+      "label": "The Law"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "fundamental-principles/natural-rights",
+      "id": "ha_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "ha_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "true-law/proper-sphere",
+      "id": "ha_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "legal-plunder/definition",
+      "id": "ha_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "historical-context/american-ideal",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "ha_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "historical-context/slavery-and-tariffs-exception",
+      "target": "the-law",
+      "id": "hs_t",
+      "label": "The Law"
+    },
+    {
+      "source": "historical-context/slavery-and-tariffs-exception",
+      "target": "fundamental-principles/natural-rights",
+      "id": "hs_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "historical-context/slavery-and-tariffs-exception",
+      "target": "legal-plunder/definition",
+      "id": "hs_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "historical-context/slavery-and-tariffs-exception",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "hs_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "key-extracts/extract-conclusion",
+      "target": "the-law",
+      "id": "kextract-conc_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-conclusion",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-conc_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-conclusion",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-conc_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-conclusion",
+      "target": "legal-plunder/definition",
+      "id": "kextract-conc_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-consequences1",
+      "target": "the-law",
+      "id": "kextract-consequences1_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-consequences1",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-consequences1_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-consequences1",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-consequences1_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-consequences1",
+      "target": "legal-plunder/definition",
+      "id": "kextract-consequences1_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-consequences2",
+      "target": "the-law",
+      "id": "kextract-consequences2_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-consequences2",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-consequences2_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-consequences2",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-consequences2_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-consequences2",
+      "target": "legal-plunder/definition",
+      "id": "kextract-consequences2_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-government-role",
+      "target": "the-law",
+      "id": "kextract-g_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-government-role",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-g_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-government-role",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-g_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-government-role",
+      "target": "legal-plunder/definition",
+      "id": "kextract-g_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-law-definition",
+      "target": "the-law",
+      "id": "kextract-l_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-law-definition",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-l_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-law-definition",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-l_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-law-definition",
+      "target": "legal-plunder/definition",
+      "id": "kextract-l_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-perversion-causes",
+      "target": "the-law",
+      "id": "kextract-pe_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-perversion-causes",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-pe_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-perversion-causes",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-pe_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-perversion-causes",
+      "target": "legal-plunder/definition",
+      "id": "kextract-pe_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-plunder-origin",
+      "target": "the-law",
+      "id": "kextract-pl_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-plunder-origin",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-pl_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-plunder-origin",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-pl_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-plunder-origin",
+      "target": "legal-plunder/definition",
+      "id": "kextract-pl_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-socialists",
+      "target": "the-law",
+      "id": "kextract-so_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-socialists",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-so_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-socialists",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-so_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-socialists",
+      "target": "legal-plunder/definition",
+      "id": "kextract-so_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-suffrage",
+      "target": "the-law",
+      "id": "kextract-su_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-suffrage",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-su_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-suffrage",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-su_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-suffrage",
+      "target": "legal-plunder/definition",
+      "id": "kextract-su_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-extracts/extract-three-gifts",
+      "target": "the-law",
+      "id": "kextract-t_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-extracts/extract-three-gifts",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kextract-t_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-extracts/extract-three-gifts",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kextract-t_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-extracts/extract-three-gifts",
+      "target": "legal-plunder/definition",
+      "id": "kextract-t_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-figures/frederic-bastiat",
+      "target": "the-law",
+      "id": "kf_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-figures/frederic-bastiat",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kf_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-figures/frederic-bastiat",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "kf_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "key-figures/frederic-bastiat",
+      "target": "true-law/proper-sphere",
+      "id": "kf_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "key-figures/frederic-bastiat",
+      "target": "legal-plunder/definition",
+      "id": "kf_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-figures/thomas-dilorenzo",
+      "target": "the-law",
+      "id": "kt_t",
+      "label": "The Law"
+    },
+    {
+      "source": "key-figures/thomas-dilorenzo",
+      "target": "fundamental-principles/natural-rights",
+      "id": "kt_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "key-figures/thomas-dilorenzo",
+      "target": "legal-plunder/definition",
+      "id": "kt_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "key-figures/thomas-dilorenzo",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "kt_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "legal-plunder/consequences/class-conflict",
+      "target": "the-law",
+      "id": "lccl_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/class-conflict",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lccl_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/class-conflict",
+      "target": "legal-plunder/definition",
+      "id": "lccl_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/class-conflict",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "lccl_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "legal-plunder/consequences/corruption-of-education",
+      "target": "the-law",
+      "id": "lcco_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/corruption-of-education",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcco_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/corruption-of-education",
+      "target": "legal-plunder/definition",
+      "id": "lcco_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/corruption-of-education",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "lcco_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "legal-plunder/consequences/demoralization-of-citizens",
+      "target": "the-law",
+      "id": "lcd_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/demoralization-of-citizens",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcd_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/demoralization-of-citizens",
+      "target": "legal-plunder/definition",
+      "id": "lcd_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/demoralization-of-citizens",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "lcd_pec",
+      "label": "the causes of perversion"
+    },
+    {
+      "source": "legal-plunder/consequences/economic-impoverishment",
+      "target": "the-law",
+      "id": "lcec_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/economic-impoverishment",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcec_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/economic-impoverishment",
+      "target": "legal-plunder/definition",
+      "id": "lcec_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/effacing-justice",
+      "target": "the-law",
+      "id": "lcef_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/effacing-justice",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcef_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/effacing-justice",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lcef_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/consequences/effacing-justice",
+      "target": "true-law/proper-sphere",
+      "id": "lcef_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/consequences/effacing-justice",
+      "target": "legal-plunder/definition",
+      "id": "lcef_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/instability-and-revolution",
+      "target": "the-law",
+      "id": "lci_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/instability-and-revolution",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lci_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/instability-and-revolution",
+      "target": "legal-plunder/definition",
+      "id": "lci_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/loss-of-moral-sense",
+      "target": "the-law",
+      "id": "lcl_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/loss-of-moral-sense",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcl_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/loss-of-moral-sense",
+      "target": "legal-plunder/definition",
+      "id": "lcl_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/politicization-of-society",
+      "target": "the-law",
+      "id": "lcp_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/politicization-of-society",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcp_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/politicization-of-society",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lcp_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/consequences/politicization-of-society",
+      "target": "true-law/proper-sphere",
+      "id": "lcp_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/consequences/politicization-of-society",
+      "target": "legal-plunder/definition",
+      "id": "lcp_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/consequences/rent-seeking",
+      "target": "the-law",
+      "id": "lcr_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/consequences/rent-seeking",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lcr_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/consequences/rent-seeking",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lcr_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/consequences/rent-seeking",
+      "target": "true-law/proper-sphere",
+      "id": "lcr_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/consequences/rent-seeking",
+      "target": "legal-plunder/definition",
+      "id": "lcr_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "the-law",
+      "id": "ld_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "fundamental-principles/natural-rights",
+      "id": "ld_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "ld_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "true-law/proper-sphere",
+      "id": "ld_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "perversion-of-law/causes-of-perversion",
+      "id": "ld_pec",
+      "label": "causes of perversion"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "legal-plunder/consequences/rent-seeking",
+      "id": "ld_lcr",
+      "label": "rent-seeking behavior"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "modern-relevance/contemporary-plunder",
+      "id": "ld_mc",
+      "label": "modern examples"
+    },
+    {
+      "source": "legal-plunder/definition",
+      "target": "perversion-of-law/false-philanthropy",
+      "id": "ld_pef",
+      "label": "false philanthropy"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/political-economy-of-tariffs",
+      "target": "the-law",
+      "id": "lmdp_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/political-economy-of-tariffs",
+      "target": "legal-plunder/definition",
+      "id": "lmdp_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/political-economy-of-tariffs",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lmdp_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "target": "the-law",
+      "id": "lmdt_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "target": "legal-plunder/definition",
+      "id": "lmdt_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmdt_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/deeper/tariff-effects-on-consumers",
+      "target": "true-law/proper-sphere",
+      "id": "lmdt_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/forced-labor",
+      "target": "the-law",
+      "id": "lmf_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/forced-labor",
+      "target": "legal-plunder/definition",
+      "id": "lmf_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/government-jobs-programs",
+      "target": "the-law",
+      "id": "lmg_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/government-jobs-programs",
+      "target": "legal-plunder/definition",
+      "id": "lmg_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/government-jobs-programs",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmg_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/government-jobs-programs",
+      "target": "true-law/proper-sphere",
+      "id": "lmg_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/minimum-wage-laws",
+      "target": "the-law",
+      "id": "lmmi_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/minimum-wage-laws",
+      "target": "legal-plunder/definition",
+      "id": "lmmi_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/minimum-wage-laws",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmmi_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/minimum-wage-laws",
+      "target": "true-law/proper-sphere",
+      "id": "lmmi_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/monopolies",
+      "target": "the-law",
+      "id": "lmmo_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/monopolies",
+      "target": "legal-plunder/definition",
+      "id": "lmmo_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/progressive-taxation",
+      "target": "the-law",
+      "id": "lmprog_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/progressive-taxation",
+      "target": "legal-plunder/definition",
+      "id": "lmprog_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/progressive-taxation",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmprog_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/progressive-taxation",
+      "target": "true-law/proper-sphere",
+      "id": "lmprog_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "target": "the-law",
+      "id": "lmprot_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "target": "legal-plunder/definition",
+      "id": "lmprot_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmprot_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/protectionism-and-tariffs",
+      "target": "true-law/proper-sphere",
+      "id": "lmprot_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/public-schools",
+      "target": "the-law",
+      "id": "lmpu_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/public-schools",
+      "target": "legal-plunder/definition",
+      "id": "lmpu_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/public-schools",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmpu_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/public-schools",
+      "target": "true-law/proper-sphere",
+      "id": "lmpu_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/subsidies",
+      "target": "the-law",
+      "id": "lms_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/subsidies",
+      "target": "legal-plunder/definition",
+      "id": "lms_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/subsidies",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lms_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/subsidies",
+      "target": "true-law/proper-sphere",
+      "id": "lms_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/usury-laws",
+      "target": "the-law",
+      "id": "lmu_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/usury-laws",
+      "target": "legal-plunder/definition",
+      "id": "lmu_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/welfare",
+      "target": "the-law",
+      "id": "lmw_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/manifestations/welfare",
+      "target": "legal-plunder/definition",
+      "id": "lmw_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "legal-plunder/manifestations/welfare",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lmw_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/manifestations/welfare",
+      "target": "true-law/proper-sphere",
+      "id": "lmw_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/universal-plunder",
+      "target": "the-law",
+      "id": "lu_t",
+      "label": "The Law"
+    },
+    {
+      "source": "legal-plunder/universal-plunder",
+      "target": "fundamental-principles/natural-rights",
+      "id": "lu_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "legal-plunder/universal-plunder",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "lu_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "legal-plunder/universal-plunder",
+      "target": "true-law/proper-sphere",
+      "id": "lu_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "legal-plunder/universal-plunder",
+      "target": "legal-plunder/definition",
+      "id": "lu_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "modern-relevance/contemporary-plunder",
+      "target": "the-law",
+      "id": "mc_t",
+      "label": "The Law"
+    },
+    {
+      "source": "modern-relevance/contemporary-plunder",
+      "target": "fundamental-principles/natural-rights",
+      "id": "mc_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "modern-relevance/contemporary-plunder",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "mc_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "modern-relevance/contemporary-plunder",
+      "target": "true-law/proper-sphere",
+      "id": "mc_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "modern-relevance/contemporary-plunder",
+      "target": "legal-plunder/definition",
+      "id": "mc_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "modern-relevance/influence-on-austrian-economics",
+      "target": "the-law",
+      "id": "minfluence-on-a_t",
+      "label": "The Law"
+    },
+    {
+      "source": "modern-relevance/influence-on-austrian-economics",
+      "target": "fundamental-principles/natural-rights",
+      "id": "minfluence-on-a_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "modern-relevance/influence-on-austrian-economics",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "minfluence-on-a_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "modern-relevance/influence-on-austrian-economics",
+      "target": "true-law/proper-sphere",
+      "id": "minfluence-on-a_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "modern-relevance/influence-on-austrian-economics",
+      "target": "legal-plunder/definition",
+      "id": "minfluence-on-a_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "modern-relevance/influence-on-libertarianism",
+      "target": "the-law",
+      "id": "minfluence-on-l_t",
+      "label": "The Law"
+    },
+    {
+      "source": "modern-relevance/influence-on-libertarianism",
+      "target": "fundamental-principles/natural-rights",
+      "id": "minfluence-on-l_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "modern-relevance/influence-on-libertarianism",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "minfluence-on-l_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "modern-relevance/influence-on-libertarianism",
+      "target": "true-law/proper-sphere",
+      "id": "minfluence-on-l_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "modern-relevance/influence-on-libertarianism",
+      "target": "legal-plunder/definition",
+      "id": "minfluence-on-l_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "modern-relevance/lessons-for-today",
+      "target": "the-law",
+      "id": "ml_t",
+      "label": "The Law"
+    },
+    {
+      "source": "modern-relevance/lessons-for-today",
+      "target": "fundamental-principles/natural-rights",
+      "id": "ml_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "modern-relevance/lessons-for-today",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "ml_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "modern-relevance/lessons-for-today",
+      "target": "true-law/proper-sphere",
+      "id": "ml_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "modern-relevance/lessons-for-today",
+      "target": "legal-plunder/definition",
+      "id": "ml_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "modern-relevance/rent-seeking-today",
+      "target": "the-law",
+      "id": "mr_t",
+      "label": "The Law"
+    },
+    {
+      "source": "modern-relevance/rent-seeking-today",
+      "target": "fundamental-principles/natural-rights",
+      "id": "mr_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "modern-relevance/rent-seeking-today",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "mr_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "modern-relevance/rent-seeking-today",
+      "target": "true-law/proper-sphere",
+      "id": "mr_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "modern-relevance/rent-seeking-today",
+      "target": "legal-plunder/definition",
+      "id": "mr_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "perversion-of-law/causes-of-perversion",
+      "target": "the-law",
+      "id": "pec_t",
+      "label": "The Law"
+    },
+    {
+      "source": "perversion-of-law/causes-of-perversion",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pec_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "perversion-of-law/causes-of-perversion",
+      "target": "true-law/proper-sphere",
+      "id": "pec_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "perversion-of-law/causes-of-perversion",
+      "target": "legal-plunder/definition",
+      "id": "pec_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "perversion-of-law/false-philanthropy",
+      "target": "the-law",
+      "id": "pef_t",
+      "label": "The Law"
+    },
+    {
+      "source": "perversion-of-law/false-philanthropy",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pef_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "perversion-of-law/false-philanthropy",
+      "target": "true-law/proper-sphere",
+      "id": "pef_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "perversion-of-law/false-philanthropy",
+      "target": "legal-plunder/definition",
+      "id": "pef_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "perversion-of-law/greed",
+      "target": "the-law",
+      "id": "peg_t",
+      "label": "The Law"
+    },
+    {
+      "source": "perversion-of-law/greed",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "peg_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "perversion-of-law/greed",
+      "target": "true-law/proper-sphere",
+      "id": "peg_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "perversion-of-law/greed",
+      "target": "legal-plunder/definition",
+      "id": "peg_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "perversion-of-law/introduction-to-perversion",
+      "target": "the-law",
+      "id": "pei_t",
+      "label": "The Law"
+    },
+    {
+      "source": "perversion-of-law/introduction-to-perversion",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pei_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "perversion-of-law/introduction-to-perversion",
+      "target": "true-law/proper-sphere",
+      "id": "pei_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "perversion-of-law/introduction-to-perversion",
+      "target": "legal-plunder/definition",
+      "id": "pei_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "perversion-of-law/law-as-instrument-of-plunder",
+      "target": "the-law",
+      "id": "pel_t",
+      "label": "The Law"
+    },
+    {
+      "source": "perversion-of-law/law-as-instrument-of-plunder",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pel_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "perversion-of-law/law-as-instrument-of-plunder",
+      "target": "true-law/proper-sphere",
+      "id": "pel_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "perversion-of-law/law-as-instrument-of-plunder",
+      "target": "legal-plunder/definition",
+      "id": "pel_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "political-mechanisms/law-manufacturing",
+      "target": "the-law",
+      "id": "pol_t",
+      "label": "The Law"
+    },
+    {
+      "source": "political-mechanisms/law-manufacturing",
+      "target": "fundamental-principles/natural-rights",
+      "id": "pol_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "political-mechanisms/law-manufacturing",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pol_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "political-mechanisms/law-manufacturing",
+      "target": "true-law/proper-sphere",
+      "id": "pol_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "political-mechanisms/law-manufacturing",
+      "target": "legal-plunder/definition",
+      "id": "pol_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "political-mechanisms/political-struggle",
+      "target": "the-law",
+      "id": "pop_t",
+      "label": "The Law"
+    },
+    {
+      "source": "political-mechanisms/political-struggle",
+      "target": "fundamental-principles/natural-rights",
+      "id": "pop_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "political-mechanisms/political-struggle",
+      "target": "legal-plunder/definition",
+      "id": "pop_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "political-mechanisms/universal-suffrage",
+      "target": "the-law",
+      "id": "pou_t",
+      "label": "The Law"
+    },
+    {
+      "source": "political-mechanisms/universal-suffrage",
+      "target": "fundamental-principles/natural-rights",
+      "id": "pou_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "political-mechanisms/universal-suffrage",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "pou_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "political-mechanisms/universal-suffrage",
+      "target": "true-law/proper-sphere",
+      "id": "pou_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "political-mechanisms/universal-suffrage",
+      "target": "legal-plunder/definition",
+      "id": "pou_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/free-trade",
+      "target": "the-law",
+      "id": "rf_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/free-trade",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rf_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/free-trade",
+      "target": "legal-plunder/definition",
+      "id": "rf_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/individual-rights",
+      "target": "the-law",
+      "id": "ri_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/individual-rights",
+      "target": "fundamental-principles/natural-rights",
+      "id": "ri_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/individual-rights",
+      "target": "legal-plunder/definition",
+      "id": "ri_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/limited-vs-activist-state",
+      "target": "the-law",
+      "id": "rl_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/limited-vs-activist-state",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rl_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/limited-vs-activist-state",
+      "target": "legal-plunder/definition",
+      "id": "rl_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/natural-law",
+      "target": "the-law",
+      "id": "rn_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/natural-law",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rn_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/natural-law",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "rn_flaw-",
+      "label": "/fundamental-principles/law-as-organization-of-defense.md"
+    },
+    {
+      "source": "related-concepts/natural-law",
+      "target": "legal-plunder/definition",
+      "id": "rn_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/philanthropy-vs-coercion",
+      "target": "the-law",
+      "id": "rph_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/philanthropy-vs-coercion",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rph_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/philanthropy-vs-coercion",
+      "target": "legal-plunder/definition",
+      "id": "rph_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/property-rights",
+      "target": "the-law",
+      "id": "rpr_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/property-rights",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rpr_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/property-rights",
+      "target": "legal-plunder/definition",
+      "id": "rpr_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/rule-of-law",
+      "target": "the-law",
+      "id": "rr_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/rule-of-law",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rr_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/rule-of-law",
+      "target": "legal-plunder/definition",
+      "id": "rr_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "related-concepts/spontaneous-order",
+      "target": "the-law",
+      "id": "rs_t",
+      "label": "The Law"
+    },
+    {
+      "source": "related-concepts/spontaneous-order",
+      "target": "fundamental-principles/natural-rights",
+      "id": "rs_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "related-concepts/spontaneous-order",
+      "target": "legal-plunder/definition",
+      "id": "rs_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "socialism/critique-of-charity",
+      "target": "the-law",
+      "id": "sc_t",
+      "label": "The Law"
+    },
+    {
+      "source": "socialism/critique-of-charity",
+      "target": "fundamental-principles/natural-rights",
+      "id": "sc_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "socialism/critique-of-charity",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "sc_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "socialism/critique-of-charity",
+      "target": "true-law/proper-sphere",
+      "id": "sc_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "socialism/critique-of-charity",
+      "target": "legal-plunder/definition",
+      "id": "sc_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "socialism/education-as-indoctrination",
+      "target": "the-law",
+      "id": "se_t",
+      "label": "The Law"
+    },
+    {
+      "source": "socialism/education-as-indoctrination",
+      "target": "fundamental-principles/natural-rights",
+      "id": "se_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "socialism/education-as-indoctrination",
+      "target": "legal-plunder/definition",
+      "id": "se_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "socialism/forced-conformity",
+      "target": "the-law",
+      "id": "sf_t",
+      "label": "The Law"
+    },
+    {
+      "source": "socialism/forced-conformity",
+      "target": "fundamental-principles/natural-rights",
+      "id": "sf_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "socialism/forced-conformity",
+      "target": "legal-plunder/definition",
+      "id": "sf_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "socialism/playing-god",
+      "target": "the-law",
+      "id": "sp_t",
+      "label": "The Law"
+    },
+    {
+      "source": "socialism/playing-god",
+      "target": "fundamental-principles/natural-rights",
+      "id": "sp_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "socialism/playing-god",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "sp_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "socialism/playing-god",
+      "target": "true-law/proper-sphere",
+      "id": "sp_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "socialism/playing-god",
+      "target": "legal-plunder/definition",
+      "id": "sp_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "socialism/socialist-doctrine",
+      "target": "the-law",
+      "id": "ss_t",
+      "label": "The Law"
+    },
+    {
+      "source": "socialism/socialist-doctrine",
+      "target": "fundamental-principles/natural-rights",
+      "id": "ss_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "socialism/socialist-doctrine",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "ss_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "socialism/socialist-doctrine",
+      "target": "true-law/proper-sphere",
+      "id": "ss_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "socialism/socialist-doctrine",
+      "target": "legal-plunder/definition",
+      "id": "ss_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "the-law",
+      "target": "fundamental-principles/natural-rights",
+      "id": "t_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "the-law",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "t_flaw-",
+      "label": "/fundamental-principles/law-as-organization-of-defense.md"
+    },
+    {
+      "source": "the-law",
+      "target": "true-law/proper-sphere",
+      "id": "t_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "the-law",
+      "target": "legal-plunder/definition",
+      "id": "t_ld",
+      "label": "legal plunder"
+    },
+    {
+      "source": "the-law",
+      "target": "legal-plunder/consequences/rent-seeking",
+      "id": "t_lcr",
+      "label": "rent-seeking behavior"
+    },
+    {
+      "source": "the-law",
+      "target": "modern-relevance/contemporary-plunder",
+      "id": "t_mc",
+      "label": "modern examples"
+    },
+    {
+      "source": "the-law",
+      "target": "perversion-of-law/false-philanthropy",
+      "id": "t_pef",
+      "label": "false philanthropy"
+    },
+    {
+      "source": "true-law/limited-government",
+      "target": "the-law",
+      "id": "tl_t",
+      "label": "The Law"
+    },
+    {
+      "source": "true-law/limited-government",
+      "target": "fundamental-principles/natural-rights",
+      "id": "tl_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "true-law/limited-government",
+      "target": "legal-plunder/definition",
+      "id": "tl_ld",
+      "label": "perverted law"
+    },
+    {
+      "source": "true-law/negative-role",
+      "target": "the-law",
+      "id": "tne_t",
+      "label": "The Law"
+    },
+    {
+      "source": "true-law/negative-role",
+      "target": "fundamental-principles/natural-rights",
+      "id": "tne_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "true-law/negative-role",
+      "target": "legal-plunder/definition",
+      "id": "tne_ld",
+      "label": "perverted law"
+    },
+    {
+      "source": "true-law/negative-role",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "tne_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "true-law/negative-role",
+      "target": "true-law/proper-sphere",
+      "id": "tne_tprop",
+      "label": "the proper sphere of law"
+    },
+    {
+      "source": "true-law/non-intervention",
+      "target": "the-law",
+      "id": "tno_t",
+      "label": "The Law"
+    },
+    {
+      "source": "true-law/non-intervention",
+      "target": "fundamental-principles/natural-rights",
+      "id": "tno_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "true-law/non-intervention",
+      "target": "legal-plunder/definition",
+      "id": "tno_ld",
+      "label": "perverted law"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "the-law",
+      "id": "tprop_t",
+      "label": "The Law"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "fundamental-principles/natural-rights",
+      "id": "tprop_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "legal-plunder/definition",
+      "id": "tprop_ld",
+      "label": "perverted law"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "fundamental-principles/law-as-organization-of-defense",
+      "id": "tprop_flaw-",
+      "label": "the definition of law"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "legal-plunder/consequences/rent-seeking",
+      "id": "tprop_lcr",
+      "label": "rent-seeking behavior"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "modern-relevance/contemporary-plunder",
+      "id": "tprop_mc",
+      "label": "modern examples"
+    },
+    {
+      "source": "true-law/proper-sphere",
+      "target": "perversion-of-law/false-philanthropy",
+      "id": "tprop_pef",
+      "label": "false philanthropy"
+    },
+    {
+      "source": "true-law/protection-of-rights",
+      "target": "the-law",
+      "id": "tprot_t",
+      "label": "The Law"
+    },
+    {
+      "source": "true-law/protection-of-rights",
+      "target": "fundamental-principles/natural-rights",
+      "id": "tprot_fna",
+      "label": "Natural Rights"
+    },
+    {
+      "source": "true-law/protection-of-rights",
+      "target": "legal-plunder/definition",
+      "id": "tprot_ld",
+      "label": "perverted law"
+    }
+  ]
+}

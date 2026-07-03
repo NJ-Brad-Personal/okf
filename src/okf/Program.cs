@@ -23,24 +23,33 @@ app.Run([.. runArgs]);
 /// <param name="json">Output validation issues as JSON instead of human-readable text. [Default: false]</param>
 static int Check([Argument] string path = ".", bool json = false)
 {
-    var checker = new BundleChecker(path);
-    var issues = checker.Check();
+    var result = new BundleChecker(path).Check();
 
     if (json)
     {
-        CheckRenderer.RenderJson(issues, path, Console.Out);
+        CheckRenderer.RenderJson(result, path, Console.Out);
     }
     else
     {
-        CheckRenderer.Render(issues, path);
-
-        if (issues.Count > 0)
-        {
-            Console.Error.WriteLine($"{issues.Count} error(s).");
-        }
+        ReportCheckResult(result, path);
     }
 
-    return issues.Count > 0 ? 1 : 0;
+    return result.Errors.Count > 0 ? 1 : 0;
+}
+
+static void ReportCheckResult(BundleCheckResult result, string bundleRoot, bool quiet = false)
+{
+    CheckRenderer.Render(result, bundleRoot, quiet);
+
+    if (result.Errors.Count > 0)
+    {
+        Console.Error.WriteLine($"{result.Errors.Count} error(s).");
+    }
+
+    if (result.Warnings.Count > 0)
+    {
+        Console.Error.WriteLine($"{result.Warnings.Count} warning(s).");
+    }
 }
 
 /// <summary>Generate an interactive HTML visualization from a bundle or graph file.</summary>
@@ -70,6 +79,14 @@ static int Visualize(
         }
         else if (Directory.Exists(fullPath))
         {
+            var checkResult = new BundleChecker(fullPath).Check();
+            ReportCheckResult(checkResult, fullPath);
+
+            if (checkResult.Errors.Count > 0)
+            {
+                return 1;
+            }
+
             graph = GraphBuilder.Build(fullPath, includeBody: true);
             displayName = name ?? new DirectoryInfo(fullPath).Name;
             outputBaseDir = fullPath;
@@ -105,13 +122,19 @@ static int Visualize(
 
 /// <summary>Generate an OKF graph file for the bundle.</summary>
 /// <param name="path">Path to the bundle directory. [Default: .]</param>
-/// <param name="out">-o, Output path for the generated graph file. [Default: okf.json]</param>
+/// <param name="out">-o, Output path for the generated graph file. [Default: okf.json, or okf.js with -m]</param>
 /// <param name="body">-b, Include body content in the graph. [Default: false]</param>
+/// <param name="module">-m, Emit a JavaScript module instead of plain JSON. [Default: false]</param>
+/// <param name="quiet">-q, Only render errors and warnings. [Default: false]</param>
+/// <param name="json">Output validation issues as JSON instead of human-readable text. [Default: false]</param>
 /// <param name="properties">-p, Properties in format Key=Value. Can be repeated.</param>
 static int Graph(
     [Argument, DefaultValue(".")] string path = ".",
     [HideDefaultValue] string? @out = null,
     bool body = false,
+    bool module = false,
+    bool quiet = false,
+    bool json = false,
     params string[]? properties)
 {
     var bundleRoot = Path.GetFullPath(path);
@@ -122,33 +145,22 @@ static int Graph(
         return 1;
     }
 
-    var outPath = @out ?? Path.Combine(bundleRoot, "okf.json");
+    var outPath = @out ?? Path.Combine(bundleRoot, module ? "okf.js" : "okf.json");
+    var bundleProperties = Converters.ParseKeyValue(properties);
+    var checkResult = new BundleChecker(bundleRoot).Check();
 
-    Dictionary<string, string>? bundleProperties = null;
-    if (properties is { Length: > 0 })
+    if (json)
     {
-        var map = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var entry in properties)
-        {
-            var equalsIndex = entry.IndexOf('=');
-            if (equalsIndex <= 0)
-            {
-                continue;
-            }
+        CheckRenderer.RenderJson(checkResult, bundleRoot, Console.Out);
+    }
+    else
+    {
+        ReportCheckResult(checkResult, bundleRoot, quiet);
+    }
 
-            var name = entry[..equalsIndex];
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                continue;
-            }
-
-            map[name] = entry[(equalsIndex + 1)..];
-        }
-
-        if (map.Count > 0)
-        {
-            bundleProperties = map;
-        }
+    if (checkResult.Errors.Count > 0)
+    {
+        return 1;
     }
 
     try
@@ -157,8 +169,14 @@ static int Graph(
             bundleRoot,
             outPath,
             body,
-            bundleProperties);
-        Console.WriteLine($"Wrote {outPath} ({nodes} nodes, {edges} edges).");
+            bundleProperties,
+            module);
+
+        if (!json)
+        {
+            Console.WriteLine($"Wrote {outPath} ({nodes} nodes, {edges} edges).");
+        }
+
         return 0;
     }
     catch (Exception ex)

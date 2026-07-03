@@ -12,38 +12,51 @@ public static class CheckRenderer
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
     };
-    public static void Render(IReadOnlyList<ValidationIssue> issues, string bundleRoot, bool linksChecked = true)
+
+    public static void Render(BundleCheckResult result, string bundleRoot, bool quiet = false)
+    {
+        if (quiet)
+        {
+            RenderQuiet(result, bundleRoot);
+            return;
+        }
+
+        RenderFull(result, bundleRoot);
+    }
+
+    static void RenderFull(BundleCheckResult result, string bundleRoot)
     {
         var bundleRootFull = Path.GetFullPath(bundleRoot);
-        var issuesByRule = issues
+        var errorsByRule = result.Errors
+            .GroupBy(issue => issue.Rule)
+            .ToDictionary(group => group.Key, group => group.ToList());
+        var warningsByRule = result.Warnings
             .GroupBy(issue => issue.Rule)
             .ToDictionary(group => group.Key, group => group.ToList());
 
-        var rules = linksChecked
-            ? CheckRules.All
-            : CheckRules.All.Where(rule => rule.Rule != CheckRule.InternalLinks).ToArray();
-
-        if (issuesByRule.ContainsKey(CheckRule.BundleExists))
+        var rules = CheckRules.All;
+        if (errorsByRule.ContainsKey(CheckRule.BundleExists))
         {
             rules = [(CheckRule.BundleExists, GetDescription(CheckRule.BundleExists))];
         }
 
         foreach (var (rule, description) in rules)
         {
-            if (issuesByRule.TryGetValue(rule, out var ruleIssues))
+            if (errorsByRule.TryGetValue(rule, out var ruleIssues))
             {
-                AnsiConsole.MarkupLine($"[red]✗[/] {Markup.Escape(description)}");
-                foreach (var issue in ruleIssues)
-                {
-                    AnsiConsole.MarkupLine($"  {FormatIssue(issue, bundleRootFull)}");
-                    if (issue.Snippet is not null)
-                    {
-                        foreach (var line in issue.Snippet.Lines)
-                        {
-                            AnsiConsole.MarkupLine($"    {FormatSnippetLine(line)}");
-                        }
-                    }
-                }
+                RenderErrorRule(description, ruleIssues, bundleRootFull);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[green]✓[/] {Markup.Escape(description)}");
+            }
+        }
+
+        foreach (var (rule, description) in CheckRules.Warnings)
+        {
+            if (warningsByRule.TryGetValue(rule, out var ruleWarnings))
+            {
+                RenderWarningRule(description, ruleWarnings, bundleRootFull);
             }
             else
             {
@@ -52,21 +65,84 @@ public static class CheckRenderer
         }
     }
 
-    public static void RenderJson(IReadOnlyList<ValidationIssue> issues, string bundleRoot, TextWriter writer)
+    static void RenderQuiet(BundleCheckResult result, string bundleRoot)
     {
-        var result = BuildJsonResult(issues, bundleRoot);
-        writer.WriteLine(JsonSerializer.Serialize(result, JsonOptions));
-    }
+        if (result.Errors.Count == 0 && result.Warnings.Count == 0)
+        {
+            return;
+        }
 
-    public static CheckJsonResult BuildJsonResult(IReadOnlyList<ValidationIssue> issues, string bundleRoot)
-    {
         var bundleRootFull = Path.GetFullPath(bundleRoot);
-        var issuesByRule = issues
+        var errorsByRule = result.Errors
+            .GroupBy(issue => issue.Rule)
+            .ToDictionary(group => group.Key, group => group.ToList());
+        var warningsByRule = result.Warnings
             .GroupBy(issue => issue.Rule)
             .ToDictionary(group => group.Key, group => group.ToList());
 
         var rules = CheckRules.All;
-        if (issuesByRule.ContainsKey(CheckRule.BundleExists))
+        if (errorsByRule.ContainsKey(CheckRule.BundleExists))
+        {
+            rules = [(CheckRule.BundleExists, GetDescription(CheckRule.BundleExists))];
+        }
+
+        foreach (var (rule, description) in rules)
+        {
+            if (errorsByRule.TryGetValue(rule, out var ruleIssues))
+            {
+                RenderErrorRule(description, ruleIssues, bundleRootFull);
+            }
+        }
+
+        foreach (var (rule, description) in CheckRules.Warnings)
+        {
+            if (warningsByRule.TryGetValue(rule, out var ruleWarnings))
+            {
+                RenderWarningRule(description, ruleWarnings, bundleRootFull);
+            }
+        }
+    }
+
+    static void RenderErrorRule(string description, IReadOnlyList<ValidationIssue> issues, string bundleRootFull)
+    {
+        AnsiConsole.MarkupLine($"[red]✗[/] {Markup.Escape(description)}");
+        foreach (var issue in issues)
+        {
+            AnsiConsole.MarkupLine($"  {FormatIssue(issue, bundleRootFull)}");
+            if (issue.Snippet is not null)
+            {
+                foreach (var line in issue.Snippet.Lines)
+                {
+                    AnsiConsole.MarkupLine($"    {FormatSnippetLine(line)}");
+                }
+            }
+        }
+    }
+
+    static void RenderWarningRule(string description, IReadOnlyList<ValidationIssue> issues, string bundleRootFull)
+    {
+        AnsiConsole.MarkupLine($"[yellow]![/] {Markup.Escape(description)}");
+        foreach (var warning in issues)
+        {
+            AnsiConsole.MarkupLine($"  {FormatIssue(warning, bundleRootFull)}");
+        }
+    }
+
+    public static void RenderJson(BundleCheckResult result, string bundleRoot, TextWriter writer)
+    {
+        var jsonResult = BuildJsonResult(result, bundleRoot);
+        writer.WriteLine(JsonSerializer.Serialize(jsonResult, JsonOptions));
+    }
+
+    public static CheckJsonResult BuildJsonResult(BundleCheckResult result, string bundleRoot)
+    {
+        var bundleRootFull = Path.GetFullPath(bundleRoot);
+        var errorsByRule = result.Errors
+            .GroupBy(issue => issue.Rule)
+            .ToDictionary(group => group.Key, group => group.ToList());
+
+        var rules = CheckRules.All;
+        if (errorsByRule.ContainsKey(CheckRule.BundleExists))
         {
             rules = [(CheckRule.BundleExists, GetDescription(CheckRule.BundleExists))];
         }
@@ -75,19 +151,33 @@ public static class CheckRenderer
             .Select(entry => new CheckJsonRule(
                 entry.Rule,
                 entry.Description,
-                !issuesByRule.ContainsKey(entry.Rule)))
+                !errorsByRule.ContainsKey(entry.Rule)))
             .ToList();
 
-        var issueResults = issues
+        var warningRuleResults = CheckRules.Warnings
+            .Select(entry => new CheckJsonRule(
+                entry.Rule,
+                entry.Description,
+                !result.Warnings.Any(issue => issue.Rule == entry.Rule)))
+            .ToList();
+
+        var issueResults = result.Errors
+            .Select(issue => ToJsonIssue(issue, bundleRootFull))
+            .ToList();
+
+        var warningResults = result.Warnings
             .Select(issue => ToJsonIssue(issue, bundleRootFull))
             .ToList();
 
         return new CheckJsonResult(
             bundleRootFull,
-            issues.Count == 0,
-            issues.Count,
+            result.Errors.Count == 0,
+            result.Errors.Count,
+            result.Warnings.Count,
             ruleResults,
-            issueResults);
+            warningRuleResults,
+            issueResults,
+            warningResults);
     }
 
     static CheckJsonIssue ToJsonIssue(ValidationIssue issue, string bundleRootFull)
@@ -121,7 +211,10 @@ public static class CheckRenderer
     }
 
     static string GetDescription(CheckRule rule)
-        => CheckRules.All.First(entry => entry.Rule == rule).Description;
+        => CheckRules.All
+            .Concat(CheckRules.Warnings)
+            .First(entry => entry.Rule == rule)
+            .Description;
 
     static string FormatSnippetLine(HighlightedSourceLine line)
         => $"[dim]{Markup.Escape(line.Text)}[/]";
@@ -152,8 +245,11 @@ public sealed record CheckJsonResult(
     string Path,
     bool Success,
     int Errors,
+    int Warnings,
     IReadOnlyList<CheckJsonRule> Rules,
-    IReadOnlyList<CheckJsonIssue> Issues);
+    IReadOnlyList<CheckJsonRule> WarningRules,
+    IReadOnlyList<CheckJsonIssue> Issues,
+    IReadOnlyList<CheckJsonIssue> WarningIssues);
 
 public sealed record CheckJsonRule(
     CheckRule Rule,

@@ -1,0 +1,35 @@
+﻿{
+  "version": "0.1",
+  "timestamp": "2026-07-02T22:15:57.2880884+00:00",
+  "nodes": [
+    {
+      "id": "concepts/broken-absolute-link",
+      "type": "BigQuery Table",
+      "title": "Broken absolute link",
+      "label": "Broken-Absolute-Link",
+      "description": "Links to a concept that does not exist using a bundle-rooted path.",
+      "timestamp": "2026-06-30T00:00:00+00:00",
+      "path": "concepts/broken-absolute-link.md",
+      "degree": 0,
+      "in": 0,
+      "out": 0,
+      "weight": 0.5,
+      "rank": 1
+    },
+    {
+      "id": "concepts/broken-relative-link",
+      "type": "BigQuery Table",
+      "title": "Broken relative link",
+      "label": "Broken-Relative-Link",
+      "description": "Links to a concept that does not exist using a relative path.",
+      "timestamp": "2026-06-30T00:00:00+00:00",
+      "path": "concepts/broken-relative-link.md",
+      "degree": 0,
+      "in": 0,
+      "out": 0,
+      "weight": 0.5,
+      "rank": 1
+    }
+  ],
+  "edges": []
+}

@@ -17,21 +17,23 @@ public sealed partial class BundleChecker
     };
 
     readonly string bundleRoot;
-    readonly List<ValidationIssue> issues = [];
+    readonly List<ValidationIssue> errors = [];
+    readonly List<ValidationIssue> warnings = [];
 
     public BundleChecker(string bundlePath)
     {
         bundleRoot = Path.GetFullPath(bundlePath);
     }
 
-    public IReadOnlyList<ValidationIssue> Check(bool validateLinks = true)
+    public BundleCheckResult Check()
     {
-        issues.Clear();
+        errors.Clear();
+        warnings.Clear();
 
         if (!Directory.Exists(bundleRoot))
         {
-            issues.Add(new ValidationIssue(CheckRule.BundleExists, bundleRoot, "Bundle directory not found."));
-            return issues;
+            errors.Add(new ValidationIssue(CheckRule.BundleExists, bundleRoot, "Bundle directory not found."));
+            return new BundleCheckResult(errors, warnings);
         }
 
         var markdownFiles = Directory
@@ -47,22 +49,22 @@ public sealed partial class BundleChecker
 
             if (fileName.Equals("index.md", StringComparison.OrdinalIgnoreCase))
             {
-                ValidateIndex(relativePath, text, validateLinks, markdownFiles);
+                ValidateIndex(relativePath, text, markdownFiles);
             }
             else if (fileName.Equals("log.md", StringComparison.OrdinalIgnoreCase))
             {
-                ValidateLog(relativePath, text, validateLinks, markdownFiles);
+                ValidateLog(relativePath, text, markdownFiles);
             }
             else
             {
-                ValidateConcept(relativePath, text, validateLinks, markdownFiles);
+                ValidateConcept(relativePath, text, markdownFiles);
             }
         }
 
-        return issues;
+        return new BundleCheckResult(errors, warnings);
     }
 
-    void ValidateConcept(string relativePath, string text, bool validateLinks, HashSet<string> markdownFiles)
+    void ValidateConcept(string relativePath, string text, HashSet<string> markdownFiles)
     {
         if (!OKFDocument.TryParse(text, out var document, out var error, out var snippet))
         {
@@ -80,14 +82,15 @@ public sealed partial class BundleChecker
         {
             AddError(CheckRule.ConceptType, relativePath, "Frontmatter must contain a non-empty 'type' field.");
         }
-
-        if (validateLinks)
+        else if (!ConceptDocument.TryDeserialize(document.FrontmatterYaml, out _))
         {
-            ValidateLinks(relativePath, document.Body, markdownFiles);
+            AddError(CheckRule.ConceptFrontmatter, relativePath, "Concept frontmatter could not be deserialized.");
         }
+
+        ValidateLinks(relativePath, document.Body, markdownFiles);
     }
 
-    void ValidateIndex(string relativePath, string text, bool validateLinks, HashSet<string> markdownFiles)
+    void ValidateIndex(string relativePath, string text, HashSet<string> markdownFiles)
     {
         var isBundleRoot = relativePath.Equals("index.md", StringComparison.OrdinalIgnoreCase);
         string body;
@@ -132,10 +135,7 @@ public sealed partial class BundleChecker
 
         ValidateIndexBody(relativePath, body);
 
-        if (validateLinks)
-        {
-            ValidateLinks(relativePath, body, markdownFiles);
-        }
+        ValidateLinks(relativePath, body, markdownFiles);
     }
 
     void ValidateIndexBody(string relativePath, string body)
@@ -175,7 +175,7 @@ public sealed partial class BundleChecker
         }
     }
 
-    void ValidateLog(string relativePath, string text, bool validateLinks, HashSet<string> markdownFiles)
+    void ValidateLog(string relativePath, string text, HashSet<string> markdownFiles)
     {
         if (OKFDocument.HasFrontmatterBlock(text))
         {
@@ -183,11 +183,7 @@ public sealed partial class BundleChecker
         }
 
         ValidateLogBody(relativePath, text);
-
-        if (validateLinks)
-        {
-            ValidateLinks(relativePath, text, markdownFiles);
-        }
+        ValidateLinks(relativePath, text, markdownFiles);
     }
 
     void ValidateLogBody(string relativePath, string body)
@@ -241,7 +237,8 @@ public sealed partial class BundleChecker
     {
         foreach (var (target, line) in MarkdownLinks.Extract(body))
         {
-            if (!MarkdownLinks.IsInternalLink(target))
+            var pathPart = target.Split('#', 2)[0];
+            if (!MarkdownLinks.IsInternalLink(target) || pathPart.EndsWith('/'))
             {
                 continue;
             }
@@ -253,17 +250,20 @@ public sealed partial class BundleChecker
 
             if (!MarkdownLinks.TargetExists(resolved, bundleRoot, markdownFiles))
             {
-                AddError(
+                AddWarning(
                     CheckRule.InternalLinks,
                     sourceRelativePath,
-                    $"Broken link to '{target}' (resolved to '{resolved}').",
+                    $"Unresolved link to '{target}' (resolved to '{resolved}').",
                     new IssueLocation(line));
             }
         }
     }
 
     void AddError(CheckRule rule, string file, string message, IssueLocation? location = null, SourceSnippet? snippet = null)
-        => issues.Add(new ValidationIssue(rule, file, message, location, snippet));
+        => errors.Add(new ValidationIssue(rule, file, message, location, snippet));
+
+    void AddWarning(CheckRule rule, string file, string message, IssueLocation? location = null, SourceSnippet? snippet = null)
+        => warnings.Add(new ValidationIssue(rule, file, message, location, snippet));
 
     [GeneratedRegex(@"^# .+", RegexOptions.Compiled)]
     private static partial Regex SectionHeadingRegex();

@@ -137,16 +137,6 @@
 	sha = 09f33017d1412f8a08e329358945a74dbac865a3
 	etag = d9772355f583bbaeb028ad17b217fc167cc6783b78e0a4e164794fd6489f9c9a
 	weak
-[file "src/Google/viz.js"]
-	url = https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/src/reference_agent/viewer/static/viz.js
-	sha = 09f33017d1412f8a08e329358945a74dbac865a3
-	etag = 1990b4564a808a150f3d382bfda0065b3848bd7c9b3b192907c9d81363b278ec
-	weak
-[file "src/Google/viz.html"]
-	url = https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/src/reference_agent/viewer/templates/viz.html
-	sha = 09f33017d1412f8a08e329358945a74dbac865a3
-	etag = da02798063c76547351b36656240f2c2659075c7f309b496cd4810f7c9841ab4
-	weak
 [file "src/okf/Extensions/Base62.cs"]
 	url = https://github.com/devlooped/catbag/blob/main/System/Base62.cs
 	sha = cf76df0d6a218c26ebe117339fe3445050b0532a

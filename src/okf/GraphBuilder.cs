@@ -178,7 +178,8 @@ public static partial class GraphBuilder
         string bundleRoot,
         string outPath,
         bool includeBody = false,
-        IReadOnlyDictionary<string, string>? bundleProperties = null)
+        IReadOnlyDictionary<string, string>? bundleProperties = null,
+        bool asModule = false)
     {
         var graph = Build(bundleRoot, includeBody, bundleProperties);
 
@@ -188,9 +189,29 @@ public static partial class GraphBuilder
             Directory.CreateDirectory(outDir);
         }
         var json = JsonSerializer.Serialize(graph, JsonOptions);
-        File.WriteAllText(outPath, json, Encoding.UTF8);
+        var content = asModule
+            ? FormatAsJavaScriptModule(json, Path.GetFileName(outPath))
+            : json;
+        File.WriteAllText(outPath, content, Encoding.UTF8);
 
         return (graph.Nodes.Count, graph.Edges.Count);
+    }
+
+    static string FormatAsJavaScriptModule(string json, string fileName)
+    {
+        var importPath = "./" + fileName.Replace('\\', '/');
+        return $"""
+            /*
+             * Consume from an HTML file:
+             *
+             * <script type="module">
+             *   import data from '{importPath}';
+             *   console.log(data);
+             * </script>
+             */
+            export default {json};
+
+            """;
     }
 
     static List<Concept> WalkConcepts(string bundleRoot, bool includeBody)
@@ -397,6 +418,50 @@ public static partial class GraphBuilder
         return id;
     }
 
+    /// <summary>
+    /// Returns true if the visible link text is essentially the same as the link reference/target.
+    /// Such links (e.g. [foo](foo.md) or [definition](definition)) are not useful as human-readable labels
+    /// for the target node and should be ignored when deriving labels from incoming links.
+    /// </summary>
+    static bool LinkTextEqualsRef(string linkText, string rawTarget, string? targetId = null)
+    {
+        if (string.IsNullOrWhiteSpace(linkText))
+            return true;
+
+        var text = linkText.Trim();
+        var target = rawTarget.Trim();
+
+        if (string.Equals(text, target, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        // Normalize by removing trailing slashes and .md extension for comparison
+        static string Normalize(string s)
+        {
+            s = s.TrimEnd('/');
+            if (s.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+                s = s[..^3];
+            // also strip leading / for bare names
+            s = s.TrimStart('/');
+            return s;
+        }
+
+        var normText = Normalize(text);
+        var normTarget = Normalize(target);
+
+        if (string.Equals(normText, normTarget, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (targetId != null)
+        {
+            var normId = Normalize(targetId);
+            if (string.Equals(normText, normId, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(text, targetId, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
     static Dictionary<string, string> LoadIndexLinkLabels(string bundleRoot, HashSet<string> conceptIds)
     {
         var labels = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -423,6 +488,11 @@ public static partial class GraphBuilder
 
                 var targetId = NormalizeToConceptId(resolved);
                 if (!conceptIds.Contains(targetId) || labels.ContainsKey(targetId))
+                {
+                    continue;
+                }
+
+                if (LinkTextEqualsRef(linkText, rawTarget, targetId))
                 {
                     continue;
                 }
@@ -470,6 +540,11 @@ public static partial class GraphBuilder
 
                 var targetId = NormalizeToConceptId(resolved);
                 if (targetId == concept.Id || !conceptIds.Contains(targetId))
+                {
+                    continue;
+                }
+
+                if (LinkTextEqualsRef(linkText, rawTarget, targetId))
                 {
                     continue;
                 }

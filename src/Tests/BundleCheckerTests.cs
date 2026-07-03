@@ -10,43 +10,50 @@ public class BundleCheckerTests
     [Fact]
     public void Valid_minimal_bundle_passes()
     {
-        var issues = new BundleChecker(FixturePath("valid")).Check();
-        Assert.Empty(issues);
+        var result = new BundleChecker(FixturePath("valid")).Check();
+        Assert.Empty(result.Errors);
+        Assert.Empty(result.Warnings);
     }
 
     [Fact]
-    public void Missing_type_is_reported()
+    public void Missing_type_is_reported_as_error()
     {
-        var issues = new BundleChecker(FixturePath("missing-type")).Check();
-        Assert.Contains(issues, issue => issue.Message.Contains("'type'"));
+        var result = new BundleChecker(FixturePath("missing-type")).Check();
+        Assert.Contains(result.Errors, issue => issue.Message.Contains("'type'"));
+        Assert.Empty(result.Warnings);
     }
 
     [Fact]
-    public void Broken_relative_link_is_reported()
+    public void Broken_relative_link_is_reported_as_warning()
     {
-        var issues = new BundleChecker(FixturePath("broken-link")).Check();
-        Assert.Contains(issues, issue => issue.Message.Contains("Broken link"));
+        var result = new BundleChecker(FixturePath("broken-link")).Check();
+        Assert.Empty(result.Errors);
+        Assert.Contains(result.Warnings, issue => issue.Message.Contains("Unresolved link"));
     }
 
     [Fact]
-    public void Broken_absolute_link_is_reported()
+    public void Broken_absolute_link_is_reported_as_warning()
     {
-        var issues = new BundleChecker(FixturePath("broken-absolute-link")).Check();
-        Assert.Contains(issues, issue => issue.Message.Contains("Broken link") && issue.Message.Contains("/tables/missing.md"));
+        var result = new BundleChecker(FixturePath("broken-absolute-link")).Check();
+        Assert.Empty(result.Errors);
+        Assert.Contains(
+            result.Warnings,
+            issue => issue.Message.Contains("Unresolved link") && issue.Message.Contains("/tables/missing.md"));
     }
 
     [Fact]
     public void Index_without_frontmatter_passes()
     {
-        var issues = new BundleChecker(FixturePath("valid")).Check();
-        Assert.DoesNotContain(issues, issue => issue.File.EndsWith("index.md"));
+        var result = new BundleChecker(FixturePath("valid")).Check();
+        Assert.DoesNotContain(result.Errors, issue => issue.File.EndsWith("index.md"));
+        Assert.DoesNotContain(result.Warnings, issue => issue.File.EndsWith("index.md"));
     }
 
     [Fact]
-    public void Log_with_invalid_date_is_reported()
+    public void Log_with_invalid_date_is_reported_as_error()
     {
-        var issues = new BundleChecker(FixturePath("invalid-log")).Check();
-        Assert.Contains(issues, issue => issue.File.EndsWith("log.md"));
+        var result = new BundleChecker(FixturePath("invalid-log")).Check();
+        Assert.Contains(result.Errors, issue => issue.File.EndsWith("log.md"));
     }
 }
 

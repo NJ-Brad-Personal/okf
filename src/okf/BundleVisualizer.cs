@@ -95,8 +95,40 @@ public static partial class BundleVisualizer
     static NodeData ToVizNodeData(GraphBuilder.Node n)
     {
         var color = TypePalette.GetValueOrDefault(n.Type, DefaultNodeColor);
+
+        // Primary size from graph importance (weight / rank / degree) so high-weight
+        // hubs are visibly larger and the layout can treat them as more significant.
+        double weight = n.Weight ?? 0;
+        int degree = n.Degree ?? 0;
+        int rank = n.Rank ?? 999;
+
+        // Rough normalization. Top weights in typical bundles are ~0.10-0.15.
+        double wScore = Math.Min(1.0, weight * 7.5);
+        // Degree normalization (hubs often 50-90+)
+        double dScore = Math.Min(1.0, degree / 95.0);
+        // Rank: lower number = more important (rank 1 is top)
+        double rScore = rank > 0 ? Math.Max(0.0, (25.0 - Math.Min(25, rank)) / 25.0) : 0.0;
+
+        double importance = 0.62 * wScore + 0.28 * dScore + 0.10 * rScore;
+
+        int minSize = 22;
+        int maxSize = 98;
+        int size = (int)Math.Round(minSize + importance * (maxSize - minSize));
+
+        // Body-length fallback / augmentation only when we have very little graph signal
+        // or when the node has substantial descriptive content.
         int bodyLen = n.Body?.Length ?? 0;
-        int size = 30 + Math.Min(60, bodyLen / 200);
+        if (importance < 0.12 || bodyLen > 450)
+        {
+            int bodySize = 26 + Math.Min(38, bodyLen / 220);
+            // Only let body help when it is larger than the importance-based size
+            if (bodySize > size)
+                size = bodySize;
+        }
+
+        size = Math.Clamp(size, 20, 105);
+
+        double fontSize = Math.Round(9.2 + importance * 5.8, 1); // ~9.2 - ~15
 
         return new NodeData
         {
@@ -108,6 +140,12 @@ public static partial class BundleVisualizer
             Tags = n.Tags?.ToList() ?? [],
             Color = color,
             Size = size,
+            Weight = weight,
+            Rank = rank,
+            Degree = degree,
+            In = n.In ?? 0,
+            Out = n.Out ?? 0,
+            FontSize = fontSize,
         };
     }
 
@@ -162,6 +200,25 @@ public static partial class BundleVisualizer
 
         [JsonPropertyName("size")]
         public int Size { get; init; }
+
+        // Graph importance signals (used for sizing + layout hints)
+        [JsonPropertyName("weight")]
+        public double Weight { get; init; }
+
+        [JsonPropertyName("rank")]
+        public int Rank { get; init; }
+
+        [JsonPropertyName("degree")]
+        public int Degree { get; init; }
+
+        [JsonPropertyName("in")]
+        public int In { get; init; }
+
+        [JsonPropertyName("out")]
+        public int Out { get; init; }
+
+        [JsonPropertyName("fontSize")]
+        public double FontSize { get; init; } = 11;
     }
 
     sealed class EdgeElement
