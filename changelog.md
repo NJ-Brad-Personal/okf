@@ -1,8 +1,27 @@
 # Changelog
 
-## [v0.2.0-alpha](https://github.com/devlooped/okf/tree/v0.2.0-alpha) (2026-07-01)
+## [v0.1.1](https://github.com/devlooped/okf/tree/v0.1.1) (2026-07-10)
 
-[Full Changelog](https://github.com/devlooped/okf/compare/a2f50546a8bd69725826a0ea91fc426d4adde66b...v0.2.0-alpha)
+[Full Changelog](https://github.com/devlooped/okf/compare/v0.1.0...v0.1.1)
+
+:sparkles: Implemented enhancements:
+
+- feat\(view\): show co-tag ego graph when a tag is selected [\#19](https://github.com/devlooped/okf/pull/19) (@kzu)
+- feat\(view\): Obsidian-style light/dark theme switch [\#18](https://github.com/devlooped/okf/pull/18) (@kzu)
+- feat\(view\): Obsidian-style graph hover highlight and labels [\#17](https://github.com/devlooped/okf/pull/17) (@kzu)
+- feat\(view\): tag cloud panel and tag concept lists [\#16](https://github.com/devlooped/okf/pull/16) (@kzu)
+- feat\(view\): Obsidian-style local graph labels, expand, and monochrome look [\#15](https://github.com/devlooped/okf/pull/15) (@kzu)
+- feat\(view\): local 3d-force-graph neighborhood and page TOC [\#13](https://github.com/devlooped/okf/pull/13) (@kzu)
+- feat\(view\): add okf view reader with tree and content pane [\#12](https://github.com/devlooped/okf/pull/12) (@kzu)
+- feat\(graph\): emit optional index-driven nav tree \(--nav\) [\#11](https://github.com/devlooped/okf/pull/11) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- chore: compliant the-law indexes; warn on index free prose [\#14](https://github.com/devlooped/okf/pull/14) (@kzu)
+
+## [v0.1.0](https://github.com/devlooped/okf/tree/v0.1.0) (2026-06-30)
+
+[Full Changelog](https://github.com/devlooped/okf/compare/a2f50546a8bd69725826a0ea91fc426d4adde66b...v0.1.0)
 
 
 
