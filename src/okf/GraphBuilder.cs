@@ -13,6 +13,9 @@ public static partial class GraphBuilder
 
     static readonly TextInfo TitleCasing = CultureInfo.CurrentCulture.TextInfo;
 
+    // UTF-8 without BOM for clean script/JSON files (browser + node friendly; Load() already strips BOM if present)
+    static readonly Encoding Utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
     public static JsonSerializerOptions JsonOptions { get; } = new(GraphJsonContext.Default.Options)
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -194,7 +197,7 @@ public static partial class GraphBuilder
         string outPath,
         bool includeBody = false,
         IReadOnlyDictionary<string, string>? bundleProperties = null,
-        bool asModule = false)
+        bool script = false)
     {
         var graph = Build(bundleRoot, includeBody, bundleProperties);
 
@@ -204,29 +207,53 @@ public static partial class GraphBuilder
             Directory.CreateDirectory(outDir);
         }
         var json = JsonSerializer.Serialize(graph, JsonOptions);
-        var content = asModule
-            ? FormatAsJavaScriptModule(json, Path.GetFileName(outPath))
+        var content = script
+            ? FormatAsScriptWithWindowGlobal(json)
             : json;
-        File.WriteAllText(outPath, content, Encoding.UTF8);
+        File.WriteAllText(outPath, content, Utf8NoBom);
 
         return (graph.Nodes.Count, graph.Edges.Count);
     }
 
-    static string FormatAsJavaScriptModule(string json, string fileName)
+    internal static string FormatAsScriptWithWindowGlobal(string json)
     {
-        var importPath = "./" + fileName.Replace('\\', '/');
         return $"""
             /*
-             * Consume from an HTML file:
+             * Generated OKF graph data.
+             * Load with a plain script tag:
              *
-             * <script type="module">
-             *   import data from '{importPath}';
-             *   console.log(data);
-             * </script>
+             *   <script src="okf.js"></script>
+             *   <script>
+             *     const data = window.data;
+             *     // use data
+             *   </script>
              */
-            export default {json};
+            const data = {json};
+            window.data = data;
 
             """;
+    }
+
+    /// <summary>
+    /// Writes an existing KnowledgeGraph to disk as JSON or as a plain JS script that sets window.data.
+    /// </summary>
+    public static (int Nodes, int Edges) WriteGraph(
+        KnowledgeGraph graph,
+        string outPath,
+        bool asScript = false)
+    {
+        var outDir = Path.GetDirectoryName(outPath);
+        if (!string.IsNullOrEmpty(outDir))
+        {
+            Directory.CreateDirectory(outDir);
+        }
+        var json = JsonSerializer.Serialize(graph, JsonOptions);
+        var content = asScript
+            ? FormatAsScriptWithWindowGlobal(json)
+            : json;
+        File.WriteAllText(outPath, content, Utf8NoBom);
+
+        return (graph.Nodes.Count, graph.Edges.Count);
     }
 
     static List<Concept> WalkConcepts(string bundleRoot, bool includeBody)

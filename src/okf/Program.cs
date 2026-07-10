@@ -122,9 +122,9 @@ static int Visualize(
 
 /// <summary>Generate an OKF graph file for the bundle.</summary>
 /// <param name="path">Path to the bundle directory. [Default: .]</param>
-/// <param name="out">-o, Output path for the generated graph file. [Default: okf.json, or okf.js with -m]</param>
+/// <param name="out">-o, Output path for the generated graph file. [Default: okf.json, or okf.js with --js]</param>
 /// <param name="body">-b, Include body content in the graph. [Default: false]</param>
-/// <param name="module">-m, Emit a JavaScript module instead of plain JSON. [Default: false]</param>
+/// <param name="js">Emit a plain JS script that sets window.data (loadable via &lt;script src&gt; on file:// too). [Default: false]</param>
 /// <param name="quiet">-q, Only render errors and warnings. [Default: false]</param>
 /// <param name="json">Output validation issues as JSON instead of human-readable text. [Default: false]</param>
 /// <param name="properties">-p, Properties in format Key=Value. Can be repeated.</param>
@@ -132,7 +132,7 @@ static int Graph(
     [Argument, DefaultValue(".")] string path = ".",
     [HideDefaultValue] string? @out = null,
     bool body = false,
-    bool module = false,
+    bool js = false,
     bool quiet = false,
     bool json = false,
     params string[]? properties)
@@ -145,7 +145,7 @@ static int Graph(
         return 1;
     }
 
-    var outPath = @out ?? Path.Combine(bundleRoot, module ? "okf.js" : "okf.json");
+    var outPath = @out ?? Path.Combine(bundleRoot, js ? "okf.js" : "okf.json");
     var bundleProperties = Converters.ParseKeyValue(properties);
     var checkResult = new BundleChecker(bundleRoot).Check();
 
@@ -170,7 +170,7 @@ static int Graph(
             outPath,
             body,
             bundleProperties,
-            module);
+            js);
 
         if (!json)
         {

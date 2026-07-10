@@ -604,28 +604,33 @@ public class GraphBuilderTests
     }
 
     [Fact]
-    public void Generate_writes_javascript_module_when_requested()
+    public void Generate_writes_javascript_script_with_window_global_when_requested()
     {
         var bundlePath = FixturePath("valid");
         var graphPath = Path.Combine(Path.GetTempPath(), $"okf-graph-{Guid.NewGuid():N}.js");
 
         try
         {
-            GraphBuilder.Generate(bundlePath, graphPath, asModule: true);
+            GraphBuilder.Generate(bundlePath, graphPath, script: true);
             var content = File.ReadAllText(graphPath);
 
             Assert.StartsWith("/*", content);
-            Assert.Contains("<script type=\"module\">", content);
-            Assert.Contains("import data from './" + Path.GetFileName(graphPath) + "';", content);
-            Assert.Contains("console.log(data);", content);
-            Assert.Contains("export default {", content);
-            var normalized = content.Replace("\r\n", "\n").Replace("\r", "\n");
-            Assert.EndsWith("};\n", normalized);
+            Assert.Contains("const data = {", content);
+            Assert.Contains("window.data = data;", content);
 
-            var jsonStart = content.IndexOf("export default ", StringComparison.Ordinal) + "export default ".Length;
-            var json = content[jsonStart..].TrimEnd();
-            Assert.EndsWith(";", json);
-            json = json[..^1];
+            // Extract the JSON object assigned to data (script wrapper uses camelCase keys)
+            var normalized = content.Replace("\r\n", "\n").Replace("\r", "\n");
+            var dataStart = normalized.IndexOf("const data = ", StringComparison.Ordinal);
+            Assert.True(dataStart >= 0);
+            // Find the object literal robustly (skip ws after =, take balanced-ish from first { to matching before ;)
+            int objStart = normalized.IndexOf('{', dataStart);
+            Assert.True(objStart >= 0);
+            // find the ; after the object close for this assignment (before window.data or end)
+            int windowIdx = normalized.IndexOf("window.data = data;", objStart, StringComparison.Ordinal);
+            int searchEnd = windowIdx > 0 ? windowIdx : normalized.Length;
+            int objEnd = normalized.LastIndexOf('}', searchEnd - 1);
+            Assert.True(objEnd > objStart);
+            var json = normalized.Substring(objStart, objEnd - objStart + 1);
 
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
