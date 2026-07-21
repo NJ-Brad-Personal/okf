@@ -3,12 +3,17 @@
     "check": {
       "commandName": "Project",
       "commandLineArgs": "check",
-      "workingDirectory": "C:\\Code\\okf\\samples\\check-failures"
+      "workingDirectory": "C:\\Users\\Brad\\source\\repos\\OKFBundle1"
     },
     "graph": {
       "commandName": "Project",
       "commandLineArgs": "graph -p:name=Google",
       "workingDirectory": "C:\\Users\\danie\\Downloads\\knowledge-catalog-main\\okf\\bundles\\ga4"
+    },
+    "view": {
+      "commandName": "Project",
+      "commandLineArgs": "view --open",
+      "workingDirectory": "C:\\Users\\Brad\\source\\repos\\OKFBundle1"
     }
   }
 }

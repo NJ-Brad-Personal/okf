@@ -375,6 +375,44 @@ Light theme:
 
 ---
 
+## `index`
+
+Generate missing `index.md` files for a bundle ([SPEC §6](src/okf/SPEC.md#6-index-files)). Runs
+validation first; generation is skipped if there are errors. By default, directories that already
+have an `index.md` are left untouched — only directories without one get a generated listing, built
+from the same synthesis logic `view`/`graph --nav` otherwise apply in-memory.
+
+```bash
+dnx okf -- index [path] [--force] [--dry-run] [-q|--quiet] [--json]
+```
+
+| Argument / option | Description |
+|-------------------|-------------|
+| `path` | Bundle directory (default: `.`) |
+| `--force` | Overwrite existing `index.md` files too, regenerating every directory listing from current concept frontmatter — a full refresh that picks up renamed, added, or removed concept files |
+| `--dry-run` | List which `index.md` files would be written without writing them |
+| `-q`, `--quiet` | Only render errors and warnings |
+| `--json` | Emit validation issues as JSON instead of human-readable text |
+
+```bash
+dnx okf -- index ./my-bundle
+# Created tables/index.md
+# Created playbooks/index.md
+# 2 index.md file(s) written.
+
+# Full refresh after renaming/adding/removing concept files:
+dnx okf -- index ./my-bundle --force
+# Overwrote index.md
+# Overwrote tables/index.md
+# Overwrote playbooks/index.md
+# 3 index.md file(s) written.
+```
+
+Note that `--force` regenerates entries from scratch (flat listing, description from frontmatter),
+so any hand-curated groupings or custom descriptions in an authored `index.md` are discarded.
+
+---
+
 ## Typical workflow
 
 ```bash
@@ -382,10 +420,13 @@ Light theme:
 # 2. Validate
 dnx okf -- check ./my-bundle
 
-# 3a. Ship a compact graph for agents / APIs
+# 3. Fill in any missing index.md directory listings
+dnx okf -- index ./my-bundle
+
+# 4a. Ship a compact graph for agents / APIs
 dnx okf -- graph ./my-bundle -o ./my-bundle/okf.json
 
-# 3b. Or ship a human reader
+# 4b. Or ship a human reader
 dnx okf -- view ./my-bundle --open
 ```
 

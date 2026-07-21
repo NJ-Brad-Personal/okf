@@ -13,7 +13,11 @@ public static partial class IndexNavBuilder
     static readonly TextInfo TitleCasing = CultureInfo.CurrentCulture.TextInfo;
     static readonly StringComparer Ordinal = StringComparer.Ordinal;
 
-    public static GraphBuilder.NavNode Build(string bundleRoot, IReadOnlyList<GraphBuilder.Node> nodes)
+    /// <param name="forceSynthesize">
+    /// When true, every directory is synthesized fresh from concept frontmatter,
+    /// ignoring any authored index.md on disk (used for a full index.md refresh).
+    /// </param>
+    public static GraphBuilder.NavNode Build(string bundleRoot, IReadOnlyList<GraphBuilder.Node> nodes, bool forceSynthesize = false)
     {
         bundleRoot = Path.GetFullPath(bundleRoot);
         var nodeById = nodes.ToDictionary(n => n.Id, n => n, Ordinal);
@@ -21,7 +25,7 @@ public static partial class IndexNavBuilder
         var directorySet = CollectDirectorySet(conceptIds);
         var built = new Dictionary<string, GraphBuilder.NavNode>(Ordinal);
 
-        return BuildDir("", bundleRoot, nodeById, conceptIds, directorySet, built);
+        return BuildDir("", bundleRoot, nodeById, conceptIds, directorySet, built, forceSynthesize);
     }
 
     static HashSet<string> CollectDirectorySet(IEnumerable<string> conceptIds)
@@ -78,7 +82,8 @@ public static partial class IndexNavBuilder
         Dictionary<string, GraphBuilder.Node> nodeById,
         HashSet<string> conceptIds,
         HashSet<string> directorySet,
-        Dictionary<string, GraphBuilder.NavNode> built)
+        Dictionary<string, GraphBuilder.NavNode> built,
+        bool forceSynthesize = false)
     {
         if (built.TryGetValue(dirId, out var cached))
             return cached;
@@ -96,7 +101,7 @@ public static partial class IndexNavBuilder
         string? titleFromIndex = null;
 
         List<GraphBuilder.NavNode> childNodes;
-        if (File.Exists(indexAbs))
+        if (!forceSynthesize && File.Exists(indexAbs))
         {
             var text = File.ReadAllText(indexAbs);
             body = GraphBuilder.GetIndexBody(indexRel, text);
@@ -110,12 +115,13 @@ public static partial class IndexNavBuilder
                 nodeById,
                 conceptIds,
                 directorySet,
-                built);
+                built,
+                forceSynthesize);
         }
         else
         {
             synthetic = true;
-            (body, childNodes) = SynthesizeDir(dirId, bundleRoot, nodeById, conceptIds, directorySet, built);
+            (body, childNodes) = SynthesizeDir(dirId, bundleRoot, nodeById, conceptIds, directorySet, built, forceSynthesize);
             titleFromIndex = null;
         }
 
@@ -166,7 +172,8 @@ public static partial class IndexNavBuilder
         Dictionary<string, GraphBuilder.Node> nodeById,
         HashSet<string> conceptIds,
         HashSet<string> directorySet,
-        Dictionary<string, GraphBuilder.NavNode> built)
+        Dictionary<string, GraphBuilder.NavNode> built,
+        bool forceSynthesize = false)
     {
         // Build group nodes from buckets, applying local membership filter
         var groupNodes = new List<GraphBuilder.NavNode>();
@@ -201,7 +208,7 @@ public static partial class IndexNavBuilder
                 else
                 {
                     listedDirIds.Add(resolved.Id);
-                    var childDir = BuildDir(resolved.Id, bundleRoot, nodeById, conceptIds, directorySet, built);
+                    var childDir = BuildDir(resolved.Id, bundleRoot, nodeById, conceptIds, directorySet, built, forceSynthesize);
                     // Overlay label/description from this index entry when provided
                     var label = !string.IsNullOrWhiteSpace(entry.Title) ? entry.Title : childDir.Label;
                     var desc = !string.IsNullOrWhiteSpace(entry.Description) ? entry.Description : childDir.Description;
@@ -237,7 +244,7 @@ public static partial class IndexNavBuilder
         var result = ApplyFlatten(groupNodes);
 
         // Orphans
-        var orphans = CollectOrphans(dirId, conceptIds, directorySet, listedConceptIds, listedDirIds, nodeById, bundleRoot, built);
+        var orphans = CollectOrphans(dirId, conceptIds, directorySet, listedConceptIds, listedDirIds, nodeById, bundleRoot, built, forceSynthesize);
         if (orphans.Count > 0)
         {
             result.Add(new GraphBuilder.NavNode
@@ -289,7 +296,8 @@ public static partial class IndexNavBuilder
         HashSet<string> listedDirIds,
         Dictionary<string, GraphBuilder.Node> nodeById,
         string bundleRoot,
-        Dictionary<string, GraphBuilder.NavNode> built)
+        Dictionary<string, GraphBuilder.NavNode> built,
+        bool forceSynthesize = false)
     {
         var orphans = new List<GraphBuilder.NavNode>();
 
@@ -311,7 +319,7 @@ public static partial class IndexNavBuilder
         {
             if (listedDirIds.Contains(childDir))
                 continue;
-            var dirNode = BuildDir(childDir, bundleRoot, nodeById, conceptIds, directorySet, built);
+            var dirNode = BuildDir(childDir, bundleRoot, nodeById, conceptIds, directorySet, built, forceSynthesize);
             orphans.Add(dirNode);
         }
 
@@ -525,7 +533,8 @@ public static partial class IndexNavBuilder
         Dictionary<string, GraphBuilder.Node> nodeById,
         HashSet<string> conceptIds,
         HashSet<string> directorySet,
-        Dictionary<string, GraphBuilder.NavNode> built)
+        Dictionary<string, GraphBuilder.NavNode> built,
+        bool forceSynthesize = false)
     {
         var dirLabel = string.IsNullOrEmpty(dirId)
             ? new DirectoryInfo(bundleRoot).Name
@@ -562,7 +571,7 @@ public static partial class IndexNavBuilder
             var title = TitleCaseSegment(seg).Replace("%20", " ");
             sb.Append("\n* [").Append(title).Append("](").Append(seg).Append("/)\n");
 
-            var childDir = BuildDir(childDirId, bundleRoot, nodeById, conceptIds, directorySet, built);
+            var childDir = BuildDir(childDirId, bundleRoot, nodeById, conceptIds, directorySet, built, forceSynthesize);
             children.Add(childDir with { Label = title });
         }
 

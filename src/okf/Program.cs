@@ -16,6 +16,7 @@ var app = ConsoleApp.Create();
 app.Add("check", Check);
 app.Add("graph", Graph);
 app.Add("view", View);
+app.Add("index", Index);
 app.Run([.. runArgs]);
 
 /// <summary>Validate an OKF bundle directory for structural and content issues.</summary>
@@ -49,6 +50,78 @@ static void ReportCheckResult(BundleCheckResult result, string bundleRoot, bool 
     if (result.Warnings.Count > 0)
     {
         Console.Error.WriteLine($"{result.Warnings.Count} warning(s).");
+    }
+}
+
+/// <summary>Generate missing index.md files for a bundle (SPEC §6). Directories that already have an index.md are left untouched unless --force is given.</summary>
+/// <param name="path">Path to the bundle directory. [Default: .]</param>
+/// <param name="force">Overwrite existing index.md files too, regenerating them from current concept frontmatter (full refresh). [Default: false]</param>
+/// <param name="dryRun">List which index.md files would be written without writing them. [Default: false]</param>
+/// <param name="quiet">-q, Only render errors and warnings. [Default: false]</param>
+/// <param name="json">Output validation issues as JSON instead of human-readable text. [Default: false]</param>
+static int Index(
+    [Argument] string path = ".",
+    bool force = false,
+    bool dryRun = false,
+    bool quiet = false,
+    bool json = false)
+{
+    var bundleRoot = Path.GetFullPath(path);
+
+    if (!Directory.Exists(bundleRoot))
+    {
+        Console.Error.WriteLine($"Bundle directory not found: {bundleRoot}");
+        return 1;
+    }
+
+    var checkResult = new BundleChecker(bundleRoot).Check();
+
+    if (json)
+    {
+        CheckRenderer.RenderJson(checkResult, bundleRoot, Console.Out);
+    }
+    else
+    {
+        ReportCheckResult(checkResult, bundleRoot, quiet);
+    }
+
+    if (checkResult.Errors.Count > 0)
+    {
+        return 1;
+    }
+
+    try
+    {
+        var written = IndexGenerator.Generate(bundleRoot, force, dryRun);
+
+        if (!json)
+        {
+            foreach (var entry in written)
+            {
+                var verb = entry.Existed
+                    ? (dryRun ? "Would overwrite" : "Overwrote")
+                    : (dryRun ? "Would create" : "Created");
+                Console.WriteLine($"{verb} {entry.Path}");
+            }
+
+            if (written.Count == 0)
+            {
+                Console.WriteLine(force
+                    ? "No directories to index."
+                    : "All directories already have an index.md.");
+            }
+            else
+            {
+                Console.WriteLine($"{written.Count} index.md file(s) {(dryRun ? "would be written" : "written")}.");
+            }
+        }
+
+        return 0;
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine(ex.Message);
+        return 1;
     }
 }
 
