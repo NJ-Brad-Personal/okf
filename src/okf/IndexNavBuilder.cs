@@ -94,7 +94,9 @@ public static partial class IndexNavBuilder
         var indexRel = string.IsNullOrEmpty(dirId)
             ? GraphBuilder.IndexName
             : dirId + "/" + GraphBuilder.IndexName;
-        var indexAbs = Path.Combine(bundleRoot, indexRel.Replace('/', Path.DirectorySeparatorChar));
+        // dirId is the %20-encoded concept id; decode back to a real space for the
+        // actual filesystem path (indexRel itself stays encoded for link resolution below).
+        var indexAbs = Path.Combine(bundleRoot, indexRel.Replace("%20", " ").Replace('/', Path.DirectorySeparatorChar));
 
         string body;
         bool synthetic;

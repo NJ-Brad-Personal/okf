@@ -199,6 +199,40 @@ public class IndexNavBuilderTests
     }
 
     [Fact]
+    public void Existing_index_in_space_named_directory_is_detected_not_synthetic()
+    {
+        var bundle = Path.Combine(Path.GetTempPath(), "okf-nav-space-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(bundle);
+        try
+        {
+            Directory.CreateDirectory(Path.Combine(bundle, "Sub Folder"));
+            File.WriteAllText(Path.Combine(bundle, "Sub Folder", "index.md"), """
+                # Sub Folder
+
+                * [Thing](thing.md) - Authored entry.
+                """);
+            File.WriteAllText(Path.Combine(bundle, "Sub Folder", "thing.md"), """
+                ---
+                type: Reference
+                title: Thing
+                ---
+
+                Body.
+                """);
+
+            var graph = GraphBuilder.Build(bundle, includeNav: true);
+            var subDir = FindDir(graph.Nav!, "Sub%20Folder");
+            Assert.NotNull(subDir);
+            Assert.False(subDir!.Synthetic == true);
+            Assert.Contains("Authored entry.", subDir.Body!);
+        }
+        finally
+        {
+            Directory.Delete(bundle, recursive: true);
+        }
+    }
+
+    [Fact]
     public void Valid_fixture_tables_dir_is_synthetic()
     {
         var graph = GraphBuilder.Build(FixturePath("valid"), includeNav: true);

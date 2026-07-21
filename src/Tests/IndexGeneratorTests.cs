@@ -215,6 +215,33 @@ public class IndexGeneratorTests
     }
 
     [Fact]
+    public void Handles_directory_names_containing_spaces()
+    {
+        var bundle = NewBundle();
+        try
+        {
+            Directory.CreateDirectory(Path.Combine(bundle, "Renamed Folder"));
+            File.WriteAllText(Path.Combine(bundle, "Renamed Folder", "thing.md"), """
+                ---
+                type: Reference
+                title: Thing
+                ---
+
+                Body.
+                """);
+
+            var written = IndexGenerator.Generate(bundle);
+
+            Assert.Contains(written, w => w.Path == "Renamed Folder/index.md");
+            Assert.True(File.Exists(Path.Combine(bundle, "Renamed Folder", "index.md")));
+        }
+        finally
+        {
+            Directory.Delete(bundle, recursive: true);
+        }
+    }
+
+    [Fact]
     public void Generated_files_pass_bundle_check()
     {
         var bundle = NewBundle();

@@ -43,7 +43,10 @@ public static class IndexGenerator
     {
         if (node.Kind == "dir" && node.Synthetic == true)
         {
+            // node.Id is the %20-encoded concept id (SPEC filename-with-spaces convention);
+            // decode back to a real space before touching the filesystem.
             var indexRel = string.IsNullOrEmpty(node.Id) ? "index.md" : node.Id + "/index.md";
+            indexRel = indexRel.Replace("%20", " ");
             var indexAbs = Path.Combine(bundleRoot, indexRel.Replace('/', Path.DirectorySeparatorChar));
             var existed = File.Exists(indexAbs);
             var body = node.Body ?? "";
